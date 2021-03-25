@@ -79,14 +79,14 @@ class Login extends React.Component {
         const {getFieldDecorator} = this.props.form;
         const user = getUser();
         return (
-            <DocumentTitle title="茄子TV后台管理系统登陆">
+            <DocumentTitle title="茄子TV篮球后台管理系统登陆">
                 <div className="login">
                     <div className="login-form">
                         <div className="login-logo">
                             <Avatar src={logo} size="large"/>
                         </div>
                         <div className="login-logo">
-                            <span>茄子直播</span>
+                            <span>茄子TV篮球</span>
                         </div>
                         <Form onSubmit={this.handleSubmit} style={{maxWidth: '300px'}}>
                             <FormItem>

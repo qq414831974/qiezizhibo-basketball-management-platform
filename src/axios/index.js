@@ -297,30 +297,6 @@ export const delBulletinById = (params) => del({url: `${config.system_service}/s
     }).catch(function (error) {
         console.log(error)
     });
-export const getScoreboard = () => get({url: `${config.system_service}/sys/scoreboard`})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
-export const setScoreboard = (params) => post({url: `${config.system_service}/sys/scoreboard`, data: params})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
-export const updateScoreboard = (params) => put({url: `${config.system_service}/sys/scoreboard`, data: params})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
-export const delScoreboardById = (params) => del({url: `${config.system_service}/sys/scoreboard?${unpack(params)}`})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
 export const getShareSentenceList = () => get({url: `${config.system_service}/sys/share/sentence`})
     .then(function (response) {
         return response.data;
@@ -376,14 +352,14 @@ export const deleteExp = (param) => del({url: `${config.system_service}/sys/exp?
         console.log(error)
     });
 //player
-export const getAllPlayers = (params) => get({url: `${config.football_service}/football/player?${unpack(params)}`})
+export const getAllPlayers = (params) => get({url: `${config.basketball_service}/basketball/player?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
 export const getAllPlayersNotInTeam = (params, teamId) => get({
-    url: `${config.football_service}/football/player?${unpack({
+    url: `${config.basketball_service}/basketball/player?${unpack({
         teamId: teamId,
         notInTeam: true, ...params,
         wechatType: 0,
@@ -394,38 +370,38 @@ export const getAllPlayersNotInTeam = (params, teamId) => get({
     }).catch(function (error) {
         console.log(error);
     });
-export const createPlayer = (params) => post({url: `${config.football_service}/football/player`, data: params})
+export const createPlayer = (params) => post({url: `${config.basketball_service}/basketball/player`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getPlayerById = (id) => get({url: `${config.football_service}/football/player/${id}`})
+export const getPlayerById = (id) => get({url: `${config.basketball_service}/basketball/player/${id}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const updatePlayerById = (params) => put({url: `${config.football_service}/football/player`, data: params})
+export const updatePlayerById = (params) => put({url: `${config.basketball_service}/basketball/player`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const delPlayerByIds = (params) => del({url: `${config.football_service}/football/player?${unpack(params)}`})
+export const delPlayerByIds = (params) => del({url: `${config.basketball_service}/basketball/player?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const getPlayersByTeamId = (id, params) => get({url: `${config.football_service}/football/player?${unpack({teamId: id, ...params})}`,})
+export const getPlayersByTeamId = (id, params) => get({url: `${config.basketball_service}/basketball/player?${unpack({teamId: id, ...params})}`,})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
 export const getMatchPlayersByTeamId = (matchid, teamid) => get({
-    url: `${config.football_service}/football/player?${unpack({
+    url: `${config.basketball_service}/basketball/player?${unpack({
         teamId: teamid,
         matchId: matchid,
         pageSize: 100,
@@ -510,50 +486,50 @@ export const getActivityMediaFileId = (params) => get({url: `${config.live_servi
     }).catch(function (error) {
         console.log(error)
     });
-export const getAllTeams = (params) => get({url: `${config.football_service}/football/team?${unpack(params)}`})
+export const getAllTeams = (params) => get({url: `${config.basketball_service}/basketball/team?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const getTeamInLeague = (id) => get({url: `${config.football_service}/football/team?leagueId=${id}&pageSize=100&pageNum=1`})
+export const getTeamInLeague = (id) => get({url: `${config.basketball_service}/basketball/team?leagueId=${id}&pageSize=100&pageNum=1`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const createTeam = (params) => post({url: `${config.football_service}/football/team`, data: params})
+export const createTeam = (params) => post({url: `${config.basketball_service}/basketball/team`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getTeamById = (id) => get({url: `${config.football_service}/football/team/${id}`})
+export const getTeamById = (id) => get({url: `${config.basketball_service}/basketball/team/${id}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const updateTeamById = (params) => put({url: `${config.football_service}/football/team`, data: params})
+export const updateTeamById = (params) => put({url: `${config.basketball_service}/basketball/team`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const delTeamByIds = (params) => del({url: `${config.football_service}/football/team?${unpack(params)}`})
+export const delTeamByIds = (params) => del({url: `${config.basketball_service}/basketball/team?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const addPlayerToTeam = (params) => post({url: `${config.football_service}/football/team/player`, data: params})
+export const addPlayerToTeam = (params) => post({url: `${config.basketball_service}/basketball/team/player`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addPlayerToMatchTeam = (params) => post({
-    url: `${config.football_service}/football/team/match/player`,
+    url: `${config.basketball_service}/basketball/team/match/player`,
     data: params
 })
     .then(function (response) {
@@ -562,7 +538,7 @@ export const addPlayerToMatchTeam = (params) => post({
         console.log(error)
     });
 export const modifyPlayerInTeam = (params) => put({
-    url: `${config.football_service}/football/team/player`,
+    url: `${config.basketball_service}/basketball/team/player`,
     data: params
 })
     .then(function (response) {
@@ -571,7 +547,7 @@ export const modifyPlayerInTeam = (params) => put({
         console.log(error)
     });
 export const modifyPlayerInMatchTeam = (params) => put({
-    url: `${config.football_service}/football/team/match/player`,
+    url: `${config.basketball_service}/basketball/team/match/player`,
     data: params
 })
     .then(function (response) {
@@ -580,7 +556,7 @@ export const modifyPlayerInMatchTeam = (params) => put({
         console.log(error)
     });
 export const deletePlayerInTeam = (params) => del({
-    url: `${config.football_service}/football/team/player?${unpack(params)}`,
+    url: `${config.basketball_service}/basketball/team/player?${unpack(params)}`,
 })
     .then(function (response) {
         return response.data;
@@ -588,7 +564,7 @@ export const deletePlayerInTeam = (params) => del({
         console.log(error)
     });
 export const deletePlayerInMatchTeam = (params) => del({
-    url: `${config.football_service}/football/team/match/player?${unpack(params)}`
+    url: `${config.basketball_service}/basketball/team/match/player?${unpack(params)}`
 })
     .then(function (response) {
         return response.data;
@@ -596,7 +572,7 @@ export const deletePlayerInMatchTeam = (params) => del({
         console.log(error)
     });
 export const getAllLeagueMatchSeries = (params) => get({
-    url: `${config.football_service}/football/league?${unpack({leagueType: 3, ...params})}`,
+    url: `${config.basketball_service}/basketball/league?${unpack({leagueType: 3, ...params})}`,
     data: params
 })
     .then(function (response) {
@@ -605,7 +581,7 @@ export const getAllLeagueMatchSeries = (params) => get({
         console.log(error);
     });
 export const getAllLeagueMatchs = (params) => get({
-    url: `${config.football_service}/football/league?${unpack({leagueType: 4, ...params})}`,
+    url: `${config.basketball_service}/basketball/league?${unpack({leagueType: 4, ...params})}`,
 })
     .then(function (response) {
         return response.data;
@@ -613,7 +589,7 @@ export const getAllLeagueMatchs = (params) => get({
         console.log(error);
     });
 export const createLeagueMatch = (params) => post({
-    url: `${config.football_service}/football/league`,
+    url: `${config.basketball_service}/basketball/league`,
     data: params
 })
     .then(function (response) {
@@ -621,14 +597,14 @@ export const createLeagueMatch = (params) => post({
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueMatchById = (id) => get({url: `${config.football_service}/football/league/${id}`})
+export const getLeagueMatchById = (id) => get({url: `${config.basketball_service}/basketball/league/${id}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
 export const updateLeagueMatchById = (params) => put({
-    url: `${config.football_service}/football/league`,
+    url: `${config.basketball_service}/basketball/league`,
     data: params
 })
     .then(function (response) {
@@ -637,7 +613,7 @@ export const updateLeagueMatchById = (params) => put({
         console.log(error);
     });
 export const delLeagueMatchByIds = (params) => del({
-    url: `${config.football_service}/football/league?${unpack(params)}`,
+    url: `${config.basketball_service}/basketball/league?${unpack(params)}`,
     data: params
 })
     .then(function (response) {
@@ -645,14 +621,14 @@ export const delLeagueMatchByIds = (params) => del({
     }).catch(function (error) {
         console.log(error);
     });
-export const getLeagueInfoBySeriesId = (params) => get({url: `${config.football_service}/football/league?${unpack(params)}`})
+export const getLeagueInfoBySeriesId = (params) => get({url: `${config.basketball_service}/basketball/league?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addLeagueIntoSeries = (params) => post({
-    url: `${config.football_service}/football/league/series`,
+    url: `${config.basketball_service}/basketball/league/series`,
     data: params
 })
     .then(function (response) {
@@ -660,26 +636,26 @@ export const addLeagueIntoSeries = (params) => post({
     }).catch(function (error) {
         console.log(error)
     });
-export const removeLeagueIntoSeries = (params) => del({url: `${config.football_service}/football/league/series?${unpack(params)}`})
+export const removeLeagueIntoSeries = (params) => del({url: `${config.basketball_service}/basketball/league/series?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getNoSeriesLeague = (params) => get({url: `${config.football_service}/football/league?${unpack({leagueType: 2, ...params})}`})
+export const getNoSeriesLeague = (params) => get({url: `${config.basketball_service}/basketball/league?${unpack({leagueType: 2, ...params})}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueChargeRule = (param) => get({url: `${config.football_service}/football/charge/league?${unpack(param)}`})
+export const getLeagueChargeRule = (param) => get({url: `${config.basketball_service}/basketball/charge/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addLeagueChargeRule = (param) => post({
-    url: `${config.football_service}/football/charge/league`,
+    url: `${config.basketball_service}/basketball/charge/league`,
     data: param
 })
     .then(function (response) {
@@ -688,7 +664,7 @@ export const addLeagueChargeRule = (param) => post({
         console.log(error)
     });
 export const updateLeagueChargeRule = (param) => put({
-    url: `${config.football_service}/football/charge/league`,
+    url: `${config.basketball_service}/basketball/charge/league`,
     data: param
 })
     .then(function (response) {
@@ -696,20 +672,20 @@ export const updateLeagueChargeRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const leagueChargeAllMatch = (param) => get({url: `${config.football_service}/football/charge/league/chargeAll?${unpack(param)}`})
+export const leagueChargeAllMatch = (param) => get({url: `${config.basketball_service}/basketball/charge/league/chargeAll?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchChargeRule = (param) => get({url: `${config.football_service}/football/charge/match?${unpack(param)}`})
+export const getMatchChargeRule = (param) => get({url: `${config.basketball_service}/basketball/charge/match?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addMatchChargeRule = (param) => post({
-    url: `${config.football_service}/football/charge/match`,
+    url: `${config.basketball_service}/basketball/charge/match`,
     data: param
 })
     .then(function (response) {
@@ -718,7 +694,7 @@ export const addMatchChargeRule = (param) => post({
         console.log(error)
     });
 export const updateMatchChargeRule = (param) => put({
-    url: `${config.football_service}/football/charge/match`,
+    url: `${config.basketball_service}/basketball/charge/match`,
     data: param
 })
     .then(function (response) {
@@ -726,32 +702,32 @@ export const updateMatchChargeRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const genLeagueTeamRank = (params) => post({url: `${config.football_service}/football/league/rank/team?${unpack(params)}`})
+export const genLeagueTeamRank = (params) => post({url: `${config.basketball_service}/basketball/league/rank/team?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const genLeaguePlayerRank = (params) => post({url: `${config.football_service}/football/league/rank/player?${unpack(params)}`})
+export const genLeaguePlayerRank = (params) => post({url: `${config.basketball_service}/basketball/league/rank/player?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueTeam = (params) => get({url: `${config.football_service}/football/league/rank/team?${unpack(params)}`})
+export const getLeagueTeam = (params) => get({url: `${config.basketball_service}/basketball/league/rank/team?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const addTeamToLeague = (params) => post({url: `${config.football_service}/football/league/team`, data: params})
+export const addTeamToLeague = (params) => post({url: `${config.basketball_service}/basketball/league/team`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const updateTeamInLeague = (params) => put({
-    url: `${config.football_service}/football/league/team`,
+    url: `${config.basketball_service}/basketball/league/team`,
     data: params
 })
     .then(function (response) {
@@ -759,32 +735,32 @@ export const updateTeamInLeague = (params) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const deleteTeamInLeague = (params) => del({url: `${config.football_service}/football/league/team?${unpack(params)}`})
+export const deleteTeamInLeague = (params) => del({url: `${config.basketball_service}/basketball/league/team?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeaguePlayer = (params) => get({url: `${config.football_service}/football/league/rank/player?${unpack(params)}`})
+export const getLeaguePlayer = (params) => get({url: `${config.basketball_service}/basketball/league/rank/player?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeaguePlayerByLeagueTeam = (params) => get({url: `${config.football_service}/football/league/rank/player?${unpack(params)}`})
+export const getLeaguePlayerByLeagueTeam = (params) => get({url: `${config.basketball_service}/basketball/league/rank/player?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueRankSetting = (params) => get({url: `${config.football_service}/football/league/rank/setting?${unpack(params)}`})
+export const getLeagueRankSetting = (params) => get({url: `${config.basketball_service}/basketball/league/rank/setting?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const updateLeagueRankSetting = (params) => post({
-    url: `${config.football_service}/football/league/rank/setting`,
+    url: `${config.basketball_service}/basketball/league/rank/setting`,
     data: params
 })
     .then(function (response) {
@@ -793,7 +769,7 @@ export const updateLeagueRankSetting = (params) => post({
         console.log(error)
     });
 export const addLeaguePlayer = (params) => post({
-    url: `${config.football_service}/football/league/player`,
+    url: `${config.basketball_service}/basketball/league/player`,
     data: params
 })
     .then(function (response) {
@@ -802,7 +778,7 @@ export const addLeaguePlayer = (params) => post({
         console.log(error)
     });
 export const updatePlayerInLeague = (params) => put({
-    url: `${config.football_service}/football/league/player`,
+    url: `${config.basketball_service}/basketball/league/player`,
     data: params
 })
     .then(function (response) {
@@ -810,74 +786,74 @@ export const updatePlayerInLeague = (params) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const delPlayerInLeague = (params) => del({url: `${config.football_service}/football/league/player?${unpack(params)}`})
+export const delPlayerInLeague = (params) => del({url: `${config.basketball_service}/basketball/league/player?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueReport = (params) => get({url: `${config.football_service}/football/league/report?${unpack(params)}`})
+export const getLeagueReport = (params) => get({url: `${config.basketball_service}/basketball/league/report?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const genLeagueReport = (params) => post({url: `${config.football_service}/football/league/report?${unpack(params)}`})
+export const genLeagueReport = (params) => post({url: `${config.basketball_service}/basketball/league/report?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchHeatRule = (param) => get({url: `${config.football_service}/football/heat/match?${unpack(param)}`})
+export const getMatchHeatRule = (param) => get({url: `${config.basketball_service}/basketball/heat/match?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const addMatchHeatRule = (param) => post({url: `${config.football_service}/football/heat/match`, data: param})
+export const addMatchHeatRule = (param) => post({url: `${config.basketball_service}/basketball/heat/match`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const updateMatchHeatRule = (param) => put({url: `${config.football_service}/football/heat/match`, data: param})
+export const updateMatchHeatRule = (param) => put({url: `${config.basketball_service}/basketball/heat/match`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const deleteMatchHeatRule = (param) => del({url: `${config.football_service}/football/heat/match?${unpack(param)}`})
+export const deleteMatchHeatRule = (param) => del({url: `${config.basketball_service}/basketball/heat/match?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchTeamHeat = (param) => get({url: `${config.football_service}/football/heat/match/team?${unpack(param)}`})
+export const getMatchTeamHeat = (param) => get({url: `${config.basketball_service}/basketball/heat/match/team?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchPlayerHeat = (param) => get({url: `${config.football_service}/football/heat/match/player?${unpack(param)}`})
+export const getMatchPlayerHeat = (param) => get({url: `${config.basketball_service}/basketball/heat/match/player?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeaguePlayerHeat = (param) => get({url: `${config.football_service}/football/heat/league/player?${unpack(param)}`})
+export const getLeaguePlayerHeat = (param) => get({url: `${config.basketball_service}/basketball/heat/league/player?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueTeamHeat = (param) => get({url: `${config.football_service}/football/heat/league/team?${unpack(param)}`})
+export const getLeagueTeamHeat = (param) => get({url: `${config.basketball_service}/basketball/heat/league/team?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addMatchTeamHeat = (param) => post({
-    url: `${config.football_service}/football/heat/match/team`,
+    url: `${config.basketball_service}/basketball/heat/match/team`,
     data: param
 })
     .then(function (response) {
@@ -886,7 +862,7 @@ export const addMatchTeamHeat = (param) => post({
         console.log(error)
     });
 export const addMatchPlayerHeat = (param) => post({
-    url: `${config.football_service}/football/heat/match/player`,
+    url: `${config.basketball_service}/basketball/heat/match/player`,
     data: param
 })
     .then(function (response) {
@@ -895,7 +871,7 @@ export const addMatchPlayerHeat = (param) => post({
         console.log(error)
     });
 export const addLeaguePlayerHeat = (param) => post({
-    url: `${config.football_service}/football/heat/league/player`,
+    url: `${config.basketball_service}/basketball/heat/league/player`,
     data: param
 })
     .then(function (response) {
@@ -904,7 +880,7 @@ export const addLeaguePlayerHeat = (param) => post({
         console.log(error)
     });
 export const addLeagueTeamHeat = (param) => post({
-    url: `${config.football_service}/football/heat/league/team`,
+    url: `${config.basketball_service}/basketball/heat/league/team`,
     data: param
 })
     .then(function (response) {
@@ -912,20 +888,20 @@ export const addLeagueTeamHeat = (param) => post({
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueHeatRule = (param) => get({url: `${config.football_service}/football/heat/league?${unpack(param)}`})
+export const getLeagueHeatRule = (param) => get({url: `${config.basketball_service}/basketball/heat/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const addLeagueHeatRule = (param) => post({url: `${config.football_service}/football/heat/league`, data: param})
+export const addLeagueHeatRule = (param) => post({url: `${config.basketball_service}/basketball/heat/league`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const updateLeagueHeatRule = (param) => put({
-    url: `${config.football_service}/football/heat/league`,
+    url: `${config.basketball_service}/basketball/heat/league`,
     data: param
 })
     .then(function (response) {
@@ -933,92 +909,92 @@ export const updateLeagueHeatRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const deleteLeagueHeatRule = (param) => del({url: `${config.football_service}/football/heat/league?${unpack(param)}`})
+export const deleteLeagueHeatRule = (param) => del({url: `${config.basketball_service}/basketball/heat/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const leagueHeatAllMatch = (param) => get({url: `${config.football_service}/football/heat/league/heatAll?${unpack(param)}`})
+export const leagueHeatAllMatch = (param) => get({url: `${config.basketball_service}/basketball/heat/league/heatAll?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueBetRule = (param) => get({url: `${config.football_service}/football/bet/league?${unpack(param)}`})
+export const getLeagueBetRule = (param) => get({url: `${config.basketball_service}/basketball/bet/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const addLeagueBetRule = (param) => post({url: `${config.football_service}/football/bet/league`, data: param})
+export const addLeagueBetRule = (param) => post({url: `${config.basketball_service}/basketball/bet/league`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const updateLeagueBetRule = (param) => put({url: `${config.football_service}/football/bet/league`, data: param})
+export const updateLeagueBetRule = (param) => put({url: `${config.basketball_service}/basketball/bet/league`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const deleteLeagueBetRule = (param) => del({url: `${config.football_service}/football/bet/league?${unpack(param)}`})
+export const deleteLeagueBetRule = (param) => del({url: `${config.basketball_service}/basketball/bet/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const leagueBetAllMatch = (param) => get({url: `${config.football_service}/football/bet/league/betAll?${unpack(param)}`})
+export const leagueBetAllMatch = (param) => get({url: `${config.basketball_service}/basketball/bet/league/betAll?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchBetRule = (param) => get({url: `${config.football_service}/football/bet/match?${unpack(param)}`})
+export const getMatchBetRule = (param) => get({url: `${config.basketball_service}/basketball/bet/match?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const addMatchBetRule = (param) => post({url: `${config.football_service}/football/bet/match`, data: param})
+export const addMatchBetRule = (param) => post({url: `${config.basketball_service}/basketball/bet/match`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const updateMatchBetRule = (param) => put({url: `${config.football_service}/football/bet/match`, data: param})
+export const updateMatchBetRule = (param) => put({url: `${config.basketball_service}/basketball/bet/match`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const deleteMatchBetRule = (param) => del({url: `${config.football_service}/football/bet/match?${unpack(param)}`})
+export const deleteMatchBetRule = (param) => del({url: `${config.basketball_service}/basketball/bet/match?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getUserBets = (param) => get({url: `${config.football_service}/football/bet/user?${unpack(param)}`})
+export const getUserBets = (param) => get({url: `${config.basketball_service}/basketball/bet/user?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const updateUserBet = (param) => put({url: `${config.football_service}/football/bet/user`, data: param})
+export const updateUserBet = (param) => put({url: `${config.basketball_service}/basketball/bet/user`, data: param})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueClipRule = (param) => get({url: `${config.football_service}/football/clip/league?${unpack(param)}`})
+export const getLeagueClipRule = (param) => get({url: `${config.basketball_service}/basketball/clip/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addLeagueClipRule = (param) => post({
-    url: `${config.football_service}/football/clip/league`,
+    url: `${config.basketball_service}/basketball/clip/league`,
     data: param
 })
     .then(function (response) {
@@ -1027,7 +1003,7 @@ export const addLeagueClipRule = (param) => post({
         console.log(error)
     });
 export const updateLeagueClipRule = (param) => put({
-    url: `${config.football_service}/football/clip/league`,
+    url: `${config.basketball_service}/basketball/clip/league`,
     data: param
 })
     .then(function (response) {
@@ -1035,20 +1011,20 @@ export const updateLeagueClipRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const leagueClipAllMatch = (param) => get({url: `${config.football_service}/football/clip/league/clipAll?${unpack(param)}`})
+export const leagueClipAllMatch = (param) => get({url: `${config.basketball_service}/basketball/clip/league/clipAll?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchClipRule = (param) => get({url: `${config.football_service}/football/clip/match?${unpack(param)}`})
+export const getMatchClipRule = (param) => get({url: `${config.basketball_service}/basketball/clip/match?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addMatchClipRule = (param) => post({
-    url: `${config.football_service}/football/clip/match`,
+    url: `${config.basketball_service}/basketball/clip/match`,
     data: param
 })
     .then(function (response) {
@@ -1057,7 +1033,7 @@ export const addMatchClipRule = (param) => post({
         console.log(error)
     });
 export const updateMatchClipRule = (param) => put({
-    url: `${config.football_service}/football/clip/match`,
+    url: `${config.basketball_service}/basketball/clip/match`,
     data: param
 })
     .then(function (response) {
@@ -1066,14 +1042,14 @@ export const updateMatchClipRule = (param) => put({
         console.log(error)
     });
 
-export const getLeagueEncryptionRule = (param) => get({url: `${config.football_service}/football/encryption/league?${unpack(param)}`})
+export const getLeagueEncryptionRule = (param) => get({url: `${config.basketball_service}/basketball/encryption/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addLeagueEncryptionRule = (param) => post({
-    url: `${config.football_service}/football/encryption/league`,
+    url: `${config.basketball_service}/basketball/encryption/league`,
     data: param
 })
     .then(function (response) {
@@ -1082,7 +1058,7 @@ export const addLeagueEncryptionRule = (param) => post({
         console.log(error)
     });
 export const updateLeagueEncryptionRule = (param) => put({
-    url: `${config.football_service}/football/encryption/league`,
+    url: `${config.basketball_service}/basketball/encryption/league`,
     data: param
 })
     .then(function (response) {
@@ -1090,20 +1066,20 @@ export const updateLeagueEncryptionRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const leagueEncryptionAllMatch = (param) => get({url: `${config.football_service}/football/encryption/league/encryptionAll?${unpack(param)}`})
+export const leagueEncryptionAllMatch = (param) => get({url: `${config.basketball_service}/basketball/encryption/league/encryptionAll?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchEncryptionRule = (param) => get({url: `${config.football_service}/football/encryption/match?${unpack(param)}`})
+export const getMatchEncryptionRule = (param) => get({url: `${config.basketball_service}/basketball/encryption/match?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addMatchEncryptionRule = (param) => post({
-    url: `${config.football_service}/football/encryption/match`,
+    url: `${config.basketball_service}/basketball/encryption/match`,
     data: param
 })
     .then(function (response) {
@@ -1112,7 +1088,7 @@ export const addMatchEncryptionRule = (param) => post({
         console.log(error)
     });
 export const updateMatchEncryptionRule = (param) => put({
-    url: `${config.football_service}/football/encryption/match`,
+    url: `${config.basketball_service}/basketball/encryption/match`,
     data: param
 })
     .then(function (response) {
@@ -1120,32 +1096,32 @@ export const updateMatchEncryptionRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
-export const getAllMatchs = (params) => get({url: `${config.football_service}/football/match?${unpack(params)}`})
+export const getAllMatchs = (params) => get({url: `${config.basketball_service}/basketball/match?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const createMatch = (params) => post({url: `${config.football_service}/football/match`, data: params})
+export const createMatch = (params) => post({url: `${config.basketball_service}/basketball/match`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchById = (id) => get({url: `${config.football_service}/football/match/${id}`})
+export const getMatchById = (id) => get({url: `${config.basketball_service}/basketball/match/${id}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
-export const updateMatchById = (params) => put({url: `${config.football_service}/football/match`, data: params})
+export const updateMatchById = (params) => put({url: `${config.basketball_service}/basketball/match`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
 export const updateMatchScoreStatusById = (params) => put({
-    url: `${config.football_service}/football/match/score`,
+    url: `${config.basketball_service}/basketball/match/score`,
     data: params
 })
     .then(function (response) {
@@ -1153,14 +1129,14 @@ export const updateMatchScoreStatusById = (params) => put({
     }).catch(function (error) {
         console.log(error);
     });
-export const delMatchByIds = (params) => del({url: `${config.football_service}/football/match?${unpack(params)}`})
+export const delMatchByIds = (params) => del({url: `${config.basketball_service}/basketball/match?${unpack(params)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error);
     });
 export const getRecentMatches = () => get({
-    url: `${config.football_service}/match?${unpack({
+    url: `${config.basketball_service}/match?${unpack({
         pageSize: 20,
         pageNum: 1,
         dateBegin: getPastMonthDate(),
@@ -1172,22 +1148,7 @@ export const getRecentMatches = () => get({
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchMonopolys = (param) => get({url: `${config.football_service}/football/charge/monopoly?${unpack(param)}`})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
-export const getFormationByMatchTeam = (params) => get({url: `${config.football_service}/football/match/formation?${unpack(params)}`})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
-export const updateFormation = (params) => post({
-    url: `${config.football_service}/football/match/formation`,
-    data: params
-})
+export const getMatchMonopolys = (param) => get({url: `${config.basketball_service}/basketball/charge/monopoly?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -1366,7 +1327,7 @@ export const deleteClipCollections = (param) => del({url: `${config.media_servic
         console.log(error)
     });
 export const getTimelineByMatchId = (params) => get({
-    url: `${config.football_service}/football/timeline?${unpack(params)}`,
+    url: `${config.basketball_service}/basketball/timeline?${unpack(params)}`,
     data: params
 })
     .then(function (response) {
@@ -1374,20 +1335,20 @@ export const getTimelineByMatchId = (params) => get({
     }).catch(function (error) {
         console.log(error)
     });
-export const updateTimeline = (params) => put({url: `${config.football_service}/football/timeline`, data: params})
+export const updateTimeline = (params) => put({url: `${config.basketball_service}/basketball/timeline`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const addTimeline = (params) => post({url: `${config.football_service}/football/timeline`, data: params})
+export const addTimeline = (params) => post({url: `${config.basketball_service}/basketball/timeline`, data: params})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const deleteTimelineByIds = (params) => del({
-    url: `${config.football_service}/football/timeline?${unpack(params)}`,
+    url: `${config.basketball_service}/basketball/timeline?${unpack(params)}`,
     data: params
 })
     .then(function (response) {
@@ -1396,7 +1357,7 @@ export const deleteTimelineByIds = (params) => del({
         console.log(error)
     });
 export const updatePassAndPossession = (params) => post({
-    url: `${config.football_service}/football/timeline/passAndPossession`,
+    url: `${config.basketball_service}/basketball/timeline/passAndPossession`,
     data: params
 })
     .then(function (response) {
@@ -1405,7 +1366,7 @@ export const updatePassAndPossession = (params) => post({
         console.log(error)
     });
 export const getPassAndPossession = (matchid, teamid) => get({
-    url: `${config.football_service}/football/timeline/passAndPossession?${unpack({
+    url: `${config.basketball_service}/basketball/timeline/passAndPossession?${unpack({
         matchId: matchid,
         teamId: teamid
     })}`
@@ -1415,7 +1376,7 @@ export const getPassAndPossession = (matchid, teamid) => get({
     }).catch(function (error) {
         console.log(error)
     });
-export const getMatchStatus = (matchid) => get({url: `${config.football_service}/football/timeline/status?${unpack({matchId: matchid})}`})
+export const getMatchStatus = (matchid) => get({url: `${config.basketball_service}/basketball/timeline/status?${unpack({matchId: matchid})}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -1502,14 +1463,14 @@ export const deleteCommentByIds = (ids) => del({url: `${config.chat_service}/com
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueFans = (param) => get({url: `${config.football_service}/football/league/fans?${unpack(param)}`})
+export const getLeagueFans = (param) => get({url: `${config.basketball_service}/basketball/league/fans?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addLeagueFans = (param) => post({
-    url: `${config.football_service}/football/league/fans`,
+    url: `${config.basketball_service}/basketball/league/fans`,
     data: param
 })
     .then(function (response) {
@@ -1518,7 +1479,7 @@ export const addLeagueFans = (param) => post({
         console.log(error)
     });
 export const deleteLeagueFans = (param) => del({
-    url: `${config.football_service}/football/league/fans/leave?${unpack(param)}`,
+    url: `${config.basketball_service}/basketball/league/fans/leave?${unpack(param)}`,
     data: null
 })
     .then(function (response) {
@@ -1701,14 +1662,14 @@ export const addFakeGiftOrder = (param) => post({url: `${config.pay_service}/pay
     }).catch(function (error) {
         console.log(error)
     });
-export const getLeagueAdRule = (param) => get({url: `${config.football_service}/football/ad/league?${unpack(param)}`})
+export const getLeagueAdRule = (param) => get({url: `${config.basketball_service}/basketball/ad/league?${unpack(param)}`})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
 export const addLeagueAdRule = (param) => post({
-    url: `${config.football_service}/football/ad/league`,
+    url: `${config.basketball_service}/basketball/ad/league`,
     data: param
 })
     .then(function (response) {
@@ -1717,7 +1678,7 @@ export const addLeagueAdRule = (param) => post({
         console.log(error)
     });
 export const updateLeagueAdRule = (param) => put({
-    url: `${config.football_service}/football/ad/league`,
+    url: `${config.basketball_service}/basketball/ad/league`,
     data: param
 })
     .then(function (response) {

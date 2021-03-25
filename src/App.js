@@ -90,7 +90,7 @@ class App extends Component {
             return <div/>
         }
         return (
-            <DocumentTitle title="茄子TV后台管理系统">
+            <DocumentTitle title="茄子TV篮球后台管理系统">
                 <Layout>
                     <SiderCustom collapsed={this.state.collapsed} ontoggle={this.toggle}/>
                     {(responsive.data.isMobile && !this.state.collapsed)
@@ -106,7 +106,7 @@ class App extends Component {
                                 <Routes auth={auth} permissions={permission.data}/>
                             </Content>
                             <Footer style={{textAlign: 'center'}}>
-                                Qiezizhibo-Admin ©2020
+                                Qiezizhibo-Basketball-Admin ©2021
                             </Footer>
                         </Layout>
                     }

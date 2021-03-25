@@ -27,14 +27,14 @@ export const menus_admin = [
     },
     {key: '/area', title: '地区管理', icon: 'environment',},
     {
-        key: '/football', title: '球赛管理', icon: 'dribbble',
+        key: '/basketball', title: '球赛管理', icon: 'dribbble',
         public: 1,
         sub: [
-            {key: '/football/footballLeagueMatch', title: '联赛', icon: 'trophy',},
-            {key: '/football/footballMatch', title: '球赛', icon: 'dribbble',},
-            {key: '/football/footballTeam', title: '球队', icon: 'team',},
-            {key: '/football/footballPlayer', title: '球员', icon: 'user',},
-            {key: '/football/import', title: '导入', icon: 'import',},
+            {key: '/basketball/basketballLeagueMatch', title: '联赛', icon: 'trophy',},
+            {key: '/basketball/basketballMatch', title: '球赛', icon: 'dribbble',},
+            {key: '/basketball/basketballTeam', title: '球队', icon: 'team',},
+            {key: '/basketball/basketballPlayer', title: '球员', icon: 'user',},
+            {key: '/basketball/import', title: '导入', icon: 'import',},
         ],
     },
     {

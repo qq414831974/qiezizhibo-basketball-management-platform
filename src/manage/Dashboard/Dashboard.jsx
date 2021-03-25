@@ -99,7 +99,7 @@ class Dashboard extends React.Component {
     }
     onMatchClick = (id) => {
         const history = this.props.history;
-        history.push(`/football/footballMatch/${id}`);
+        history.push(`/basketball/basketballMatch/${id}`);
     }
 
     render() {
@@ -112,12 +112,6 @@ class Dashboard extends React.Component {
                             <Card title="新增功能" bordered={false}
                                   style={{height: 214, width: "100%", overflow: "scroll"}}>
                                 <div className="w-full">2021-03-18：系统改版</div>
-                                <div className="w-full">2020-12-26：新增自动剪辑系统</div>
-                                <div className="w-full">2020-11-17：新增竞猜系统</div>
-                                <div className="w-full">2020-10-19：新增热度比拼系统</div>
-                                <div className="w-full">2020-09-14：新增粉丝团系统</div>
-                                <div className="w-full">2020-09-11：新增礼物系统</div>
-                                <div className="w-full">2020-09-10：新增经验系统</div>
                             </Card>
                         </div>
                     </Col>
@@ -125,7 +119,7 @@ class Dashboard extends React.Component {
                         <div className="gutter-box">
                             <Card bordered={false} style={{height: 214}}>
                                 <div className="w-full center"><img src={logo} className="round-img"/></div>
-                                <span style={{fontSize: 20}} className="w-full center mt-s">欢迎来到茄子直播后台管理</span>
+                                <span style={{fontSize: 20}} className="w-full center mt-s">欢迎来到茄子TV篮球后台管理</span>
                             </Card>
                         </div>
                     </Col>

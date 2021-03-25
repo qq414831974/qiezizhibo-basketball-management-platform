@@ -6,50 +6,48 @@ import UserManagement from '../manage/User/UserManagement';
 import UserDetailManagement from '../manage/User/UserDetailManagement';
 import ExpManagement from '../manage/Exp/ExpManagement';
 import GrowthManagement from '../manage/Growth/GrowthManagement';
-import FootBallPlayerManagement from "../manage/Football/Player/FootBallPlayerManagement";
-import FootballPlayerDetailManagement from "../manage/Football/Player/FootballPlayerDetailManagement";
+import BasketballPlayerManagement from "../manage/Basketball/Player/BasketballPlayerManagement";
+import BasketballPlayerDetailManagement from "../manage/Basketball/Player/BasketballPlayerDetailManagement";
 import LiveManagement from "../manage/Live/LiveManagement";
 import LiveDetailManagement from "../manage/Live/LiveDetailManagement";
-import FootBallTeamManagement from "../manage/Football/Team/FootBallTeamManagement";
-import TeamDetailManagement from "../manage/Football/Team/FootBallTeamDetailManagement";
-import FootBallMatchManagement from "../manage/Football/Match/FootBallMatchManagement";
-import MatchDetailManagement from "../manage/Football/Match/FootBallMatchDetailManagement";
-import FootBallLeagueMatchManagement from "../manage/Football/League/FootBallLeagueMatchManagement";
-import FootBallLeagueMatchSeriesManagement from "../manage/Football/League/Series/FootBallLeagueMatchSeriesManagement";
-import FootballLeagueMatchDetailManagement from "../manage/Football/League/FootballLeagueMatchDetailManagement";
-import ImportManagement from "../manage/Football/Import/ImportManagement";
+import BasketballTeamManagement from "../manage/Basketball/Team/BasketballTeamManagement";
+import TeamDetailManagement from "../manage/Basketball/Team/BasketballTeamDetailManagement";
+import BasketballMatchManagement from "../manage/Basketball/Match/BasketballMatchManagement";
+import MatchDetailManagement from "../manage/Basketball/Match/BasketballMatchDetailManagement";
+import BasketballLeagueMatchManagement from "../manage/Basketball/League/BasketballLeagueMatchManagement";
+import BasketballLeagueMatchSeriesManagement from "../manage/Basketball/League/Series/BasketballLeagueMatchSeriesManagement";
+import BasketballLeagueMatchDetailManagement from "../manage/Basketball/League/BasketballLeagueMatchDetailManagement";
+import ImportManagement from "../manage/Basketball/Import/ImportManagement";
 import RoleManagement from "../manage/Role/RoleManagement";
 import PermissionManagement from "../manage/Permission/PermissionManagement";
 import AreasManagement from "../manage/Areas/AreasManagement";
 import CommentManagement from "../manage/Comment/CommentManagement";
 import Dashboard from "../manage/Dashboard/Dashboard";
 import BannerSetting from "../manage/Setting/Banner/BannerSetting";
-import ScoreBoardSetting from "../manage/Setting/ScoreBoard/ScoreBoardSetting";
 import BulletinSetting from "../manage/Setting/Bulletin/BulletinSetting";
 import WechatSetting from "../manage/Setting/WechatSetting";
-import FootballMatchSchedule from "../manage/Football/Match/FootballMatchSchedule";
+import BasketballMatchSchedule from "../manage/Basketball/Match/BasketballMatchSchedule";
 import ProductManagement from "../manage/Pay/Product/ProductManagement";
 import OrderManagement from "../manage/Pay/Order/OrderManagement";
-import ImportLYSYManagement from "../manage/Football/Import/LYSY/ImportLYSYManagement";
 import FreeTicketManagement from "../manage/Pay/FreeTicket/FreeTicketManagement";
 import DepositManagement from "../manage/Pay/Deposit/DepositManagement";
 import MatchMonopolyManagement from "../manage/Pay/Monopoly/MatchMonopolyManagement";
 import ShareSentenceManagement from "../manage/Setting/ShareSentence/ShareSentenceManagement";
 import GiftManagement from "../manage/Pay/Gift/GiftManagement";
-import FootBallLeagueChargeManagement from "../manage/Football/Charge/League/FootBallLeagueChargeManagement";
-import FootBallMatchChargeManagement from "../manage/Football/Charge/Match/FootBallMatchChargeManagement";
-import FootBallLeagueHeatManagement from "../manage/Football/Heat/League/FootBallLeagueHeatManagement";
-import FootBallMatchHeatManagement from "../manage/Football/Heat/Match/FootBallMatchHeatManagement";
-import FootBallLeagueBetManagement from "../manage/Football/Bet/League/FootBallLeagueBetManagement";
-import FootBallMatchBetManagement from "../manage/Football/Bet/Match/FootBallMatchBetManagement";
-import UserBetManagement from "../manage/Football/Bet/UserBetManagement";
-import FootBallLeagueClipManagement from "../manage/Football/Clip/League/FootBallLeagueClipManagement";
-import FootBallMatchClipManagement from "../manage/Football/Clip/Match/FootBallMatchClipManagement";
-import FootBallLeagueAdManagement from "../manage/Football/Ad/League/FootBallLeagueAdManagement";
-import FootBallLeagueEncryptionManagement from "../manage/Football/Encryption/League/FootBallLeagueEncryptionManagement";
-import FootBallMatchEncrypitonManagement from "../manage/Football/Encryption/Match/FootBallMatchEncryptionManagement";
-import FootballLeagueMatchBillAnalysis from "../manage/Football/League/Bill/FootballLeagueMatchBillAnalysis";
-import FootBallLeagueDetailSetting from "../manage/Football/League/Detail/FootBallLeagueDetailSetting";
+import BasketballLeagueChargeManagement from "../manage/Basketball/Charge/League/BasketballLeagueChargeManagement";
+import BasketballMatchChargeManagement from "../manage/Basketball/Charge/Match/BasketballMatchChargeManagement";
+import BasketballLeagueHeatManagement from "../manage/Basketball/Heat/League/BasketballLeagueHeatManagement";
+import BasketballMatchHeatManagement from "../manage/Basketball/Heat/Match/BasketballMatchHeatManagement";
+import BasketballLeagueBetManagement from "../manage/Basketball/Bet/League/BasketballLeagueBetManagement";
+import BasketballMatchBetManagement from "../manage/Basketball/Bet/Match/BasketballMatchBetManagement";
+import UserBetManagement from "../manage/Basketball/Bet/UserBetManagement";
+import BasketballLeagueClipManagement from "../manage/Basketball/Clip/League/BasketballLeagueClipManagement";
+import BasketballMatchClipManagement from "../manage/Basketball/Clip/Match/BasketballMatchClipManagement";
+import BasketballLeagueAdManagement from "../manage/Basketball/Ad/League/BasketballLeagueAdManagement";
+import BasketballLeagueEncryptionManagement from "../manage/Basketball/Encryption/League/BasketballLeagueEncryptionManagement";
+import BasketballMatchEncrypitonManagement from "../manage/Basketball/Encryption/Match/BasketballMatchEncryptionManagement";
+import BasketballLeagueMatchBillAnalysis from "../manage/Basketball/League/Bill/BasketballLeagueMatchBillAnalysis";
+import BasketballLeagueDetailSetting from "../manage/Basketball/League/Detail/BasketballLeagueDetailSetting";
 import Unauthorized from '../manage/Pages/Unauthorized';
 import LogManagement from '../manage/Log/LogManagement';
 
@@ -90,13 +88,12 @@ export default class CRouter extends Component {
                 <Route exact path="/role/role" component={this.requireAuth("/role/role",RoleManagement)}/>
                 <Route exact path="/role/permission" component={this.requireAuth("/role/permission",PermissionManagement)}/>
                 <Route exact path="/area" component={this.requireAuth("/area",AreasManagement)}/>
-                <Route exact path="/football/footballPlayer" component={this.requireAuth("/football/footballPlayer",FootBallPlayerManagement)}/>
-                <Route exact path="/football/footballTeam" component={this.requireAuth("/football/footballTeam",FootBallTeamManagement)}/>
-                <Route exact path="/football/footballMatch" component={this.requireAuth("/football/footballMatch",FootBallMatchManagement)}/>
-                <Route exact path="/football/footballLeagueMatch" component={this.requireAuth("/football/footballLeagueMatch",FootBallLeagueMatchManagement)}/>
+                <Route exact path="/basketball/basketballPlayer" component={this.requireAuth("/basketball/basketballPlayer",BasketballPlayerManagement)}/>
+                <Route exact path="/basketball/basketballTeam" component={this.requireAuth("/basketball/basketballTeam",BasketballTeamManagement)}/>
+                <Route exact path="/basketball/basketballMatch" component={this.requireAuth("/basketball/basketballMatch",BasketballMatchManagement)}/>
+                <Route exact path="/basketball/basketballLeagueMatch" component={this.requireAuth("/basketball/basketballLeagueMatch",BasketballLeagueMatchManagement)}/>
                 <Route exact path="/live" component={this.requireAuth("/live",LiveManagement)}/>
                 <Route exact path="/setting/banner" component={this.requireAuth("/setting/banner",BannerSetting)}/>
-                <Route exact path="/setting/scoreboard" component={this.requireAuth("/setting/scoreboard",ScoreBoardSetting)}/>
                 <Route exact path="/setting/wechat" component={this.requireAuth("/setting/wechat",WechatSetting)}/>
                 <Route exact path="/setting/bulletin" component={this.requireAuth("/setting/bulletin",BulletinSetting)}/>
                 <Route exact path="/setting/sharesentence" component={this.requireAuth("/setting/sharesentence",ShareSentenceManagement)}/>
@@ -106,31 +103,30 @@ export default class CRouter extends Component {
                 <Route exact path="/pay/monopoly" component={this.requireAuth("/pay/monopoly",MatchMonopolyManagement)}/>
                 <Route exact path="/pay/gift" component={this.requireAuth("/pay/gift",GiftManagement)}/>
                 <Route exact path="/pay/deposit" component={this.requireAuth("/pay/deposit",DepositManagement)}/>
-                <Route exact path="/football/import" component={this.requireAuth("/football/import",ImportManagement)}/>
-                <Route exact path="/football/import/lysy" component={this.requireAuth("/football/import/lysy",ImportLYSYManagement)}/>
-                <Route exact path="/football/league/charge" component={this.requireAuth("/football/league/charge",FootBallLeagueChargeManagement)}/>
-                <Route exact path="/football/match/charge" component={this.requireAuth("/football/match/charge",FootBallMatchChargeManagement)}/>
-                <Route exact path="/football/league/heat" component={this.requireAuth("/football/league/heat",FootBallLeagueHeatManagement)}/>
-                <Route exact path="/football/match/heat" component={this.requireAuth("/football/match/heat",FootBallMatchHeatManagement)}/>
-                <Route exact path="/football/league/bet" component={this.requireAuth("/football/league/bet",FootBallLeagueBetManagement)}/>
-                <Route exact path="/football/match/bet" component={this.requireAuth("/football/match/bet",FootBallMatchBetManagement)}/>
-                <Route exact path="/football/league/clip" component={this.requireAuth("/football/league/clip",FootBallLeagueClipManagement)}/>
-                <Route exact path="/football/match/clip" component={this.requireAuth("/football/match/clip",FootBallMatchClipManagement)}/>
-                <Route exact path="/football/league/encryption" component={this.requireAuth("/football/league/encryption",FootBallLeagueEncryptionManagement)}/>
-                <Route exact path="/football/match/encryption" component={this.requireAuth("/football/match/encryption",FootBallMatchEncrypitonManagement)}/>
-                <Route exact path="/football/league/ad" component={this.requireAuth("/football/league/ad",FootBallLeagueAdManagement)}/>
+                <Route exact path="/basketball/import" component={this.requireAuth("/basketball/import",ImportManagement)}/>
+                <Route exact path="/basketball/league/charge" component={this.requireAuth("/basketball/league/charge",BasketballLeagueChargeManagement)}/>
+                <Route exact path="/basketball/match/charge" component={this.requireAuth("/basketball/match/charge",BasketballMatchChargeManagement)}/>
+                <Route exact path="/basketball/league/heat" component={this.requireAuth("/basketball/league/heat",BasketballLeagueHeatManagement)}/>
+                <Route exact path="/basketball/match/heat" component={this.requireAuth("/basketball/match/heat",BasketballMatchHeatManagement)}/>
+                <Route exact path="/basketball/league/bet" component={this.requireAuth("/basketball/league/bet",BasketballLeagueBetManagement)}/>
+                <Route exact path="/basketball/match/bet" component={this.requireAuth("/basketball/match/bet",BasketballMatchBetManagement)}/>
+                <Route exact path="/basketball/league/clip" component={this.requireAuth("/basketball/league/clip",BasketballLeagueClipManagement)}/>
+                <Route exact path="/basketball/match/clip" component={this.requireAuth("/basketball/match/clip",BasketballMatchClipManagement)}/>
+                <Route exact path="/basketball/league/encryption" component={this.requireAuth("/basketball/league/encryption",BasketballLeagueEncryptionManagement)}/>
+                <Route exact path="/basketball/match/encryption" component={this.requireAuth("/basketball/match/encryption",BasketballMatchEncrypitonManagement)}/>
+                <Route exact path="/basketball/league/ad" component={this.requireAuth("/basketball/league/ad",BasketballLeagueAdManagement)}/>
                 <Route exact path="/pay/bet" component={this.requireAuth("/pay/bet",UserBetManagement)}/>
-                <Route path="/football/comment/:id" component={this.requireAuth("/football/comment/:id",CommentManagement)}/>
+                <Route path="/basketball/comment/:id" component={this.requireAuth("/basketball/comment/:id",CommentManagement)}/>
                 <Route path="/live/:id" component={this.requireAuth("/live/:id",LiveDetailManagement)}/>
                 <Route path="/user/user/:id" component={this.requireAuth("/user/user/:id" ,UserDetailManagement)}/>
-                <Route path="/football/footballTeam/:id" component={this.requireAuth("/football/footballTeam/:id",TeamDetailManagement)}/>
-                <Route path="/football/footballMatch/:id" component={this.requireAuth("/football/footballMatch/:id",MatchDetailManagement)}/>
-                <Route path="/football/league/detail/:id" component={this.requireAuth("/football/footballLeagueMatch/:id",FootBallLeagueDetailSetting)}/>
-                <Route path="/football/footballLeagueMatch/:id" component={this.requireAuth("/football/footballLeagueMatch/:id",FootballLeagueMatchDetailManagement)}/>
-                <Route path="/football/footballLeagueSeries/:id" component={this.requireAuth("/football/footballLeagueSeries/:id",FootBallLeagueMatchSeriesManagement)}/>
-                <Route path="/football/footballPlayer/:id" component={this.requireAuth("/football/footballPlayer/:id",FootballPlayerDetailManagement)}/>
-                <Route path="/football/schedule" component={this.requireAuth("/football/schedule",FootballMatchSchedule)}/>
-                <Route path="/analysis/bill" component={this.requireAuth("/analysis/bill",FootballLeagueMatchBillAnalysis)}/>
+                <Route path="/basketball/basketballTeam/:id" component={this.requireAuth("/basketball/basketballTeam/:id",TeamDetailManagement)}/>
+                <Route path="/basketball/basketballMatch/:id" component={this.requireAuth("/basketball/basketballMatch/:id",MatchDetailManagement)}/>
+                <Route path="/basketball/league/detail/:id" component={this.requireAuth("/basketball/basketballLeagueMatch/:id",BasketballLeagueDetailSetting)}/>
+                <Route path="/basketball/basketballLeagueMatch/:id" component={this.requireAuth("/basketball/basketballLeagueMatch/:id",BasketballLeagueMatchDetailManagement)}/>
+                <Route path="/basketball/basketballLeagueSeries/:id" component={this.requireAuth("/basketball/basketballLeagueSeries/:id",BasketballLeagueMatchSeriesManagement)}/>
+                <Route path="/basketball/basketballPlayer/:id" component={this.requireAuth("/basketball/basketballPlayer/:id",BasketballPlayerDetailManagement)}/>
+                <Route path="/basketball/schedule" component={this.requireAuth("/basketball/schedule",BasketballMatchSchedule)}/>
+                <Route path="/analysis/bill" component={this.requireAuth("/analysis/bill",BasketballLeagueMatchBillAnalysis)}/>
                 <Route path="/sys/log" component={this.requireAuth("/sys/log",LogManagement)}/>
                 <Route render={() => <Redirect to="/index"/>}/>
             </Switch>

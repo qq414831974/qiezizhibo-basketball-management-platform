@@ -5,7 +5,6 @@ import {bindActionCreators} from "redux";
 import {receiveData} from "../../../action";
 import {connect} from "react-redux";
 import {getBulletin, setBulletin, updateBulletin, delBulletinById} from "../../../axios";
-import ScoreBoard from '../ScoreBoard/ScoreBoard';
 import {Form} from "antd/lib/index";
 import BulletinAddDialog from "./BulletinAddDialog";
 import BulletinModifyDialog from "./BulletinModifyDialog";

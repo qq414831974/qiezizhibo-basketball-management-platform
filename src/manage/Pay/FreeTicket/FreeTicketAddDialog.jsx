@@ -252,6 +252,25 @@ class FreeTicketAddDialog extends React.Component {
         this.isUserCompositions = true;
         this.fetchUsers(this.state.userSearchText, 1);
     }
+    getAgainstTeams = (againstTeams) => {
+        if (againstTeams == null && againstTeams.length == 0) {
+            return <div/>
+        }
+        // <div className="center">
+        //     <Avatar
+        //         src={currentMatch.hostTeam ? currentMatch.hostTeam.headImg : defultAvatar}/>
+        //     <p className="ml-s">{currentMatch.hostTeam ? currentMatch.hostTeam.name : ""}</p>
+        //     <p className="ml-s mr-s">{currentMatch.score}</p>
+        //     <Avatar
+        //         src={currentMatch.guestTeam ? currentMatch.guestTeam.headImg : defultAvatar}/>
+        //     <p className="ml-s">{currentMatch.guestTeam ? currentMatch.guestTeam.name : ""}</p>
+        // </div>
+
+        return againstTeams.map(data=>{
+            console.log(data)
+            return <div></div>
+        })
+    }
 
     render() {
         const {visible, form, record} = this.props;
@@ -312,19 +331,11 @@ class FreeTicketAddDialog extends React.Component {
                       hidden={!this.state.loading}/>
             </div>
             <div className="center w-full">
-                {(currentMatch.hostTeam == null || currentMatch.guestTeam == null) ?
+                {(currentMatch.againstTeams == null || currentMatch.againstTeams.length() == 0) ?
                     <Tooltip
                         title={currentMatch.name + "-" + currentMatch.startTime}><span>{currentMatch.name}</span></Tooltip>
                     : <Tooltip title={currentMatch.name + "-" + currentMatch.startTime}>
-                        <div className="center">
-                            <Avatar
-                                src={currentMatch.hostTeam ? currentMatch.hostTeam.headImg : defultAvatar}/>
-                            <p className="ml-s">{currentMatch.hostTeam ? currentMatch.hostTeam.name : ""}</p>
-                            <p className="ml-s mr-s">{currentMatch.score}</p>
-                            <Avatar
-                                src={currentMatch.guestTeam ? currentMatch.guestTeam.headImg : defultAvatar}/>
-                            <p className="ml-s">{currentMatch.guestTeam ? currentMatch.guestTeam.name : ""}</p>
-                        </div>
+                        {this.getAgainstTeams(currentMatch.againstTeams)}
                     </Tooltip>}
             </div>
             {currentMatch == null ? <div className="center w-full"><span>暂未关联比赛</span></div> : null}

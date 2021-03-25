@@ -308,7 +308,7 @@ class CommentTable extends React.Component {
 
     render() {
         if (!(this.props.matchId)) {
-            return <Redirect push to="/football/footballMatch"/>;
+            return <Redirect push to="/basketball/basketballMatch"/>;
         }
         const onNameClick = this.onNameClick;
         const {selectedRowKeys} = this.state;

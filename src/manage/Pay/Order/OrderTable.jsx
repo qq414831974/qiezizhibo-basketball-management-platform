@@ -234,11 +234,11 @@ class OrderTable extends React.Component {
     }
     toMatch = (item) => {
         const history = this.props.history;
-        history.push(`/football/footballMatch/${item.id}`);
+        history.push(`/basketball/basketballMatch/${item.id}`);
     }
     toLeague = (item) => {
         const history = this.props.history;
-        history.push(`/football/footballLeagueMatch/${item.id}`);
+        history.push(`/basketball/basketballLeagueMatch/${item.id}`);
     }
 
     render() {

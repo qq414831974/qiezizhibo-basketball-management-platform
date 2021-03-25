@@ -15,7 +15,7 @@ import UserExpPanel from "./Exp/UserExpPanel";
 
 const TabPane = Tabs.TabPane;
 
-class FootBallMatchDetailManagement extends React.Component {
+class BasketballMatchDetailManagement extends React.Component {
     state = {
         currentTab: "1",
         pageLoaded: false,
@@ -109,4 +109,4 @@ const mapDispatchToProps = dispatch => ({
     receiveData: bindActionCreators(receiveData, dispatch)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FootBallMatchDetailManagement);
+export default connect(mapStateToProps, mapDispatchToProps)(BasketballMatchDetailManagement);
