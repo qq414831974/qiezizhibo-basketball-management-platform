@@ -235,6 +235,19 @@ class BasketballLeagueMatchAddDialog extends React.Component {
                                 </RadioGroup>
                             )}
                         </FormItem>
+                        <FormItem {...formItemLayout} label="规则类型" className="bs-form-item">
+                            {getFieldDecorator('ruleType', {
+                                rules: [{required: true, message: '请选择规则类型'}],
+                                initialValue: 4
+                            })(
+                                <RadioGroup>
+                                    <Radio value={1}>小篮球赛</Radio>
+                                    <Radio value={2}>1x1</Radio>
+                                    <Radio value={3}>3x3</Radio>
+                                    <Radio value={4}>5x5</Radio>
+                                </RadioGroup>
+                            )}
+                        </FormItem>
                         <FormItem {...formItemLayout} label="地区类型" className="bs-form-item">
                             {getFieldDecorator('areaType', {
                                 rules: [{required: true, message: '请选择类型'}],
@@ -300,8 +313,8 @@ class BasketballLeagueMatchAddDialog extends React.Component {
                                 </Select>
                             )}
                         </FormItem>}
-                        <FormItem {...formItemLayout} label="几人制" className="bs-form-item">
-                            {getFieldDecorator('regulations.population', {
+                        <FormItem {...formItemLayout} label="比赛节数" className="bs-form-item">
+                            {getFieldDecorator('regulations.section', {
                                 // initialValue: record.englishName,
                                 getValueFromEvent(e) {
                                     if (e == null) {
@@ -316,8 +329,8 @@ class BasketballLeagueMatchAddDialog extends React.Component {
                                 <InputNumber placeholder='请输入'/>
                             )}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="比赛时长" className="bs-form-item">
-                            {getFieldDecorator('regulations.duration', {
+                        <FormItem {...formItemLayout} label="每节几分钟" className="bs-form-item">
+                            {getFieldDecorator('regulations.minutePerSection', {
                                 // initialValue: record.englishName,
                                 getValueFromEvent(e) {
                                     if (e == null) {

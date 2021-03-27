@@ -181,7 +181,7 @@ class OrderTable extends React.Component {
         this.setState({cancelVisible: true})
     }
     handleOrderRefundClick = () => {
-        if(this.state.record.payType == 2){
+        if (this.state.record.payType == 2) {
             message.warn('余额支付不允许退款', 3);
             return;
         }
@@ -240,11 +240,46 @@ class OrderTable extends React.Component {
         const history = this.props.history;
         history.push(`/basketball/basketballLeagueMatch/${item.id}`);
     }
+    getMatchAgainstDom = (record) => {
+        const match = record.match;
+        let dom = [];
+        if (match.againstTeams) {
+            const againstMap = match.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                dom.push(<Tooltip title={`比赛时间：${match.startTime}`}>
+                    <div key={`against-${<p className="ml-s">{hostTeam.name}</p>}`} className="center w-full"
+                         onClick={this.toMatch.bind(this, match)}>
+                        <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
+                        <span className="ml-s">{hostTeam.name}</span>
+                        <span className="ml-s mr-s">VS</span>
+                        <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
+                        <span className="ml-s">{guestTeam.name}</span>
+                    </div>
+                </Tooltip>);
+            })
+        } else {
+            return <Tooltip title={`比赛时间：${match.startTime}`}>
+                <div className="cursor-hand"
+                     onClick={this.toMatch.bind(this, match)}>
+                    {match.name}
+                </div>
+                <div className="w-full center">
+                    {record.type == 3 ? <span className="danger">买断</span> : null}
+                </div>
+            </Tooltip>
+        }
+        return <div className="w-full cursor-hand">
+            {dom}
+        </div>;
+    }
 
     render() {
         const onNameClick = this.onNameClick;
         const toMatch = this.toMatch;
         const toLeague = this.toLeague;
+        const getMatchAgainstDom = this.getMatchAgainstDom;
 
         const ModifyDialog = Form.create()(OrderModifyDialog);
 
@@ -452,32 +487,7 @@ class OrderTable extends React.Component {
                 }
                 if (record.match) {
                     const match = record.match;
-                    const hostTeam = match.hostTeam;
-                    const guestTeam = match.guestTeam;
-                    if (hostTeam == null || guestTeam == null) {
-                        dom.push(<Tooltip title={`比赛时间：${match.startTime}`}>
-                            <div className="cursor-hand"
-                                 onClick={toMatch.bind(this, record.match)}>
-                                {match.name}
-                            </div>
-                            <div className="w-full center">
-                                {record.type == 3 ? <span className="danger">买断</span> : null}
-                            </div>
-                        </Tooltip>);
-                    } else {
-                        dom.push(<Tooltip title={`比赛时间：${match.startTime}`}>
-                            <div className="center cursor-hand" onClick={toMatch.bind(this, record.match)}>
-                                <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
-                                <p className="ml-s">{hostTeam.name}</p>
-                                <p className="ml-s mr-s">VS</p>
-                                <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
-                                <p className="ml-s">{guestTeam.name}</p>
-                            </div>
-                            <div className="w-full center">
-                                {record.type == 3 ? <span className="danger">买断</span> : null}
-                            </div>
-                        </Tooltip>);
-                    }
+                    dom.push(getMatchAgainstDom(match));
                 }
                 if (record.gift) {
                     const gift = record.gift;

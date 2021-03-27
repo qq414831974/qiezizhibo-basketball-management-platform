@@ -286,7 +286,58 @@ class BulletinAddDialog extends React.Component {
         this.isLeagueCompositions = true;
         this.fetchLeagues(this.state.leagueSearchText, 1);
     }
-
+    getAgainstTeams = (match) => {
+        let dom = [];
+        if (match.againstTeams) {
+            const againstMap = match.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                dom.push(<div key={`against-${<p className="ml-s">{hostTeam.name}</p>}`}
+                              className="center w-full border-gray border-radius-10px">
+                    <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
+                    <span className="ml-s">{hostTeam.name}</span>
+                    <span className="ml-s mr-s">VS</span>
+                    <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
+                    <span className="ml-s">{guestTeam.name}</span>
+                </div>);
+                if (againstMap[Number(key) + 1]) {
+                    dom.push(<span className="ml-s mr-s">以及</span>)
+                }
+            })
+        } else {
+            return <span className="cursor-hand">{match.name}</span>
+        }
+        return <div className="w-full center">{dom}</div>;
+    }
+    getMatchAgainstDom = (match) => {
+        let dom = [];
+        if (match.againstTeams) {
+            const againstMap = match.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                if (key <= 2) {
+                    dom.push(<div key={`against-${<p className="ml-s">{hostTeam.name}</p>}`}
+                                  className="center w-full border-gray border-radius-10px">
+                        <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
+                        <span className="ml-s">{hostTeam.name}</span>
+                        <span className="ml-s mr-s">VS</span>
+                        <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
+                        <span className="ml-s">{guestTeam.name}</span>
+                    </div>);
+                }
+                if (againstMap[Number(key) + 1] && key <= 1) {
+                    dom.push(<span className="ml-s mr-s">以及</span>)
+                } else if (key == 2) {
+                    dom.push(<span className="ml-s mr-s">等对阵</span>)
+                }
+            })
+        } else {
+            return <span className="cursor-hand">{match.name}</span>
+        }
+        return <div className="w-full center">{dom}</div>;
+    }
     render() {
         const {visible, form, record} = this.props;
         const {getFieldDecorator} = form;
@@ -340,15 +391,7 @@ class BulletinAddDialog extends React.Component {
         const currentMatch = this.state.match;
         const options = this.state.data.map(d => <Option style={{height: 50}} key={d.id} value={d.id}>
             <Tooltip title={d.name + "-" + d.startTime}>
-                {(d.hostteam == null || d.guestteam == null) ?
-                    <span>{d.name}</span>
-                    : <div className="center">
-                        <Avatar src={d.hostteam ? d.hostteam.headImg : defultAvatar}/>
-                        <p className="ml-s">{d.hostteam ? d.hostteam.name : ""}</p>
-                        <p className="ml-s mr-s">{d.score}</p>
-                        <Avatar src={d.guestteam ? d.guestteam.headImg : defultAvatar}/>
-                        <p className="ml-s">{d.guestteam ? d.guestteam.name : ""}</p>
-                    </div>}
+                {this.getMatchAgainstDom(d)}
             </Tooltip>
         </Option>);
         const currentLeague = this.state.league;
@@ -426,19 +469,11 @@ class BulletinAddDialog extends React.Component {
                                       hidden={!this.state.loading}/>
                             </div>
                             <div className="center w-full">
-                                {(currentMatch.hostteam == null || currentMatch.guestteam == null) ?
+                                {(currentMatch.againstTeams == null || currentMatch.againstTeams.length == 0) ?
                                     <Tooltip
                                         title={currentMatch.name + "-" + currentMatch.startTime}><span>{currentMatch.name}</span></Tooltip>
                                     : <Tooltip title={currentMatch.name + "-" + currentMatch.startTime}>
-                                        <div className="center">
-                                            <Avatar
-                                                src={currentMatch.hostteam ? currentMatch.hostteam.headImg : defultAvatar}/>
-                                            <p className="ml-s">{currentMatch.hostteam ? currentMatch.hostteam.name : ""}</p>
-                                            <p className="ml-s mr-s">{currentMatch.score}</p>
-                                            <Avatar
-                                                src={currentMatch.guestteam ? currentMatch.guestteam.headImg : defultAvatar}/>
-                                            <p className="ml-s">{currentMatch.guestteam ? currentMatch.guestteam.name : ""}</p>
-                                        </div>
+                                        {this.getAgainstTeams(currentMatch)}
                                     </Tooltip>}
                             </div>
                         </div>
@@ -506,7 +541,7 @@ class BulletinAddDialog extends React.Component {
                             initialValue: 0
                         })(
                             <RadioGroup>
-                                <Radio value={0}>茄子tv</Radio>
+                                <Radio value={0}>茄子TV篮球</Radio>
                                 <Radio value={1}>青少年</Radio>
                             </RadioGroup>
                         )}

@@ -96,24 +96,25 @@ class UserBetModifyDialog extends React.Component {
                 <div>奖品:{record.gradeInfo.awardDeposit / 100}茄币</div>}
         </div>;
         const match = record.match;
-        const hostTeam = match.hostTeam;
-        const guestTeam = match.guestTeam;
-        let matchDom = null;
+        let matchDom = [];
         let userDom = null;
         if (record.match) {
-            if (hostTeam == null || guestTeam == null) {
-                matchDom =
-                    <Tooltip title={`比赛时间：${match.startTime}`}><span className="mb-s">{match.name}</span></Tooltip>
-            } else {
-                matchDom = <Tooltip title={`比赛时间：${match.startTime}`}>
-                    <div className="center mb-s">
+            if (match.againstTeams) {
+                const againstMap = match.againstTeams;
+                Object.keys(againstMap).forEach(key => {
+                    const hostTeam = againstMap[key].hostTeam;
+                    const guestTeam = againstMap[key].guestTeam;
+                    matchDom.push(<div key={`against-${<p className="ml-s">{hostTeam.name}</p>}`}
+                                       className="center w-full">
                         <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
-                        <p className="ml-s">{hostTeam.name}</p>
-                        <p className="ml-s mr-s">{`${match.status == -1 ? "VS" : match.score}`}</p>
+                        <span className="ml-s">{hostTeam.name}</span>
+                        <span className="ml-s mr-s">VS</span>
                         <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
-                        <p className="ml-s">{guestTeam.name}</p>
-                    </div>
-                </Tooltip>
+                        <span className="ml-s">{guestTeam.name}</span>
+                    </div>);
+                })
+            } else {
+                matchDom = <span className="cursor-hand">{match.name}</span>
             }
         }
         if (record.user) {

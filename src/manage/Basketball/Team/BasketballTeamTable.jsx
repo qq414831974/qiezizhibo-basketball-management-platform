@@ -332,7 +332,7 @@ class BasketballTeamTable extends React.Component {
                 let type = "未知"
                 switch (record.wechatType) {
                     case 0 :
-                        type = "茄子tv";
+                        type = "茄子TV篮球";
                         break;
                     case 1 :
                         type = "青少年";

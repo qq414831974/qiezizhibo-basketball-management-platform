@@ -58,21 +58,18 @@ const formItemLayout = {
 const day = ["日", "一", "二", "三", "四", "五", "六"]
 const typeData = [
     {
-        title: '时间轴',
-        value: 1,
-    }, {
         title: '技术统计',
-        value: 2,
+        value: 1,
     },
     {
         title: '球员名单',
-        value: 3,
+        value: 2,
     }, {
         title: '聊天室',
-        value: 4,
+        value: 3,
     }, {
         title: '集锦',
-        value: 5,
+        value: 4,
     }
 ];
 
@@ -80,7 +77,10 @@ class BasketballMatchModifyDialog extends React.Component {
     state = {
         liveloading: false,
         leagueloading: false,
-        plusHide: true
+        plusHide: true,
+        againstTeams: [],
+        againstTeamsNooice: [],
+        data: [],
     }
     isLeagueCompositions = true;
 
@@ -88,12 +88,22 @@ class BasketballMatchModifyDialog extends React.Component {
         if (!this.props.visible) {
             return;
         }
-        this.fetch();
+        const againstTeams = [];
+        const againstTeamsNooice = [];
+        Object.keys(this.props.record.againsts).forEach((key) => {
+            againstTeams[key - 1] = this.props.record.againsts[key];
+        })
+        Object.keys(this.props.record.againstTeamsNooice).forEach((key) => {
+            againstTeamsNooice[key - 1] = this.props.record.againstTeamsNooice[key];
+        })
+        console.log(againstTeams)
         this.setState({
-            hostTeam: this.props.record.hostTeam,
-            guestTeam: this.props.record.guestTeam
+            againstTeams: againstTeams,
+            againstTeamsNooice: againstTeamsNooice,
         });
-        this.setState({currentLeague: this.props.record.league, leaguedata: [this.props.record.league]})
+        this.setState({currentLeague: this.props.record.league, leaguedata: [this.props.record.league]}, () => {
+            this.fetch();
+        })
     };
 
     fetch = (param) => {
@@ -101,8 +111,8 @@ class BasketballMatchModifyDialog extends React.Component {
             teamloading: true,
             currentliveloading: true,
         });
-        if (param || this.state.league) {
-            const league = param || this.state.league
+        if (param || this.state.currentLeague) {
+            const league = param || this.state.currentLeague
             getTeamInLeague(league.id).then(res => {
                 if (res && res.code == 200) {
                     this.setState({
@@ -161,7 +171,7 @@ class BasketballMatchModifyDialog extends React.Component {
         });
     }
     handleLeagueChange = (value, op) => {
-        this.setState({league: op.props.data});
+        this.setState({currentLeague: op.props.data});
         this.fetch(op.props.data);
         const {form} = this.props;
         this.state.leaguedata && this.state.leaguedata.forEach(item => {
@@ -320,7 +330,7 @@ class BasketballMatchModifyDialog extends React.Component {
         let dom = [];
         dom.push(<Option value={null} data={null} key={"team-none"}>{<p
             className="ml-s mt-n mb-n">无</p>}</Option>);
-        this.state.data.forEach((item, index) => {
+        this.state.data && this.state.data.forEach((item, index) => {
             dom.push(<Option value={item.id} data={item} key={"team" + item.id}>{<Tooltip title={item.remark}>
                 <div className="inline-p"><Avatar
                     src={item.headImg}/><p
@@ -489,7 +499,7 @@ class BasketballMatchModifyDialog extends React.Component {
     //     }
     // }
     getPlaceSelecter = () => {
-        const league = this.state.league || (this.props.record ? this.props.record.league : null)
+        const league = this.state.currentLeague || (this.props.record ? this.props.record.league : null)
         let dom = []
         if (league && league.place) {
             league.place.forEach((item, index) => {
@@ -506,6 +516,116 @@ class BasketballMatchModifyDialog extends React.Component {
         form.setFieldsValue({
             place: item
         })
+    }
+    addAgainstTeams = () => {
+        let againstTeams = this.state.againstTeams;
+        let againstTeamsNooice = this.state.againstTeamsNooice;
+        againstTeams.push({index: againstTeams.length + 1});
+        againstTeamsNooice.push({index: againstTeamsNooice.length + 1});
+        this.setState({againstTeams: againstTeams, againstTeamsNooice: againstTeamsNooice})
+    }
+    getAgainstTeamsForm = () => {
+        const {form} = this.props;
+        const {getFieldDecorator} = form;
+        let dom = [];
+        let againstTeams = this.state.againstTeams;
+        dom.push(<Row className="w-full">
+            <Col span={4} className="ant-form-item-label">
+                <label className="ant-form-item-required">
+                    对阵方
+                </label>
+            </Col>
+            <Col span={16}>
+                <Button type="dashed" onClick={this.addAgainstTeams}>
+                    <Icon type="plus"/>添加对阵方</Button>
+            </Col>
+        </Row>)
+        for (let i = 0; i < againstTeams.length; i++) {
+            if (againstTeams[i] == null) {
+                continue;
+            }
+            dom.push(<FormItem {...formItemLayout}
+                               label={`对阵方${i + 1}`}
+                               className="bs-form-item border-min-black pa-s mt-s border-radius-10px">
+                <Row gutter={10}>
+                    <Col span={10}>
+                        <FormItem className="bs-form-item">
+                            {getFieldDecorator(`againsts[${i}].hostTeamId`, {
+                                rules: [{required: true, message: '请选择主队!'}],
+                                initialValue: againstTeams[i].hostTeamId,
+                            })(
+                                <Select>
+                                    {this.getTeamOption()}
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col span={4}>
+                        <div className="center w-full">
+                            <img style={{height: 45, width: 90}} src={vs}/>
+                        </div>
+                    </Col>
+                    <Col span={10}>
+                        <FormItem className="bs-form-item">
+                            {getFieldDecorator(`againsts[${i}].guestTeamId`, {
+                                rules: [{required: true, message: '请选择客队!'}],
+                                initialValue: againstTeams[i].guestTeamId,
+                            })(
+                                <Select>
+                                    {this.getTeamOption()}
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Col>
+                </Row>
+            </FormItem>)
+        }
+        return dom;
+    }
+    getAgainstTeamNooiceForm = () => {
+        const {form} = this.props;
+        const {getFieldDecorator} = form;
+        let dom = [];
+        let againstTeamsNooice = this.state.againstTeamsNooice;
+        for (let i = 0; i < againstTeamsNooice.length; i++) {
+            if (againstTeamsNooice[i] == null) {
+                continue;
+            }
+            dom.push(<FormItem {...formItemLayout}
+                               label={`对阵方${i + 1}`}
+                               className="bs-form-item border-min-black pa-s mt-s border-radius-10px">
+                <Row gutter={10}>
+                    <Col span={10}>
+                        <FormItem className="bs-form-item">
+                            {getFieldDecorator(`againstTeamsNooice[${i}].hostNooice`, {
+                                rules: [{required: true, message: '请输入点赞数!'}],
+                                initialValue: againstTeamsNooice[i] && againstTeamsNooice[i].hostNooice ? againstTeamsNooice[i].hostNooice : randomNum(100, 999),
+                            })(
+                                <Input addonBefore="点赞数"
+                                       placeholder="点赞数"/>
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col span={4}>
+                        <div className="center w-full">
+                            <img style={{height: 45, width: 90}} src={vs}/>
+                        </div>
+                    </Col>
+                    <Col span={10}>
+                        <FormItem className="bs-form-item">
+                            {getFieldDecorator(`againstTeamsNooice[${i}].guestNooice`, {
+                                rules: [{required: true, message: '请输入点赞数!'}],
+                                initialValue: againstTeamsNooice[i] && againstTeamsNooice[i].guestNooice ? againstTeamsNooice[i].guestNooice : randomNum(100, 999),
+                            })(
+                                <Input addonBefore="点赞数"
+                                       placeholder="点赞数"/>
+                            )}
+                        </FormItem>
+                    </Col>
+                </Row>
+            </FormItem>)
+        }
+        return dom;
     }
 
     render() {
@@ -524,10 +644,6 @@ class BasketballMatchModifyDialog extends React.Component {
         const isMobile = this.props.responsive.data.isMobile;
         const startTime = form.getFieldValue('startTime') ? moment(form.getFieldValue('startTime')) : null;
         const endTime = form.getFieldValue('startTime') ? moment(form.getFieldValue('startTime')) : null;
-        const isLiveCharge = this.state.isLiveCharge != null ? this.state.isLiveCharge : (record && record.isLiveCharge);
-        const isRecordCharge = this.state.isRecordCharge != null ? this.state.isRecordCharge : (record && record.isRecordCharge);
-        const isMonopolyCharge = this.state.isMonopolyCharge != null ? this.state.isMonopolyCharge : (record && record.isMonopolyCharge);
-        const giftWatchRecordEnable = this.state.giftWatchRecordEnable != null ? this.state.giftWatchRecordEnable : (record && record.giftWatchRecordEnable);
 
         const content_create = <div>
             <Divider className="mb-n" orientation="right">
@@ -611,7 +727,7 @@ class BasketballMatchModifyDialog extends React.Component {
                                     initialValue: record.league ? record.league.id : null,
                                 })(
                                     <Select showSearch
-                                            placeholder="按名称搜索并选择"
+                                            placeholder="按名称搜索并选择联赛"
                                             defaultActiveFirstOption={false}
                                             showArrow={false}
                                             filterOption={false}
@@ -631,200 +747,105 @@ class BasketballMatchModifyDialog extends React.Component {
                                 )}
                             </FormItem>
                         </div>
-                        <Row gutter={2}>
-                            <Col span={8}>
-                                <div className="center">
-                                    <FormItem {...formItemLayout} className="bs-form-item">
-                                        {getFieldDecorator('hostTeamId', {
-                                            // rules: [{required: true, message: '请选择主队!'}],
-                                            initialValue: record.hostTeam ? record.hostTeam.id : null,
-                                        })(
-                                            <Select size="large" style={{minWidth: 150}}
-                                                    onSelect={onHostSelect}
-                                                    disabled={this.state.teamloading}>
-                                                {this.state.data ? getTeamOption() : null}
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                                    <Icon className="ml-s" style={{fontSize: 16}} type="loading"
-                                          hidden={!this.state.teamloading}/>
-                                </div>
-                            </Col>
-                            <Col span={8}>
-                                <div className="center">
-                                    {isMobile ? null : <FormItem className="bs-form-item">
-                                        {getFieldDecorator('startTime', {
-                                            rules: [{required: true, message: '请选择开始时间!'}],
-                                            initialValue: moment(record.startTime),
-                                        })(
-                                            <DatePicker showTime
-                                                        format='YYYY-MM-DD HH:mm'/>
-                                        )}
-                                    </FormItem>}
-                                </div>
-                                <div className="center">
-                                    {isMobile ? null : <FormItem className="bs-form-item">
-                                        {getFieldDecorator('duration', {
-                                            rules: [{required: true, message: '请输入比赛时长!'}],
-                                            initialValue: record.duration,
-                                        })(
-                                            <Input className="input-text-align-center"
-                                                   prefix={<Tooltip title="比赛开始后请勿随意修改"><Icon
-                                                       type="clock-circle"/></Tooltip>} suffix={<span>分钟</span>}
-                                                   placeholder="比赛时长"/>
-                                        )}
-                                    </FormItem>}
-                                </div>
-                            </Col>
-                            <Col span={8}>
-                                <div className="center">
-                                    <FormItem {...formItemLayout} className="bs-form-item">
-                                        {getFieldDecorator('guestTeamId', {
-                                            // rules: [{required: true, message: '请选择客队!'}],
-                                            initialValue: record.guestTeam ? record.guestTeam.id : null,
-                                        })(
-                                            <Select size="large" style={{minWidth: 150}}
-                                                    onSelect={onGuestSelect}
-                                                    disabled={this.state.teamloading}>
-                                                {this.state.data ? getTeamOption() : null}
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                                    <Icon className="ml-s" style={{fontSize: 16}} type="loading"
-                                          hidden={!this.state.teamloading}/>
-                                </div>
-                            </Col>
-                        </Row>
-                        {isMobile ? <div className="center">
-                            <FormItem className="bs-form-item">
+                        <div>
+                            {this.getAgainstTeamsForm()}
+                        </div>
+                        <div className="center mt-s">
+                            {isMobile ? null : <FormItem className="bs-form-item">
                                 {getFieldDecorator('startTime', {
                                     rules: [{required: true, message: '请选择开始时间!'}],
                                     initialValue: moment(record.startTime),
                                 })(
                                     <DatePicker showTime
-                                                format={'YYYY-MM-DD HH:mm'}/>
+                                                format='YYYY-MM-DD HH:mm'/>
                                 )}
-                            </FormItem>
-                        </div> : null}
-                        {isMobile ? <div className="center">
+                            </FormItem>}
+                        </div>
+                        <div className="center w-full">
+                            <p>{form.getFieldValue('startTime') ? form.getFieldValue('startTime').format('MM-DD HH:mm') : ""}</p>
+                        </div>
+                        <div className="center w-full">
+                            <p>{form.getFieldValue('startTime') ? "星期" + day[form.getFieldValue('startTime').format('d')] : ""}</p>
+                        </div>
+                        <div className="center">
                             <FormItem className="bs-form-item">
-                                {getFieldDecorator('duration', {
-                                    rules: [{required: true, message: '请输入比赛时长!'}],
-                                    initialValue: record.duration,
+                                {getFieldDecorator('section', {
+                                    initialValue: record.section,
+                                    rules: [{required: true, message: '请输入小节数!'}],
                                 })(
-                                    <Input className="input-text-align-center"
-                                           prefix={<Tooltip title="比赛开始后请勿随意修改"><Icon type="clock-circle"/></Tooltip>}
-                                           suffix={<span>分钟</span>} placeholder="比赛时长"/>
+                                    <Input prefix={<Icon type="apartment"/>}
+                                           suffix={<span>节</span>}
+                                           placeholder="小节数"/>
                                 )}
                             </FormItem>
-                        </div> : null}
-                        <Row gutter={2} className="mt-m">
-                            <Col span={8}>
-                                <div className="center">
-                                    <img className="round-img"
-                                         src={this.state.hostTeam ? this.state.hostTeam.headImg : defultAvatar}/>
-                                </div>
-                                <div className="center w-full mt-m">
-                                    <p style={{fontSize: 22}}>{this.state.hostTeam ? this.state.hostTeam.name : ""}</p>
-                                </div>
-                                <div className="center w-full mt-m">
-                                    <FormItem {...formItemLayout} className="bs-form-item center">
-                                        {getFieldDecorator('hostNooice', {
-                                            initialValue: record.hostNooice,
-                                        })(
-                                            <Input placeholder="点赞数"
-                                                   disabled={this.state.hostTeam == null || this.state.guestTeam == null}
-                                                   prefix={<Icon type="like"/>}/>
-                                        )}
-                                    </FormItem>
-                                </div>
-                            </Col>
-                            <Col span={8}>
-                                <div className="center w-full">
-                                    <img style={{height: 90, width: 90}} src={vs}/>
-                                </div>
-                                <div className="center w-full">
-                                    <p>{form.getFieldValue('startTime') ? form.getFieldValue('startTime').format('MM-DD HH:mm') : ""}</p>
-                                </div>
-                                <div className="center w-full">
-                                    <p>{form.getFieldValue('startTime') ? "星期" + day[form.getFieldValue('startTime').format('d')] : ""}</p>
-                                </div>
-                                <div className="center w-full">
-                                    <p className="mb-n" style={{fontWeight: "bold"}}>分组</p>
-                                </div>
-                                <div className="center w-full">
-                                    {this.state.currentLeague ?
-                                        <FormItem className="bs-form-item">
-                                            {getFieldDecorator('subgroup', {
-                                                initialValue: record.subgroup,
-                                            })(
-                                                <Select size="large" style={{minWidth: 150}}
-                                                        onSelect={this.onGroupSelect}
-                                                        disabled={this.state.leagueloading}>
-                                                    {this.getGroupOption()}
-                                                </Select>
-                                            )}
-                                        </FormItem>
-                                        :
-                                        <FormItem className="bs-form-item">
-                                            {getFieldDecorator('subgroup', {
-                                                initialValue: record.subgroup,
-                                            })(
-                                                <Input style={{minWidth: 100, textAlign: "center"}} placeholder='分组'
-                                                       onChange={this.onGroupChange}/>
-                                            )}
-                                        </FormItem>
-                                    }
-                                </div>
-                                <div className="center w-full">
-                                    <p className="mb-n" style={{fontWeight: "bold"}}>轮次</p>
-                                </div>
-                                <div className="center w-full">
-                                    {this.state.currentLeague ?
-                                        <FormItem className="bs-form-item">
-                                            {getFieldDecorator('round', {
-                                                initialValue: record.round,
-                                            })(
-                                                <Select size="large" style={{minWidth: 150}}
-                                                        onSelect={this.onRoundSelect}
-                                                        disabled={this.state.leagueloading}>
-                                                    {this.getRoundOption()}
-                                                </Select>
-                                            )}
-                                        </FormItem>
-                                        :
-                                        <FormItem className="bs-form-item">
-                                            {getFieldDecorator('round', {
-                                                initialValue: record.round,
-                                            })(
-                                                <Input style={{minWidth: 100, textAlign: "center"}} placeholder='轮次'
-                                                       onChange={this.onRoundChange}/>
-                                            )}
-                                        </FormItem>
-                                    }
-                                </div>
-                            </Col>
-                            <Col span={8}>
-                                <div className="center">
-                                    <img className="round-img"
-                                         src={this.state.guestTeam ? this.state.guestTeam.headImg : defultAvatar}/>
-                                </div>
-                                <div className="center w-full mt-m">
-                                    <p style={{fontSize: 22}}>{this.state.guestTeam ? this.state.guestTeam.name : ""}</p>
-                                </div>
-                                <div className="center w-full mt-m">
-                                    <FormItem {...formItemLayout} className="bs-form-item center">
-                                        {getFieldDecorator('guestNooice', {
-                                            initialValue: record.guestNooice,
-                                        })(
-                                            <Input placeholder="点赞数"
-                                                   disabled={this.state.hostTeam == null || this.state.guestTeam == null}
-                                                   prefix={<Icon type="like"/>}/>
-                                        )}
-                                    </FormItem>
-                                </div>
-                            </Col>
-                        </Row>
+                        </div>
+                        <div className="center">
+                            <FormItem className="bs-form-item">
+                                {getFieldDecorator('minutePerSection', {
+                                    initialValue: record.minutePerSection,
+                                    rules: [{required: true, message: '请输入每节分钟数!'}],
+                                })(
+                                    <Input addonBefore="每节"
+                                           suffix={<span>分钟</span>}
+                                           placeholder="分钟数"/>
+                                )}
+                            </FormItem>
+                        </div>
+
+                        <div className="center w-full">
+                            <p className="mb-n" style={{fontWeight: "bold"}}>分组</p>
+                        </div>
+                        <div className="center w-full">
+                            {this.state.currentLeague ?
+                                <FormItem className="bs-form-item">
+                                    {getFieldDecorator('subgroup', {
+                                        initialValue: record.subgroup,
+                                    })(
+                                        <Select size="large" style={{minWidth: 150}}
+                                                onSelect={this.onGroupSelect}
+                                                disabled={this.state.leagueloading}>
+                                            {this.getGroupOption()}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                                :
+                                <FormItem className="bs-form-item">
+                                    {getFieldDecorator('subgroup', {
+                                        initialValue: record.subgroup,
+                                    })(
+                                        <Input style={{minWidth: 100, textAlign: "center"}} placeholder='分组'
+                                               onChange={this.onGroupChange}/>
+                                    )}
+                                </FormItem>
+                            }
+                        </div>
+                        <div className="center w-full">
+                            <p className="mb-n" style={{fontWeight: "bold"}}>轮次</p>
+                        </div>
+                        <div className="center w-full">
+                            {this.state.currentLeague ?
+                                <FormItem className="bs-form-item">
+                                    {getFieldDecorator('round', {
+                                        initialValue: record.round,
+                                    })(
+                                        <Select size="large" style={{minWidth: 150}}
+                                                onSelect={this.onRoundSelect}
+                                                disabled={this.state.leagueloading}>
+                                            {this.getRoundOption()}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                                :
+                                <FormItem className="bs-form-item">
+                                    {getFieldDecorator('round', {
+                                        initialValue: record.round,
+                                    })(
+                                        <Input style={{minWidth: 100, textAlign: "center"}} placeholder='轮次'
+                                               onChange={this.onRoundChange}/>
+                                    )}
+                                </FormItem>
+                            }
+                        </div>
                         <div className="center w-full">
                             <p className="mb-n mt-m" style={{fontSize: 20}}>比赛名</p>
                         </div>
@@ -862,9 +883,6 @@ class BasketballMatchModifyDialog extends React.Component {
                                     <Checkbox/>
                                 )}
                             </FormItem>
-                            {/*<Checkbox*/}
-                            {/*    checked={this.state.activityChecked ? this.state.activityChecked : (form.getFieldValue("activityOld") != null)}*/}
-                            {/*    onChange={this.onActivityCheckedChange}/>*/}
                         </div>
                         <div className="center w-full">
                             {this.state.currentLiveData ?
@@ -889,23 +907,6 @@ class BasketballMatchModifyDialog extends React.Component {
                             <Button type="primary" loading={this.state.currentliveloading}
                                     onClick={this.showLiveCreatePop}>选择直播间</Button>
                         </div>
-                        {/*<div className="center w-full">*/}
-                        {/*<div>*/}
-                        {/*<p className="mt-m mb-n inline-block" style={{fontSize: 22}}>直播地址</p>*/}
-                        {/*<Tooltip title="正常情况请勿修改，如遇直播无法播放再做修改！">*/}
-                        {/*<Icon className="inline-block" type="question-circle"/>*/}
-                        {/*</Tooltip>*/}
-                        {/*</div>*/}
-                        {/*</div>*/}
-                        {/*<div className="center w-full">*/}
-                        {/*<FormItem style={{margin: 0}}>*/}
-                        {/*{getFieldDecorator('playPath', {*/}
-                        {/*initialValue: record.playPath,*/}
-                        {/*})(*/}
-                        {/*<Input style={{minWidth: 300, textAlign: "center"}}/>*/}
-                        {/*)}*/}
-                        {/*</FormItem>*/}
-                        {/*</div>*/}
                         <div className="center w-full">
                             <span className="mb-n mt-m" style={{fontSize: 20}}>菜单设置</span>
                         </div>
@@ -926,6 +927,12 @@ class BasketballMatchModifyDialog extends React.Component {
                                                 }}/>
                                 )}
                             </FormItem>
+                        </div>
+                        <div className="center w-full">
+                            <span className="mb-n mt-m" style={{fontSize: 20}}>点赞数</span>
+                        </div>
+                        <div>
+                            {this.getAgainstTeamNooiceForm()}
                         </div>
                         <div className="center w-full">
                             <span className="mb-n mt-m" style={{fontSize: 20}}>人数放大</span>

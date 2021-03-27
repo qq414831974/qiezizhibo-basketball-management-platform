@@ -400,6 +400,12 @@ export const getPlayersByTeamId = (id, params) => get({url: `${config.basketball
     }).catch(function (error) {
         console.log(error);
     });
+export const getPlayersByMatchId = (params) => get({url: `${config.basketball_service}/basketball/player/getPlayerByMatchId?${unpack(params)}`,})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
 export const getMatchPlayersByTeamId = (matchid, teamid) => get({
     url: `${config.basketball_service}/basketball/player?${unpack({
         teamId: teamid,
@@ -412,6 +418,7 @@ export const getMatchPlayersByTeamId = (matchid, teamid) => get({
 }).catch(function (error) {
     console.log(error)
 });
+
 export const createActivity = (params) => post({url: `${config.live_service}/activity`, data: params})
     .then(function (response) {
         return response.data;
@@ -522,7 +529,10 @@ export const delTeamByIds = (params) => del({url: `${config.basketball_service}/
     }).catch(function (error) {
         console.log(error);
     });
-export const addPlayerToTeam = (params) => post({url: `${config.basketball_service}/basketball/team/player`, data: params})
+export const addPlayerToTeam = (params) => post({
+    url: `${config.basketball_service}/basketball/team/player`,
+    data: params
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -720,7 +730,10 @@ export const getLeagueTeam = (params) => get({url: `${config.basketball_service}
     }).catch(function (error) {
         console.log(error)
     });
-export const addTeamToLeague = (params) => post({url: `${config.basketball_service}/basketball/league/team`, data: params})
+export const addTeamToLeague = (params) => post({
+    url: `${config.basketball_service}/basketball/league/team`,
+    data: params
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -810,13 +823,19 @@ export const getMatchHeatRule = (param) => get({url: `${config.basketball_servic
     }).catch(function (error) {
         console.log(error)
     });
-export const addMatchHeatRule = (param) => post({url: `${config.basketball_service}/basketball/heat/match`, data: param})
+export const addMatchHeatRule = (param) => post({
+    url: `${config.basketball_service}/basketball/heat/match`,
+    data: param
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const updateMatchHeatRule = (param) => put({url: `${config.basketball_service}/basketball/heat/match`, data: param})
+export const updateMatchHeatRule = (param) => put({
+    url: `${config.basketball_service}/basketball/heat/match`,
+    data: param
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -894,7 +913,10 @@ export const getLeagueHeatRule = (param) => get({url: `${config.basketball_servi
     }).catch(function (error) {
         console.log(error)
     });
-export const addLeagueHeatRule = (param) => post({url: `${config.basketball_service}/basketball/heat/league`, data: param})
+export const addLeagueHeatRule = (param) => post({
+    url: `${config.basketball_service}/basketball/heat/league`,
+    data: param
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -927,13 +949,19 @@ export const getLeagueBetRule = (param) => get({url: `${config.basketball_servic
     }).catch(function (error) {
         console.log(error)
     });
-export const addLeagueBetRule = (param) => post({url: `${config.basketball_service}/basketball/bet/league`, data: param})
+export const addLeagueBetRule = (param) => post({
+    url: `${config.basketball_service}/basketball/bet/league`,
+    data: param
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
         console.log(error)
     });
-export const updateLeagueBetRule = (param) => put({url: `${config.basketball_service}/basketball/bet/league`, data: param})
+export const updateLeagueBetRule = (param) => put({
+    url: `${config.basketball_service}/basketball/bet/league`,
+    data: param
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -963,7 +991,10 @@ export const addMatchBetRule = (param) => post({url: `${config.basketball_servic
     }).catch(function (error) {
         console.log(error)
     });
-export const updateMatchBetRule = (param) => put({url: `${config.basketball_service}/basketball/bet/match`, data: param})
+export const updateMatchBetRule = (param) => put({
+    url: `${config.basketball_service}/basketball/bet/match`,
+    data: param
+})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {
@@ -1121,7 +1152,7 @@ export const updateMatchById = (params) => put({url: `${config.basketball_servic
         console.log(error);
     });
 export const updateMatchScoreStatusById = (params) => put({
-    url: `${config.basketball_service}/basketball/match/score`,
+    url: `${config.basketball_service}/basketball/timeline/status`,
     data: params
 })
     .then(function (response) {
@@ -1356,21 +1387,7 @@ export const deleteTimelineByIds = (params) => del({
     }).catch(function (error) {
         console.log(error)
     });
-export const updatePassAndPossession = (params) => post({
-    url: `${config.basketball_service}/basketball/timeline/passAndPossession`,
-    data: params
-})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
-export const getPassAndPossession = (matchid, teamid) => get({
-    url: `${config.basketball_service}/basketball/timeline/passAndPossession?${unpack({
-        matchId: matchid,
-        teamId: teamid
-    })}`
-})
+export const deleteTimelineByMatchId = (params) => del({url: `${config.basketball_service}/basketball/timeline/deleteAll?${unpack(params)}`,})
     .then(function (response) {
         return response.data;
     }).catch(function (error) {

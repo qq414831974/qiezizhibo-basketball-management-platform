@@ -9,6 +9,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import logo from "../../../static/logo.png";
 import defultAvatar from "../../../static/avatar.jpg";
+import {getMatchAgainstDom} from "../../../utils";
 
 const freeTicketType = {
     0: "全部免费",
@@ -330,20 +331,7 @@ class FreeTicketTable extends React.Component {
                         return <span>全部免费</span>;
                     } else if (record.type == 1) {
                         const match = record.match ? record.match : {};
-                        const hostTeam = match.hostTeam;
-                        const guestTeam = match.guestTeam;
-                        if (hostTeam == null || guestTeam == null) {
-                            return <Tooltip title={`比赛时间：${match.startTime}`}><span>{match.name}</span></Tooltip>
-                        }
-                        return <Tooltip title={`比赛时间：${match.startTime}`}>
-                            <div className="center">
-                                <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
-                                <p className="ml-s">{hostTeam.name}</p>
-                                <p className="ml-s mr-s">VS</p>
-                                <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
-                                <p className="ml-s">{guestTeam.name}</p>
-                            </div>
-                        </Tooltip>;
+                        return getMatchAgainstDom(match);
                     } else if (record.type == 2) {
                         const league = record.league ? record.league : {};
                         return <div className="center"><Avatar src={league.headImg ? league.headImg : defultAvatar}/>
@@ -438,6 +426,7 @@ class FreeTicketTable extends React.Component {
                            }
         />
             <Modal
+                width={800}
                 className={isMobile ? "top-n" : ""}
                 title="添加免费观看"
                 visible={this.state.dialogAddVisible}
@@ -450,6 +439,7 @@ class FreeTicketTable extends React.Component {
                            ref={this.saveFreeTicketAddDialogRef}/>
             </Modal>
             <Modal
+                width={800}
                 className={isMobile ? "top-n" : ""}
                 title="修改免费观看"
                 visible={this.state.dialogModifyVisible}

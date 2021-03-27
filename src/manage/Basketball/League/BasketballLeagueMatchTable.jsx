@@ -386,7 +386,7 @@ class BasketballLeagueMatchTable extends React.Component {
                     filterDropdownVisible: visible,
                 }, () => this.searchInput && this.searchInput.focus());
             },
-            width: '35%',
+            width: '30%',
             render: function (text, record, index) {
                 return <div className="cursor-hand" onClick={onNameClick.bind(this, record)}>
                     <div className={`center ${record.shortName ? "border-bottom-gray" : ""}`}><Avatar
@@ -409,6 +409,24 @@ class BasketballLeagueMatchTable extends React.Component {
                     type = "杯赛";
                 } else if (record.type == 2) {
                     type = "联赛";
+                }
+                return <span>{type}</span>
+            }
+        }, {
+            title: '规则类型',
+            align: 'center',
+            dataIndex: 'ruleType',
+            width: '5%',
+            render: function (text, record, index) {
+                let type = "5x5";
+                if (record.type == 1) {
+                    type = "小篮球赛";
+                } else if (record.type == 2) {
+                    type = "1x1";
+                } else if (record.type == 3) {
+                    type = "3x3";
+                }else if (record.type == 4) {
+                    type = "5x5";
                 }
                 return <span>{type}</span>
             }
@@ -455,11 +473,11 @@ class BasketballLeagueMatchTable extends React.Component {
             width: '7%',
             align: 'center',
             render: function (text, record, index) {
-                let type = "茄子tv";
+                let type = "茄子TV篮球";
                 if (record.wechatType) {
                     switch (record.wechatType) {
                         case 0:
-                            type = "茄子tv";
+                            type = "茄子TV篮球";
                             break;
                         case 1:
                             type = "青少年";

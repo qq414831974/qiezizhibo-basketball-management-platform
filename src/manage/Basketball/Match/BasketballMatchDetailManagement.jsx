@@ -13,11 +13,10 @@ import {getQueryString} from "../../../utils";
 
 const TabPane = Tabs.TabPane;
 
-const TIME_LINE = 1;
-const STATISTICS = 2;
-const PLAY_LIST = 3;
-const CHATTING_ROOM = 4;
-const RECOMMOMED = 5;
+const STATISTICS = 1;
+const PLAY_LIST = 2;
+const CHATTING_ROOM = 3;
+const CLIP = 4;
 
 class BasketballMatchDetailManagement extends React.Component {
     state = {
@@ -57,16 +56,27 @@ class BasketballMatchDetailManagement extends React.Component {
                 return;
             }
             values["startTime"] = values["startTime"] ? values["startTime"].format('YYYY/MM/DD HH:mm:ss') : null;
-            values["endTime"] = values["endTime"] ? values["endTime"].format('YYYY/MM/DD HH:mm:ss') : null;
-            values["createTime"] = values["createTime"] ? values["createTime"].format('YYYY/MM/DD HH:mm:ss') : null;
-            values["updateTime"] = values["updateTime"] ? values["updateTime"].format('YYYY/MM/DD HH:mm:ss') : null;
-            values["deleteTime"] = values["deleteTime"] ? values["deleteTime"].format('YYYY/MM/DD HH:mm:ss') : null;
+            values["available"] = values["available"] != null ? !values["available"] : false;
+            if (values["againsts"]) {
+                let againstMap = {};
+                for (let i = 0; i < values["againsts"].length; i++) {
+                    againstMap[i + 1] = values["againsts"][i];
+                }
+                values["againsts"] = againstMap;
+            }
+            if (values["againstTeamsNooice"]) {
+                let againstTeamNooiceMap = {};
+                for (let i = 0; i < values["againstTeamsNooice"].length; i++) {
+                    againstTeamNooiceMap[i + 1] = values["againstTeamsNooice"][i];
+                }
+                values["againstTeamsNooice"] = againstTeamNooiceMap;
+            }
             updateMatchById(values).then((data) => {
                 if (data && data.code == 200) {
                     if (data.data) {
                         this.fetch(this.props.match.params.id);
                         message.success('修改成功', 1);
-                    }else{
+                    } else {
                         message.warn(data.message, 1);
                     }
                 } else {
@@ -95,7 +105,7 @@ class BasketballMatchDetailManagement extends React.Component {
                         const history = this.props.history;
                         history.push(`/basketball/basketballMatch`);
                     }, 2000);
-                }else{
+                } else {
                     message.warn(data.message, 1);
                 }
             } else {
@@ -140,7 +150,7 @@ class BasketballMatchDetailManagement extends React.Component {
                                                      handleDelete={this.handleDelete}
                                                      ref={this.saveMatchModifyDialogRef}/>
                                     </TabPane>
-                                    {matchType.indexOf(RECOMMOMED) >= 0 ?
+                                    {matchType.indexOf(CLIP) >= 0 ?
                                         <TabPane tab="球员集锦" key="3">
                                             <BasketballMatchPlayersMediaPanel
                                                 visible={this.state.currentTab == 3 ? true : false}

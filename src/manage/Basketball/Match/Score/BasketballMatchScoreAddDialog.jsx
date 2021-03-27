@@ -3,91 +3,23 @@ import {receiveData} from "../../../../action";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {Avatar, Button, Row, Col, Icon, Spin, Collapse, message, Input, Select, InputNumber} from 'antd';
-import {getMatchPlayersByTeamId, addTimeline} from "../../../../axios";
+import {addTimeline} from "../../../../axios";
 import defultAvatar from '../../../../static/avatar.jpg';
-import shirt from '../../../../static/shirt.png';
-import shirt2 from '../../../../static/shirt2.png';
-import yellowcard from '../../../../static/yellowcard.svg';
-import redcard from '../../../../static/redcard.svg';
-import offside from '../../../../static/offside.svg';
-import goal from '../../../../static/goal.svg';
-import substitution from '../../../../static/substitution.svg';
-import shoot from '../../../../static/shoot.svg';
-import tackle from '../../../../static/tackle.svg';
-import free_kick from '../../../../static/free_kick.svg';
-import foul from '../../../../static/foul.svg';
-import save from '../../../../static/save.svg';
-import corner from '../../../../static/corner.svg';
-import long_pass from '../../../../static/long_pass.svg';
-import clearance from '../../../../static/clearance.svg';
-import cross from '../../../../static/cross.svg';
-import own_goal from '../../../../static/own_goal.svg';
-import shoot_out from '../../../../static/shoot_out.svg';
-import shoot_door from '../../../../static/shoot_door.svg';
-import cross_failed from '../../../../static/cross_failed.svg';
-import cross_success from '../../../../static/cross_success.svg';
-import tackle_failed from '../../../../static/tackle_failed.svg';
-import penalty from '../../../../static/penalty.svg';
+import ball from '../../../../static/ball.svg';
+import ball2 from '../../../../static/ball2.svg';
+import ball3 from '../../../../static/ball3.svg';
+import vs from '../../../../static/vs.png';
 
 const Option = Select.Option;
 const Panel = Collapse.Panel;
-const HOSTTEAM = 0;
-const GUESTTEAM = 1;
-const eventType = {
-    0: {text: "比赛开始", icon: "", show: true},
-    1: {text: "进球", icon: "", show: true},
-    2: {text: "射门", icon: ""},
-    3: {text: "越位", icon: ""},
-    4: {text: "抢断", icon: ""},
-    5: {text: "任意球", icon: ""},
-    6: {text: "犯规", icon: ""},
-    7: {text: "黄牌", icon: "", show: true},
-    8: {text: "红牌", icon: "", show: true},
-    9: {text: "扑救", icon: ""},
-    10: {text: "换人", icon: "", show: true},
-    11: {text: "加时", icon: "", show: true},
-    12: {text: "点球大战", icon: "", show: true},
-    13: {text: "伤停", icon: ""},
-    14: {text: "中场", icon: "", show: true},
-    15: {text: "下半场", icon: "", show: true},
-    16: {text: "暂停", icon: ""},
-    17: {text: "角球", icon: ""},
-    18: {text: "传中", icon: ""},
-    19: {text: "长传", icon: ""},
-    20: {text: "解围", icon: ""},
-    21: {text: "比赛结束", icon: "", show: true},
-    22: {text: "乌龙球", icon: ""},
-    24: {text: "点球", icon: ""},
-    25: {text: "进球(点球大战)", icon: "", hideTime: true, minute: 121},
-}
+
 const event = [
-    {key: 1, text: "进球", icon: goal, show: 1},
-    {key: 7, text: "黄牌", icon: yellowcard, show: 1},
-    {key: 8, text: "红牌", icon: redcard, show: 1},
-    {key: 17, text: "角球", icon: corner, show: 1},
-    {key: 5, text: "任意球", icon: free_kick, show: 1},
-    {key: 2, text: "射门", icon: shoot, show: 1},
-    {key: 9, text: "扑救", icon: save, show: 1},
-    {key: 24, text: "点球", icon: penalty, show: 1},
-
-    {key: 0, text: "比赛开始", icon: "", show: 0},
-    {key: 14, text: "中场", icon: "", show: 0},
-    {key: 15, text: "下半场", icon: "", show: 0},
-    {key: 11, text: "加时", icon: "", show: 0},
-    {key: 12, text: "点球大战", icon: "", show: 0},
-    {key: 21, text: "比赛结束", icon: "", show: 0},
-    {key: 16, text: "暂停", icon: "", show: 0},
-    {key: 13, text: "伤停", icon: "", show: 0},
-
-    {key: 10, text: "换人", icon: substitution, show: 2},
-    {key: 3, text: "越位", icon: offside, show: 2},
-    {key: 4, text: "抢断", icon: tackle, show: 2},
-    {key: 6, text: "犯规", icon: foul, show: 2},
-    {key: 18, text: "传中", icon: cross, show: 2},
-    {key: 19, text: "长传", icon: long_pass, show: 2},
-    {key: 20, text: "解围", icon: clearance, show: 2},
-    {key: 22, text: "乌龙球", icon: own_goal, show: 2},
-    {key: 25, text: "进球(点球大战)", icon: penalty, show: 2},
+    {key: 1, text: "一分球", icon: ball, show: 1},
+    {key: 2, text: "二分球", icon: ball2, show: 1},
+    {key: 3, text: "三分球", icon: ball3, show: 1},
+    {key: 11, text: "一分球撤销", icon: ball, show: 2},
+    {key: 12, text: "二分球撤销", icon: ball2, show: 2},
+    {key: 13, text: "三分球撤销", icon: ball3, show: 2},
 ]
 
 class BasketballMatchScoreAddDialog extends React.Component {
@@ -98,44 +30,23 @@ class BasketballMatchScoreAddDialog extends React.Component {
         player: null,
         loading: true,
         hidden: true,
+        scoreNumber: 1,
     };
 
     componentDidMount() {
         if (!this.props.visible) {
             return;
         }
-        this.props.data.hostTeam.isHostTeam = true;
-        this.props.data.guestTeam.isHostTeam = false;
-        const callback1 = () => {
-            this.check1 = true;
-            if (this.check1 && this.check2) {
-                this.setState({loading: false});
+        const {data} = this.props;
+        if (data.againstTeams) {
+            const againstMap = data.againstTeams;
+            const size = Object.keys(againstMap).length;
+            if (size > 1) {
+                this.props.onHeightChange(270 + (size - 1) * 70);
             }
         }
-        const callback2 = () => {
-            this.check2 = true;
-            if (this.check1 && this.check2) {
-                this.setState({loading: false});
-            }
-        }
-        this.fetchTeamPlayer(this.props.matchId, this.props.data.hostTeam.id, HOSTTEAM, callback1);
-        this.fetchTeamPlayer(this.props.matchId, this.props.data.guestTeam.id, GUESTTEAM, callback2);
     }
 
-    fetchTeamPlayer = (matchId, teamId, type, callback) => {
-        getMatchPlayersByTeamId(null, teamId).then((data) => {
-            if (data && data.code == 200) {
-                if (type == HOSTTEAM) {
-                    this.setState({hostTeamPlayer: data.data ? data.data.records : []})
-                } else {
-                    this.setState({guestTeamPlayer: data.data ? data.data.records : []})
-                }
-                callback();
-            } else {
-                message.error('获取比赛队伍队员失败：' + (data ? data.result + "-" + data.message : data), 3);
-            }
-        });
-    }
     addTimeline = (param) => {
         addTimeline(param).then((data) => {
             if (data && data.code == 200) {
@@ -151,24 +62,6 @@ class BasketballMatchScoreAddDialog extends React.Component {
             }
         });
     }
-    getTeamOption = () => {
-        let dom = [];
-        let teamPlayerData = [];
-        if (this.state.team) {
-            if (this.state.team.isHostTeam) {
-                teamPlayerData = this.state.hostTeamPlayer;
-            } else {
-                teamPlayerData = this.state.guestTeamPlayer;
-            }
-            teamPlayerData.forEach((item, index) => {
-                dom.push(<Option value={item.id + ""} data={item.id}>{<div className="inline-p"><Avatar
-                    src={item.headImg}/>
-                    <p
-                        className="ml-s">{item.name + "(" + item.shirtNum + "号)"}</p></div>}</Option>)
-            });
-        }
-        return dom;
-    }
 
     next() {
         const current = this.state.current + 1;
@@ -176,16 +69,11 @@ class BasketballMatchScoreAddDialog extends React.Component {
         if (current == 0 && this.state.team != null) {
             currentChecked = true;
         }
-        if (current == 1 && this.state.player != null) {
-            currentChecked = true;
-        }
-        if (current == 2 && this.state.event != null) {
+        if (current == 1 && this.state.event != null) {
             currentChecked = true;
         }
         this.setState({current: current, currentChecked: currentChecked});
         if (current == 1) {
-            this.props.onHeightChange(380);
-        } else if (current == 2) {
             let hidden = this.state.hidden;
             if (this.state.event) {
                 if (this.state.event.show == 2) {
@@ -194,12 +82,12 @@ class BasketballMatchScoreAddDialog extends React.Component {
                 }
             }
             if (hidden) {
-                this.props.onHeightChange(350);
+                this.props.onHeightChange(270);
             } else {
-                this.props.onHeightChange(500);
+                this.props.onHeightChange(420);
             }
-        } else if (current == 3) {
-            this.props.onHeightChange(400);
+        } else if (current == 2) {
+            this.props.onHeightChange(350);
         } else {
             this.props.onHeightChange(270);
         }
@@ -211,16 +99,11 @@ class BasketballMatchScoreAddDialog extends React.Component {
         if (current == 0 && this.state.team != null) {
             currentChecked = true;
         }
-        if (current == 1 && this.state.player != null) {
-            currentChecked = true;
-        }
-        if (current == 2 && this.state.event != null) {
+        if (current == 1 && this.state.event != null) {
             currentChecked = true;
         }
         this.setState({current: current, currentChecked: currentChecked});
         if (current == 1) {
-            this.props.onHeightChange(380);
-        } else if (current == 2) {
             let hidden = this.state.hidden;
             if (this.state.event) {
                 if (this.state.event.show == 2) {
@@ -229,79 +112,36 @@ class BasketballMatchScoreAddDialog extends React.Component {
                 }
             }
             if (hidden) {
-                this.props.onHeightChange(350);
+                this.props.onHeightChange(270);
             } else {
-                this.props.onHeightChange(500);
+                this.props.onHeightChange(420);
             }
-        } else if (current == 3) {
-            this.props.onHeightChange(400);
+        } else if (current == 2) {
+            this.props.onHeightChange(350);
         } else {
             this.props.onHeightChange(270);
         }
     }
 
-    onTeamSelect = (isHostTeam, e) => {
-        this.setState({team: isHostTeam ? this.props.data.hostTeam : this.props.data.guestTeam, currentChecked: true});
-        this.next();
-    }
-    onPlayerSelect = (player, e) => {
-        this.setState({player: player, currentChecked: true});
-        this.next();
-    }
-    getTeamPlayerList = () => {
-        let doms = [];
-        let teamPlayerData = null;
-        const shirtStyle = {position: "absolute", fontSize: 12, color: "#FFFFFF",};
-        const shirtStyle2 = {position: "absolute", fontSize: 12, color: "#000000",};
-        const onPlayerSelect = this.onPlayerSelect;
-        if (this.state.team) {
-            if (this.state.team.isHostTeam) {
-                teamPlayerData = this.state.hostTeamPlayer;
-            } else {
-                teamPlayerData = this.state.guestTeamPlayer;
+    onTeamSelect = (againstIndex, teamId, e) => {
+        let currentTeam = null;
+        this.props.data.againstTeams && Object.keys(this.props.data.againstTeams).forEach(key => {
+            const againstTeam = this.props.data.againstTeams[key]
+            if (againstTeam && againstTeam.hostTeam && againstTeam.hostTeam.id == teamId) {
+                currentTeam = againstTeam.hostTeam;
+            } else if (againstTeam && againstTeam.guestTeam && againstTeam.guestTeam.id == teamId) {
+                currentTeam = againstTeam.guestTeam;
             }
-            teamPlayerData.forEach((item, index) => {
-                // if (item.status) {//1：首发，2：替补，3：队员
-                let dom_div = (
-                    <Col span={(Math.floor(24 / (teamPlayerData.length > 6 ? 6 : teamPlayerData.length)))}>
-                        <div onClick={onPlayerSelect.bind(this, item)}
-                             className={this.state.player == item ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                            <div style={{width: "58px", position: "relative"}}>
-                                <div className="center" style={{position: "absolute", right: 0}}>
-                                    <img
-                                        style={{opacity: 0.8, width: "20px", height: "20px"}}
-                                        src={item.status == 1 ? shirt : shirt2}/>
-                                    <p style={item.status == 1 ? shirtStyle : shirtStyle2}>{item.shirtNum}</p>
-                                </div>
-                                <img className="round-img-s" src={item.headImg ? item.headImg : defultAvatar}/>
-                                <p className="mb-n">{item.name}</p>
-                            </div>
-                        </div>
-                    </Col>);
-                let row = Math.floor(index / 6);
-                if (!doms[row]) {
-                    doms[row] = [];
-                }
-                doms[row].push(dom_div)
-                // }
-            });
-        }
-        let dom = [];
-        doms.forEach((item, index) => {
-            dom.push(<Row className="center" gutter={2}>{item}</Row>)
-        });
-        return <div>
-            <p className="w-full mb-n"
-               style={{fontSize: 20}}>选择球员</p>
-            {dom}
-        </div>;
+        })
+        this.setState({team: currentTeam, againstIndex: againstIndex, currentChecked: true});
+        this.next();
     }
     getEventList = () => {
         let doms = [];
         let doms_hidden = [];
         const onEventSelect = this.onEventSelect;
         const onHiddenChange = this.onHiddenChange;
-        const rowSize = this.props.responsive.data.isMobile ? 4 : 6;
+        const rowSize = 3;
         let indes = 0;
         let index_hidden = 0;
         event.forEach((item, index) => {
@@ -366,153 +206,47 @@ class BasketballMatchScoreAddDialog extends React.Component {
         </div>;
     }
     onEventSelect = (item, e) => {
-        if (item != this.state.event) {
-            this.setState({event: item, currentChecked: true, remark: null, text: null, minute: null});
-        } else {
-            this.setState({event: item, currentChecked: true});
-        }
+        this.setState({event: item, currentChecked: true});
         this.next();
     }
     onHiddenChange = (e) => {
         if (e.length != 0) {
             this.setState({hidden: false});
-            this.props.onHeightChange(500);
+            this.props.onHeightChange(420);
         } else {
             this.setState({hidden: true});
-            this.props.onHeightChange(350);
+            this.props.onHeightChange(270);
         }
     }
     submit = () => {
         const params = {
             matchId: this.props.data.id,
             teamId: this.state.team.id,
-            playerId: this.state.player.id,
             eventType: this.state.event.key,
-            minute: this.state.minute ? this.state.minute : (eventType[this.state.event.key]["minute"] ? eventType[this.state.event.key]["minute"] : this.props.minute),
-            remark: this.state.event.key === 25 ? "1" : this.state.remark,
-            text: this.state.text,
+            againstIndex: this.state.againstIndex,
+            section: this.state.section ? this.state.section : this.props.section,
+            remark: this.state.scoreNumber
         }
         this.addTimeline(params);
     }
     getEventDetail = () => {
         const currentEvent = this.state.event;
-        const onEventDetailSelect = this.onEventDetailSelect;
         if (currentEvent == null) {
             return null;
         }
-        const doms = {
-            1: <div className="pt-m">
-                <div className="center">
-                    <span>助攻</span>
-                </div>
-                <div className="center mt-s">
-                    <Select size="large" style={{minWidth: 150}}
-                            onSelect={this.onEventPlayerSelect}>{this.getTeamOption()}</Select>
-                </div>
-            </div>,
-            7: null,
-            8: null,
-            10: <div className="pt-m">
-                <div className="center">
-                    <span>换上</span>
-                </div>
-                <div className="center mt-s">
-                    <Select size="large" style={{minWidth: 150}}
-                            onSelect={this.onEventPlayerSelect}>{this.getTeamOption()}</Select>
-                </div>
-            </div>,
-            2: <div className="pt-m center">
-                <div
-                    onClick={onEventDetailSelect.bind(this, 3)}
-                    className={currentEvent.key == 2 && this.state.remark == 3 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={shoot_out}/>
-                        <p className="mb-n">射偏</p>
-                    </div>
-                </div>
-                <div
-                    onClick={onEventDetailSelect.bind(this, 2)}
-                    className={currentEvent.key == 2 && this.state.remark == 2 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={shoot_door}/>
-                        <p className="mb-n">射在门框</p>
-                    </div>
-                </div>
-                <div
-                    onClick={onEventDetailSelect.bind(this, 1)}
-                    className={currentEvent.key == 2 && this.state.remark == 1 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={save}/>
-                        <p className="mb-n">射门被拦截</p>
-                    </div>
-                </div>
-            </div>,
-            3: null,
-            4: <div className="pt-m center">
-                <div
-                    onClick={onEventDetailSelect.bind(this, 0)}
-                    className={currentEvent.key == 4 && this.state.remark == 0 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={tackle_failed}/>
-                        <p className="mb-n">失败</p>
-                    </div>
-                </div>
-                <div
-                    onClick={onEventDetailSelect.bind(this, 1)}
-                    className={currentEvent.key == 4 && this.state.remark == 1 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={tackle}/>
-                        <p className="mb-n">成功</p>
-                    </div>
-                </div>
-            </div>,
-            5: null,
-            6: null,
-            9: null,
-            17: null,
-            18: <div className="pt-m center">
-                <div
-                    onClick={onEventDetailSelect.bind(this, 0)}
-                    className={currentEvent.key == 18 && this.state.remark == 3 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={cross_failed}/>
-                        <p className="mb-n">失败</p>
-                    </div>
-                </div>
-                <div
-                    onClick={onEventDetailSelect.bind(this, 1)}
-                    className={currentEvent.key == 18 && this.state.remark == 2 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={cross_success}/>
-                        <p className="mb-n">成功</p>
-                    </div>
-                </div>
-            </div>,
-            19: null,
-            20: null,
-            22: null,
-            24: <div className="pt-m center">
-                <div
-                    onClick={onEventDetailSelect.bind(this, 0)}
-                    className={currentEvent.key == 24 && this.state.remark == 0 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={shoot_out}/>
-                        <p className="mb-n">没进</p>
-                    </div>
-                </div>
-                <div
-                    onClick={onEventDetailSelect.bind(this, 1)}
-                    className={currentEvent.key == 24 && this.state.remark == 1 ? "step-item-hover step-item-selected center" : "step-item-hover center"}>
-                    <div style={{width: "78px", position: "relative"}}>
-                        <img className="round-img-m" src={shoot}/>
-                        <p className="mb-n">进球</p>
-                    </div>
-                </div>
-            </div>,
-            25: null,
-        };
-        currentEvent.dom = doms[currentEvent.key];
-        const hideTime = eventType[currentEvent.key].hideTime;
+        let dom = [];
+        if (this.props.data && this.props.data.section) {
+            for (let i = 0; i < this.props.data.section; i++) {
+                dom.push(<Option value={i + 1}>{`第${i + 1}小节`}</Option>)
+            }
+        }
+        let numDom = [];
+        for (let i = 1; i <= 50; i++) {
+            numDom.push(<Option value={i}>{`共${i}个`}</Option>)
+        }
+
+        const currentSection = this.state.section ? this.state.section : this.props.section;
+        const currentScoreNumber = this.state.scoreNumber;
         return <div>
             <div>
                 <Avatar src={currentEvent.icon}/>
@@ -520,122 +254,129 @@ class BasketballMatchScoreAddDialog extends React.Component {
             <div className="w-full">
                 <span style={{fontSize: 14}}>{currentEvent.text}</span>
             </div>
+            <div className="w-full centher mt-m">
+                选择小节数
+            </div>
             <div className="pt-s">
-                {hideTime == true ? null :
-                    <Input defaultValue={this.state.minute ? this.state.minute : this.props.minute}
-                           onChange={this.onTimeChange}
-                           style={{width: 130}}
-                           addonBefore="在"
-                           addonAfter="分钟"/>}
+                <Select style={{minWidth: 200}} onChange={this.onSectionChange} value={currentSection}
+                        placeholder="选择小节数">
+                    {dom}
+                </Select>
             </div>
-            {currentEvent.dom}
-            <div className="center pt-s">
-                <span>描述</span>
+            <div className="w-full centher mt-m">
+                选择进球个数
             </div>
-            <div className="center w-full pl-l pr-l pt-s">
-                <Input.TextArea rows={2} style={{maxWidth: "350px"}} onChange={this.onTextChange} className="center"
-                                placeholder="请输入描述文字不(不超过50字)"/>
+            <div className="pt-s">
+                <Select style={{minWidth: 200}} onChange={this.onScoreNumberChange} value={currentScoreNumber}
+                        placeholder="选择进球个数">
+                    {numDom}
+                </Select>
             </div>
         </div>
     }
-    onEventPlayerSelect = (e, op) => {
-        this.setState({
-            remark: op.props.data,
-        });
+    onSectionChange = (e) => {
+        this.setState({section: e})
     }
-    onEventDetailSelect = (value, e) => {
-        this.setState({
-            remark: value,
-        });
+    onScoreNumberChange = (e) => {
+        this.setState({scoreNumber: e})
     }
-    onTimeChange = (e) => {
-        const value = e.target.value
-        e.target.value = e.target.value.replace(/[^\d]/g, '')
-        if (value > 999) {
-            alert("数值过大");
-            e.target.value = null;
-            return;
+    getTeamList = () => {
+        const {data, againstIndex} = this.props;
+        let dom = [];
+        if (data.againstTeams) {
+            const againstMap = data.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                dom.push(
+                    <Row key={`against-${key}`}
+                         className={`mt-s border-radius-10px border-gray ${againstIndex != null && key == againstIndex ? "cell-highlight" : ""}`}>
+                        <Col span={10}>
+                            <div
+                                className={this.state.team && (hostTeam.id == this.state.team.id) ? "step-item-hover step-item-selected" : "step-item-hover"}
+                                onClick={this.onTeamSelect.bind(this, key, hostTeam.id)}>
+                                <div className="w-full center">
+                                    <img className="round-img-s mt-s"
+                                         src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
+                                </div>
+                                <div className="w-full center">
+                                    <span style={{fontSize: 16}} className="w-full">
+                                        {hostTeam.name}
+                                    </span>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col span={4}>
+                            <div className="w-full center">
+                                <span>对阵{key}</span>
+                            </div>
+                            <div className="center w-full">
+                                <img style={{height: 45, width: 90}} src={vs}/>
+                            </div>
+                        </Col>
+                        <Col span={10}>
+                            <div
+                                className={this.state.team && (guestTeam.id == this.state.team.id) ? "step-item-hover step-item-selected" : "step-item-hover"}
+                                onClick={this.onTeamSelect.bind(this, key, guestTeam.id)}>
+                                <div className="w-full center">
+                                    <img className="round-img-s mt-s"
+                                         src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
+                                </div>
+                                <div className="w-full center">
+                                    <span style={{fontSize: 16}} className="w-full">
+                                        {guestTeam.name}
+                                    </span>
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>);
+            })
         }
-        this.setState({
-            minute: Number.parseInt(value),
-        });
-    }
-    onTextChange = (e) => {
-        this.setState({
-            text: e.target.value,
-        });
+        return <div>
+            <span className="w-full mb-n" style={{fontSize: 20}}>选择球队</span>
+            {dom}
+        </div>
     }
 
     render() {
         const {data} = this.props;
         const {current, currentChecked} = this.state;
-        const onTeamSelect = this.onTeamSelect;
-        const getTeamPlayerList = this.getTeamPlayerList;
+        const getTeamList = this.getTeamList;
         const getEventList = this.getEventList;
         const getEventDetail = this.getEventDetail;
-        let clazzName = this.state.current >= 1 ? "steps-content-large" : "steps-content";
-        if (this.state.current == 2 && !this.state.hidden) {
-            clazzName = "steps-content-large-more";
-        }
         const steps = [{
-            content: <div>
-                <p className="w-full mb-n" style={{fontSize: 20}}>选择球队</p>
-                <Row gutter={24}>
-                    <Col span={12}>
-                        <div
-                            className={this.state.team && (data.hostTeam.id == this.state.team.id) ? "step-item-hover step-item-selected" : "step-item-hover"}
-                            onClick={onTeamSelect.bind(this, true)}>
-                            <img className="round-img mt-s" src={data.hostTeam.headImg}/>
-                            <p style={{fontSize: 16}} className="w-full">{data.hostTeam.name}</p>
-                        </div>
-                    </Col>
-                    <Col span={12}>
-                        <div
-                            className={this.state.team && (data.guestTeam.id == this.state.team.id) ? "step-item-hover step-item-selected" : "step-item-hover"}
-                            onClick={onTeamSelect.bind(this, false)}>
-                            <img className="round-img mt-s" src={data.guestTeam.headImg}/>
-                            <p style={{fontSize: 16}} className="w-full">{data.guestTeam.name}</p>
-                        </div>
-                    </Col>
-                </Row>
-            </div>,
-        }, {
-            content: getTeamPlayerList(),
+            content: getTeamList(),
         }, {
             content: getEventList(),
         }, {
             content: getEventDetail(),
         }];
-        return this.state.loading ? <div className="center">
-                <Spin/>
+        return <div className="steps-div">
+            <div className="steps-content h-full">{steps[current].content}</div>
+            <div className="steps-action center">
+                {
+                    current > 0
+                    && (
+                        <Button icon="arrow-left" size="large" shape="circle"
+                                onClick={() => this.prev()}/>
+                    )
+                }
+                {
+                    current < steps.length - 1
+                    &&
+                    <Button disabled={!currentChecked} type="primary" icon="arrow-right" size="large" shape="circle"
+                            className={current == 0 ? "" : "ml-m"}
+                            onClick={() => this.next()}/>
+                }
+                {
+                    current === steps.length - 1
+                    && <Button type="primary" icon="check" size="large" shape="circle"
+                               className="ml-m" onClick={() => {
+                        this.submit();
+                    }}/>
+                }
             </div>
-            : <div className="steps-div">
-                <div
-                    className={clazzName}>{steps[current].content}</div>
-                <div className="steps-action center">
-                    {
-                        current > 0
-                        && (
-                            <Button icon="arrow-left" size="large" shape="circle"
-                                    onClick={() => this.prev()}/>
-                        )
-                    }
-                    {
-                        current < steps.length - 1
-                        &&
-                        <Button disabled={!currentChecked} type="primary" icon="arrow-right" size="large" shape="circle"
-                                className={current == 0 ? "" : "ml-m"}
-                                onClick={() => this.next()}/>
-                    }
-                    {
-                        current === steps.length - 1
-                        && <Button type="primary" icon="check" size="large" shape="circle"
-                                   className="ml-m" onClick={() => {
-                            this.submit();
-                        }}/>
-                    }
-                </div>
-            </div>;
+        </div>;
     }
 }
 

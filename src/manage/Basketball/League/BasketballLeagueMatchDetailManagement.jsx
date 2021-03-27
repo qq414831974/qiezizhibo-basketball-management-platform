@@ -23,7 +23,6 @@ import {
     addTeamToLeague,
     updateTeamInLeague,
     deleteTeamInLeague,
-    getLeaguePlayer,
     addLeaguePlayer,
     updatePlayerInLeague,
     delPlayerInLeague,
@@ -40,8 +39,6 @@ import {Link, Redirect} from 'react-router-dom';
 import BreadcrumbCustom from '../../Components/BreadcrumbCustom';
 import BasketballLeagueMatchAddTeamDialog from "./BasketballLeagueMatchAddTeamDialog";
 import BasketballLeagueMatchModifyTeamDialog from "./BasketballLeagueMatchModifyTeamDialog";
-import BasketballLeagueMatchAddPlayerDialog from "./BasketballLeagueMatchAddPlayerDialog";
-import BasketballLeagueMatchModifyPlayerDialog from "./BasketballLeagueMatchModifyPlayerDialog";
 import {message} from "antd/lib/index";
 
 moment.locale('zh-cn');
@@ -60,7 +57,7 @@ const formItemLayout = {
 };
 
 class BasketballLeagueMatchDetailManagement extends React.Component {
-    state = {teamList: [], playerList: [], teamSwitch: true, playerSwitch: true}
+    state = {teamList: [], playerList: [], teamSwitch: true}
 
     componentDidMount() {
         if (!(this.props.match.params && this.props.match.params.id)) {
@@ -88,29 +85,19 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
         getLeagueRankSetting({leagueId: this.props.match.params.id}).then(data => {
             let autoRank = false;
             let showLeagueTeam = false;
-            let showLeaguePlayer = false;
             if (data && data.data && data.data.id) {
                 autoRank = data.data.autoRank;
                 showLeagueTeam = data.data.showLeagueTeam;
-                showLeaguePlayer = data.data.showLeaguePlayer;
             }
-            this.setState({teamSwitch: showLeagueTeam, playerSwitch: showLeaguePlayer, sortradiovalue: autoRank})
+            this.setState({teamSwitch: showLeagueTeam, sortradiovalue: autoRank})
         });
-        this.setState({playerListLoading: true});
-        getLeaguePlayer({leagueId: this.props.match.params.id}).then(data => {
-            if (data && data.code == 200) {
-                this.setState({playerList: data.data, playerListLoading: false});
-            } else {
-                this.setState({playerListLoading: false});
-            }
-        });
-        getLeagueReport({leagueId: this.props.match.params.id}).then(data => {
-            if (data && data.code == 200) {
-                if (data.data) {
-                    this.setState({reportUrl: data.data.url});
-                }
-            }
-        })
+        // getLeagueReport({leagueId: this.props.match.params.id}).then(data => {
+        //     if (data && data.code == 200) {
+        //         if (data.data) {
+        //             this.setState({reportUrl: data.data.url});
+        //         }
+        //     }
+        // })
     }
     refresh = () => {
         this.fetch();
@@ -125,36 +112,8 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
     onAddTeamClick = (e) => {
         this.setState({addTeamVisible: true});
     }
-    onAddPlayerClick = (e) => {
-        this.setState({addPlayerVisible: true});
-    }
     onTeamClick = (record) => {
         this.setState({currentTeam: record, modifyTeamVisible: true});
-    }
-    onPlayerClick = (record) => {
-        this.setState({currentPlayer: record, modifyPlayerVisible: true});
-    }
-    handleAddPlayerOK = () => {
-        const form = this.addPlayerForm;
-        form.validateFields((err, values) => {
-            if (err) {
-                return;
-            }
-            addLeaguePlayer(values).then((data) => {
-                if (data && data.code == 200) {
-                    if (data.data) {
-                        this.refresh();
-                        message.success('添加成功', 1);
-                    } else {
-                        message.warn(data.message, 1);
-                    }
-                } else {
-                    message.error('添加失败：' + (data ? data.code + ":" + data.message : data), 3);
-                }
-            });
-            form.resetFields();
-            this.setState({addPlayerVisible: false});
-        });
     }
     handleAddTeamOK = () => {
         const form = this.addTeamForm;
@@ -176,28 +135,6 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
             });
             form.resetFields();
             this.setState({addTeamVisible: false});
-        });
-    }
-    handleModifyPlayerOK = () => {
-        const form = this.modifyPlayerForm;
-        form.validateFields((err, values) => {
-            if (err) {
-                return;
-            }
-            updatePlayerInLeague(values).then((data) => {
-                if (data && data.code == 200) {
-                    if (data.data) {
-                        this.refresh();
-                        message.success('修改成功', 1);
-                    } else {
-                        message.warn(data.message, 1);
-                    }
-                } else {
-                    message.error('修改失败：' + (data ? data.code + ":" + data.message : data), 3);
-                }
-            });
-            form.resetFields();
-            this.setState({modifyPlayerVisible: false});
         });
     }
     handleModifyTeamOK = () => {
@@ -225,52 +162,17 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
     handleAddTeamCancel = () => {
         this.setState({addTeamVisible: false});
     }
-    handleAddPlayerCancel = () => {
-        this.setState({addPlayerVisible: false});
-    }
     saveAddTeamDialogRef = (form) => {
         this.addTeamForm = form;
-    }
-    saveAddPlayerDialogRef = (form) => {
-        this.addPlayerForm = form;
     }
     handleModifyTeamCancel = () => {
         this.setState({modifyTeamVisible: false});
     }
-    handleModifyPlayerCancel = () => {
-        this.setState({modifyPlayerVisible: false});
-    }
     saveModifyTeamDialogRef = (form) => {
         this.modifyTeamForm = form;
     }
-    saveModifyPlayerDialogRef = (form) => {
-        this.modifyPlayerForm = form;
-    }
     handleTeamDelete = () => {
         this.setState({deleteVisible: true, handleDeleteOK: this.handleDeleteTeamOK});
-    }
-    handlePlayerDelete = () => {
-        this.setState({deleteVisible: true, handleDeleteOK: this.handleDeletePlayerOK});
-    }
-    handleDeletePlayerOK = () => {
-        this.state.currentPlayer &&
-        delPlayerInLeague({
-            leagueId: this.state.currentPlayer.leagueId,
-            teamId: this.state.currentPlayer.teamId,
-            playerId: this.state.currentPlayer.playerId
-        }).then(data => {
-            this.setState({deleteVisible: false, modifyPlayerVisible: false});
-            if (data && data.code == 200) {
-                if (data.data) {
-                    this.refresh();
-                    message.success('删除成功', 1);
-                } else {
-                    message.success(data.message, 1);
-                }
-            } else {
-                message.error('删除失败：' + (data ? data.result + "-" + data.message : data), 3);
-            }
-        });
     }
     handleDeleteTeamOK = () => {
         this.state.currentTeam &&
@@ -318,21 +220,6 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
                     this.refresh();
                     message.success('修改成功', 1);
                     this.setState({teamSwitch: e});
-                } else {
-                    message.warn(data.message, 1);
-                }
-            } else {
-                message.error('修改失败：' + (data ? data.code + ":" + data.message : data), 3);
-            }
-        });
-    }
-    onLeaguePlayerSwitchChange = (e) => {
-        updateLeagueRankSetting({leagueId: this.props.match.params.id, showLeaguePlayer: e}).then((data) => {
-            if (data && data.code == 200) {
-                if (data.data) {
-                    this.refresh();
-                    message.success('修改成功', 1);
-                    this.setState({playerSwitch: e});
                 } else {
                     message.warn(data.message, 1);
                 }
@@ -392,21 +279,6 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
             }
         });
     }
-    genLeaguePlayerRank = () => {
-        message.info("正在生成，请稍后", 10)
-        genLeaguePlayerRank({leagueId: this.state.data.id}).then(data => {
-            if (data && data.code == 200) {
-                if (data.data) {
-                    this.refresh();
-                    message.success('生成成功', 1);
-                } else {
-                    message.warn(data.message, 1);
-                }
-            } else {
-                message.error('生成失败：' + (data ? data.code + ":" + data.message : data), 3);
-            }
-        });
-    }
     genLeagueReport = () => {
         message.info("正在生成，请稍后", 10)
         genLeagueReport({leagueId: this.state.data.id}).then(data => {
@@ -431,8 +303,6 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
         }
         const AddTeamDialog = Form.create()(BasketballLeagueMatchAddTeamDialog);
         const ModifyTeamDialog = Form.create()(BasketballLeagueMatchModifyTeamDialog);
-        const AddPlayerDialog = Form.create()(BasketballLeagueMatchAddPlayerDialog);
-        const ModifyPlayerDialog = Form.create()(BasketballLeagueMatchModifyPlayerDialog);
         return (
             <div>
                 <BreadcrumbCustom first={<Link to={'/basketball/basketballLeagueMatch'}>联赛管理</Link>} second="详细设置"/>
@@ -447,92 +317,42 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
                     <div className="w-full center">
                         <span>{this.state.data ? `${this.state.data.dateBegin} - ${this.state.data.dateEnd}` : ""}</span>
                     </div>
-                    <div className="w-full center">
-                        <Button type="primary" onClick={this.genLeagueReport}>一键生成海报图</Button>
+                    {/*<div className="w-full center">*/}
+                    {/*    <Button type="primary" onClick={this.genLeagueReport}>一键生成海报图</Button>*/}
+                    {/*</div>*/}
+                    {/*<div className="w-full center">*/}
+                    {/*    {this.state.reportUrl ?*/}
+                    {/*        <a style={{textDecoration: "underline"}}*/}
+                    {/*           target="_blank"*/}
+                    {/*           href={this.state.reportUrl}>*/}
+                    {/*            <span>{this.state.reportUrl}</span>*/}
+                    {/*        </a>*/}
+                    {/*        :*/}
+                    {/*        <span>暂无海报</span>*/}
+                    {/*    }*/}
+                    {/*</div>*/}
+
+                    <div className="w-full">
+                        <div className="w-full center">
+                            <span style={{fontSize: 20, fontWeight: 'bold'}}>积分榜</span>
+                            <Switch checked={this.state.teamSwitch} onChange={this.onLeagueTeamSwitchChange}/>
+                        </div>
+                        <div className="w-full center">
+                            <Button type="primary" onClick={this.genLeagueTeamRank}>一键生成</Button>
+                        </div>
+                        <Card className="mt-m" title={<div>
+                            <Button type="primary" shape="circle" icon="plus" onClick={this.onAddTeamClick}/>
+                            <span className="ml-s mr-s">队伍</span>
+                            <Radio.Group onChange={this.onSortRadioChange}
+                                         value={this.state.sortradiovalue}>
+                                <Radio value={true}>自动</Radio>
+                                <Radio value={false}>手动</Radio>
+                            </Radio.Group>
+                            <span className="pull-right pa-s">{"赛   胜/平/负   进/失 积分"}</span>
+                        </div>}>
+                            {this.getGroupLegueTeam()}
+                        </Card>
                     </div>
-                    <div className="w-full center">
-                        {this.state.reportUrl ?
-                            <a style={{textDecoration: "underline"}}
-                               target="_blank"
-                               href={this.state.reportUrl}>
-                                <span>{this.state.reportUrl}</span>
-                            </a>
-                            :
-                            <span>暂无海报</span>
-                        }
-                    </div>
-                    <Row gutter={10}>
-                        <Col md={12}>
-                            <div className="w-full">
-                                <div className="w-full center">
-                                    <span style={{fontSize: 20, fontWeight: 'bold'}}>积分榜</span>
-                                    <Switch checked={this.state.teamSwitch} onChange={this.onLeagueTeamSwitchChange}/>
-                                </div>
-                                <div className="w-full center">
-                                    <Button type="primary" onClick={this.genLeagueTeamRank}>一键生成</Button>
-                                </div>
-                                <Card className="mt-m" title={<div>
-                                    <Button type="primary" shape="circle" icon="plus" onClick={this.onAddTeamClick}/>
-                                    <span className="ml-s mr-s">队伍</span>
-                                    <Radio.Group onChange={this.onSortRadioChange}
-                                                 value={this.state.sortradiovalue}>
-                                        <Radio value={true}>自动</Radio>
-                                        <Radio value={false}>手动</Radio>
-                                    </Radio.Group>
-                                    <span className="pull-right pa-s">{"赛   胜/平/负   进/失 积分"}</span>
-                                </div>}>
-                                    {this.getGroupLegueTeam()}
-                                </Card>
-                            </div>
-                        </Col>
-                        <Col md={12}>
-                            <div className="w-full center">
-                                <span style={{fontSize: 20, fontWeight: 'bold'}}>球员榜</span>
-                                <Switch checked={this.state.playerSwitch} onChange={this.onLeaguePlayerSwitchChange}/>
-                            </div>
-                            <div className="w-full center">
-                                <Button type="primary" onClick={this.genLeaguePlayerRank}>一键生成</Button>
-                            </div>
-                            <Card className="mt-m" title={<div>
-                                <Row gutter={10}>
-                                    <Col span={8}>
-                                        <Button type="primary" shape="circle" icon="plus" className="inline-block"
-                                                onClick={this.onAddPlayerClick}/>
-                                        <span className="w-full center inline-block ml-s">球员</span>
-                                    </Col>
-                                    <Col span={8}>
-                                        <span className="w-full center">球队</span>
-                                    </Col>
-                                    <Col span={8}>
-                                        <span className="w-full center">进球</span>
-                                    </Col>
-                                </Row>
-                            </div>}>
-                                <List
-                                    rowKey={record => record.id}
-                                    style={{minHeight: 400}}
-                                    size="small"
-                                    dataSource={this.state.playerList ? this.state.playerList : []}
-                                    loading={this.state.playerListLoading}
-                                    renderItem={item => (<Row gutter={10} className="cell-hover pa-s cursor-hand"
-                                                              onClick={this.onPlayerClick.bind(this, item)}>
-                                        <Col span={8}>
-                                            <Avatar size="large"
-                                                    src={item.player.headImg ? item.player.headImg : avatar}/>
-                                            <span className="ml-s">{item.player.name}</span>
-                                        </Col>
-                                        <Col span={8}>
-                                            <Avatar size="large" src={item.team.headImg ? item.team.headImg : logo}/>
-                                            <span className="ml-s">{item.team.name}</span>
-                                        </Col>
-                                        <Col span={8}>
-                                            <span className="w-full center">{item.goal}</span>
-                                        </Col>
-                                    </Row>)}
-                                />
-                            </Card>
-                        </Col>
-                    </Row>
                 </div>
                 <Modal
                     className={isMobile ? "top-n" : ""}
@@ -548,21 +368,6 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
                         visible={this.state.addTeamVisible}
                         record={this.state.data}
                         ref={this.saveAddTeamDialogRef}/>
-                </Modal>
-                <Modal
-                    className={isMobile ? "top-n" : ""}
-                    title="添加球员"
-                    okText="确定"
-                    visible={this.state.addPlayerVisible}
-                    onOk={this.handleAddPlayerOK}
-                    onCancel={this.handleAddPlayerCancel}
-                    zIndex={1001}
-                    destroyOnClose="true"
-                >
-                    <AddPlayerDialog
-                        visible={this.state.addPlayerVisible}
-                        record={this.state.data}
-                        ref={this.saveAddPlayerDialogRef}/>
                 </Modal>
                 <Modal
                     className={isMobile ? "top-n" : ""}
@@ -587,29 +392,6 @@ class BasketballLeagueMatchDetailManagement extends React.Component {
                         record={this.state.currentTeam}
                         league={this.state.data}
                         ref={this.saveModifyTeamDialogRef}/>
-                </Modal>
-                <Modal
-                    className={isMobile ? "top-n" : ""}
-                    title="编辑球员"
-                    okText="确定"
-                    visible={this.state.modifyPlayerVisible}
-                    onOk={this.handleModifyPlayerOK}
-                    onCancel={this.handleModifyPlayerCancel}
-                    zIndex={1001}
-                    destroyOnClose="true"
-                    footer={[
-                        <Button key="delete" type="danger" className="pull-left"
-                                onClick={this.handlePlayerDelete}>删除</Button>,
-                        <Button key="back" onClick={this.handleModifyPlayerCancel}>取消</Button>,
-                        <Button key="submit" type="primary" onClick={this.handleModifyPlayerOK}>
-                            确定
-                        </Button>
-                    ]}
-                >
-                    <ModifyPlayerDialog
-                        visible={this.state.modifyPlayerVisible}
-                        record={this.state.currentPlayer}
-                        ref={this.saveModifyPlayerDialogRef}/>
                 </Modal>
                 <Modal
                     className={isMobile ? "top-n" : ""}

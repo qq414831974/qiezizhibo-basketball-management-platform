@@ -7,7 +7,7 @@ import {getAllMatchSchedule, delMatchSchedule} from "../../../axios";
 import {message} from "antd/lib/index";
 import BreadcrumbCustom from '../../Components/BreadcrumbCustom';
 import defultAvatar from '../../../static/avatar.jpg';
-import {parseTimeString} from "../../../utils";
+import {getMatchAgainstDom, parseTimeString} from "../../../utils";
 
 
 class BasketballMatchSchedule extends React.Component {
@@ -104,23 +104,12 @@ class BasketballMatchSchedule extends React.Component {
             filterMultiple: false,
             render: function (text, item, index) {
                 const record = item.match;
-                const hostTeam = record.hostTeam;
-                const guestTeam = record.guestTeam;
-                if (hostTeam == null || guestTeam == null) {
-                    return <span>{record.name}</span>
-                }
-                return <div className="center cursor-hand" onClick={onNameClick.bind(this, item)}>
-                    <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
-                    <p className="ml-s">{hostTeam.name}</p>
-                    <p className="ml-s mr-s">VS</p>
-                    <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
-                    <p className="ml-s">{guestTeam.name}</p>
-                </div>;
+                return getMatchAgainstDom(record, onNameClick, this);
             },
         }, {
             title: '时间',
             align: 'center',
-            dataIndex: 'datebegin',
+            dataIndex: 'startTime',
             width: '20%',
             render: function (text, item, index) {
                 const record = item.match;
@@ -132,7 +121,14 @@ class BasketballMatchSchedule extends React.Component {
             width: '10%',
             render: function (text, item, index) {
                 const record = item.match;
-                return <span>{record.score ? (record.score + (record.penaltyScore ? `(${record.penaltyScore})` : "")) : "-"}</span>;
+                let dom = [];
+                if (record.status && record.status.score) {
+                    const scoreMap = record.status.score;
+                    Object.keys(scoreMap).forEach(key => {
+                        dom.push(<div key={`score-${key}`} className="w-full">{`${scoreMap[key]}`}</div>);
+                    })
+                }
+                return <div className="cursor-hand">{dom}</div>;
             },
         }, {
             title: '状态',

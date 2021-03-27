@@ -252,24 +252,57 @@ class FreeTicketAddDialog extends React.Component {
         this.isUserCompositions = true;
         this.fetchUsers(this.state.userSearchText, 1);
     }
-    getAgainstTeams = (againstTeams) => {
-        if (againstTeams == null && againstTeams.length == 0) {
-            return <div/>
+    getAgainstTeams = (match) => {
+        let dom = [];
+        if (match.againstTeams) {
+            const againstMap = match.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                dom.push(<div key={`against-${<p className="ml-s">{hostTeam.name}</p>}`}
+                              className="center w-full border-gray border-radius-10px">
+                    <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
+                    <span className="ml-s">{hostTeam.name}</span>
+                    <span className="ml-s mr-s">VS</span>
+                    <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
+                    <span className="ml-s">{guestTeam.name}</span>
+                </div>);
+                if (againstMap[Number(key) + 1]) {
+                    dom.push(<span className="ml-s mr-s">以及</span>)
+                }
+            })
+        } else {
+            return <span className="cursor-hand">{match.name}</span>
         }
-        // <div className="center">
-        //     <Avatar
-        //         src={currentMatch.hostTeam ? currentMatch.hostTeam.headImg : defultAvatar}/>
-        //     <p className="ml-s">{currentMatch.hostTeam ? currentMatch.hostTeam.name : ""}</p>
-        //     <p className="ml-s mr-s">{currentMatch.score}</p>
-        //     <Avatar
-        //         src={currentMatch.guestTeam ? currentMatch.guestTeam.headImg : defultAvatar}/>
-        //     <p className="ml-s">{currentMatch.guestTeam ? currentMatch.guestTeam.name : ""}</p>
-        // </div>
-
-        return againstTeams.map(data=>{
-            console.log(data)
-            return <div></div>
-        })
+        return <div className="w-full center">{dom}</div>;
+    }
+    getMatchAgainstDom = (match) => {
+        let dom = [];
+        if (match.againstTeams) {
+            const againstMap = match.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                if (key <= 2) {
+                    dom.push(<div key={`against-${<p className="ml-s">{hostTeam.name}</p>}`}
+                                  className="center w-full border-gray border-radius-10px">
+                        <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
+                        <span className="ml-s">{hostTeam.name}</span>
+                        <span className="ml-s mr-s">VS</span>
+                        <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
+                        <span className="ml-s">{guestTeam.name}</span>
+                    </div>);
+                }
+                if (againstMap[Number(key) + 1] && key <= 1) {
+                    dom.push(<span className="ml-s mr-s">以及</span>)
+                } else if (key == 2) {
+                    dom.push(<span className="ml-s mr-s">等对阵</span>)
+                }
+            })
+        } else {
+            return <span className="cursor-hand">{match.name}</span>
+        }
+        return <div className="w-full center">{dom}</div>;
     }
 
     render() {
@@ -280,15 +313,7 @@ class FreeTicketAddDialog extends React.Component {
         const currentUser = this.state.user;
         const options = this.state.data.map(d => <Option style={{height: 50}} key={d.id} value={d.id}>
             <Tooltip title={d.name + "-" + d.startTime}>
-                {(d.hostTeam == null || d.guestTeam == null) ?
-                    <span>{d.name}</span>
-                    : <div className="center">
-                        <Avatar src={d.hostTeam ? d.hostTeam.headImg : defultAvatar}/>
-                        <p className="ml-s">{d.hostTeam ? d.hostTeam.name : ""}</p>
-                        <p className="ml-s mr-s">{d.score}</p>
-                        <Avatar src={d.guestTeam ? d.guestTeam.headImg : defultAvatar}/>
-                        <p className="ml-s">{d.guestTeam ? d.guestTeam.name : ""}</p>
-                    </div>}
+                {this.getMatchAgainstDom(d)}
             </Tooltip>
         </Option>);
         const leagueOptions = this.state.leaguedata.map(d => <Option style={{height: 50}} key={d.id} value={d.id}>
@@ -309,7 +334,7 @@ class FreeTicketAddDialog extends React.Component {
             </div>
             <Select
                 showSearch
-                style={{minWidth: 300}}
+                style={{minWidth: 500}}
                 placeholder="按名称搜索并选择"
                 defaultActiveFirstOption={false}
                 showArrow={false}
@@ -331,11 +356,11 @@ class FreeTicketAddDialog extends React.Component {
                       hidden={!this.state.loading}/>
             </div>
             <div className="center w-full">
-                {(currentMatch.againstTeams == null || currentMatch.againstTeams.length() == 0) ?
+                {(currentMatch.againstTeams == null || currentMatch.againstTeams.length == 0) ?
                     <Tooltip
                         title={currentMatch.name + "-" + currentMatch.startTime}><span>{currentMatch.name}</span></Tooltip>
                     : <Tooltip title={currentMatch.name + "-" + currentMatch.startTime}>
-                        {this.getAgainstTeams(currentMatch.againstTeams)}
+                        {this.getAgainstTeams(currentMatch)}
                     </Tooltip>}
             </div>
             {currentMatch == null ? <div className="center w-full"><span>暂未关联比赛</span></div> : null}

@@ -325,13 +325,15 @@ class MatchClipPanel extends React.Component {
     }
     getTeamOption = () => {
         let dom = [];
-        const hostTeam = this.props.match.hostTeam;
-        const guestTeam = this.props.match.guestTeam;
-        if (hostTeam) {
-            dom.push(<Option key={hostTeam.id} value={hostTeam.id}>{hostTeam.name}</Option>)
-        }
-        if (guestTeam) {
-            dom.push(<Option key={guestTeam.id} value={guestTeam.id}>{guestTeam.name}</Option>)
+        const match = this.props.match;
+        if (match.againstTeams) {
+            const againstMap = match.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                dom.push(<Option key={hostTeam.id} value={hostTeam.id}>{hostTeam.name}</Option>);
+                dom.push(<Option key={guestTeam.id} value={guestTeam.id}>{guestTeam.name}</Option>);
+            })
         }
         return dom;
     }
@@ -412,7 +414,8 @@ class MatchClipPanel extends React.Component {
                     <Button type="primary" className="ml-l" onClick={this.mergeClipsConfirm}>合并</Button> : null}
             </div>}
                   className="mt-m" style={{minHeight: 250}}>
-                <Checkbox.Group style={{width: '100%'}} value={this.state.selectIds} onChange={this.onCheckBoxChange}>
+                <Checkbox.Group style={{width: '100%'}} value={this.state.selectIds}
+                                onChange={this.onCheckBoxChange}>
                     <List
                         rowKey={record => record.id}
                         grid={{gutter: 16, lg: 3, md: 2, xs: 1}}
@@ -610,12 +613,19 @@ class MatchClipPanel extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    const {auth = {data: {}}, responsive = {data: {}}} = state.httpData;
-    return {auth, responsive};
-};
-const mapDispatchToProps = dispatch => ({
-    receiveData: bindActionCreators(receiveData, dispatch)
-});
+const
+    mapStateToProps = state => {
+        const {auth = {data: {}}, responsive = {data: {}}} = state.httpData;
+        return {auth, responsive};
+    };
+const
+    mapDispatchToProps = dispatch => ({
+        receiveData: bindActionCreators(receiveData, dispatch)
+    });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MatchClipPanel);
+export default connect(mapStateToProps, mapDispatchToProps)
+
+(
+    MatchClipPanel
+)
+;

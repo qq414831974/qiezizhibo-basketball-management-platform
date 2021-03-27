@@ -145,7 +145,7 @@ class BannerAddDialog extends React.Component {
                             initialValue: 0
                         })(
                             <RadioGroup>
-                                <Radio value={0}>茄子tv</Radio>
+                                <Radio value={0}>茄子TV篮球</Radio>
                                 <Radio value={1}>青少年</Radio>
                             </RadioGroup>
                         )}

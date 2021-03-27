@@ -1,5 +1,8 @@
 import moment from 'moment'
 import 'moment/locale/zh-cn';
+import {Avatar} from "antd";
+import defultAvatar from "../static/avatar.jpg";
+import React from "react";
 
 moment.locale('zh-cn');
 
@@ -214,4 +217,34 @@ export const uuid = () => {
 
     var uuid = s.join("");
     return uuid;
+}
+export const getMatchAgainstDom = (match, handleClick, context) => {
+    let dom = [];
+    if (match.againstTeams) {
+        const againstMap = match.againstTeams;
+        Object.keys(againstMap).forEach(key => {
+            const hostTeam = againstMap[key].hostTeam;
+            const guestTeam = againstMap[key].guestTeam;
+            dom.push(<div key={`against-${key}`} className="center w-full">
+                <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
+                <span className="ml-s">{hostTeam.name}</span>
+                <span className="ml-s mr-s">VS</span>
+                <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
+                <span className="ml-s">{guestTeam.name}</span>
+            </div>);
+        })
+    } else {
+        if (handleClick == null) {
+            return <span className="cursor-default">{match.name}</span>
+        }
+        return <span className="cursor-hand" onClick={handleClick.bind(context, match)}>{match.name}</span>
+    }
+    if (handleClick == null) {
+        return <div className="w-full cursor-default">
+            {dom}
+        </div>;
+    }
+    return <div className="w-full cursor-hand" onClick={handleClick.bind(context, match)}>
+        {dom}
+    </div>;
 }

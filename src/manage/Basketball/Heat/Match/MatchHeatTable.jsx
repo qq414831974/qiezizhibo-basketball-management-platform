@@ -168,12 +168,17 @@ class MatchHeatTable extends React.Component {
         if (match == null) {
             return null;
         }
-        const hostTeam = this.props.match.hostteam
-        const guestTeam = this.props.match.guestteam
-        if (teamId == hostTeam.id) {
-            return hostTeam
-        } else if (teamId == guestTeam.id) {
-            return guestTeam
+        if (match.againstTeams) {
+            const againstMap = match.againstTeams;
+            Object.keys(againstMap).forEach(key => {
+                const hostTeam = againstMap[key].hostTeam;
+                const guestTeam = againstMap[key].guestTeam;
+                if (teamId == hostTeam.id) {
+                    return hostTeam
+                } else if (teamId == guestTeam.id) {
+                    return guestTeam
+                }
+            })
         }
         return null;
     }

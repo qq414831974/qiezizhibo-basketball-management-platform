@@ -1,6 +1,6 @@
 import React from 'react';
 import {Table, Input, Button, Icon, Modal, Tooltip, Upload, Radio, Menu, Dropdown} from 'antd';
-import {getQueryString, mergeJSON} from '../../../utils/index';
+import {getMatchAgainstDom} from '../../../utils/index';
 import {Avatar} from 'antd';
 import {
     getAllMatchs,
@@ -26,15 +26,9 @@ import {receiveData} from "../../../action";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 
-const status = {
+const statusType = {
     0: {text: "比赛开始"},
-    14: {text: "中场"},
-    15: {text: "下半场"},
-    13: {text: "伤停"},
-    11: {text: "加时"},
-    12: {text: "点球大战"},
     21: {text: "比赛结束"},
-    16: {text: "暂停"},
 }
 const TIME_LINE = 1;
 const STATISTICS = 2;
@@ -202,6 +196,20 @@ class BasketballMatchTable extends React.Component {
                 return;
             }
             values["startTime"] = values["startTime"] ? values["startTime"].format('YYYY/MM/DD HH:mm:ss') : null;
+            if (values["againsts"]) {
+                let againstMap = {};
+                for (let i = 0; i < values["againsts"].length; i++) {
+                    againstMap[i + 1] = values["againsts"][i];
+                }
+                values["againsts"] = againstMap;
+            }
+            if (values["againstTeamsNooice"]) {
+                let againstTeamNooiceMap = {};
+                for (let i = 0; i < values["againstTeamsNooice"].length; i++) {
+                    againstTeamNooiceMap[i + 1] = values["againstTeamsNooice"][i];
+                }
+                values["againstTeamsNooice"] = againstTeamNooiceMap;
+            }
             createMatch(values).then((data) => {
                 if (data && data.code == 200) {
                     if (data.data) {
@@ -210,12 +218,12 @@ class BasketballMatchTable extends React.Component {
                     } else {
                         message.warn(data.message, 1);
                     }
+                    form.resetFields();
+                    this.setState({dialogAddVisible: false});
                 } else {
                     message.error('添加失败：' + (data ? data.result + "-" + data.message : data), 3);
                 }
             });
-            form.resetFields();
-            this.setState({dialogAddVisible: false});
         });
     };
     handleMatchModifyCreate = () => {
@@ -226,6 +234,20 @@ class BasketballMatchTable extends React.Component {
             }
             values["startTime"] = values["startTime"] ? values["startTime"].format('YYYY/MM/DD HH:mm:ss') : null;
             values["available"] = values["available"] != null ? !values["available"] : false;
+            if (values["againsts"]) {
+                let againstMap = {};
+                for (let i = 0; i < values["againsts"].length; i++) {
+                    againstMap[i + 1] = values["againsts"][i];
+                }
+                values["againsts"] = againstMap;
+            }
+            if (values["againstTeamsNooice"]) {
+                let againstTeamNooiceMap = {};
+                for (let i = 0; i < values["againstTeamsNooice"].length; i++) {
+                    againstTeamNooiceMap[i + 1] = values["againstTeamsNooice"][i];
+                }
+                values["againstTeamsNooice"] = againstTeamNooiceMap;
+            }
             updateMatchById(values).then((data) => {
                 if (data && data.code == 200) {
                     if (data.data) {
@@ -234,12 +256,12 @@ class BasketballMatchTable extends React.Component {
                     } else {
                         message.warn(data.message, 1);
                     }
+                    form.resetFields();
+                    this.setState({dialogModifyVisible: false});
                 } else {
                     message.error('修改失败：' + (data ? data.result + "-" + data.message : data), 3);
                 }
             });
-            form.resetFields();
-            this.setState({dialogModifyVisible: false});
         });
     };
     saveMatchDialogRef = (form) => {
@@ -317,6 +339,7 @@ class BasketballMatchTable extends React.Component {
         this.setState({dialogStatusVisible: true});
     }
     handleMatchScoreCancel = () => {
+        this.refresh()
         this.setState({dialogScoreVisible: false});
     };
     handleMatchStatusCancel = () => {
@@ -623,26 +646,15 @@ class BasketballMatchTable extends React.Component {
                     filterDropdownVisible: visible,
                 }, () => this.searchInput && this.searchInput.focus());
             },
-            width: '35%',
+            width: '32%',
             render: function (text, record, index) {
-                const hostTeam = record.hostTeam;
-                const guestTeam = record.guestTeam;
-                if (hostTeam == null || guestTeam == null) {
-                    return <span className="cursor-hand" onClick={onNameClick.bind(this, record)}>{record.name}</span>
-                }
-                return <div className="center cursor-hand" onClick={onNameClick.bind(this, record)}>
-                    <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
-                    <p className="ml-s">{hostTeam.name}</p>
-                    <p className="ml-s mr-s">VS</p>
-                    <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
-                    <p className="ml-s">{guestTeam.name}</p>
-                </div>;
+                return getMatchAgainstDom(record, onNameClick, this);
             },
         }, {
             title: '地点',
             align: 'center',
             dataIndex: 'place',
-            width: '20%',
+            width: '15%',
             render: function (text, record, index) {
                 return <p>{record.place ? record.place : "-"}</p>
             }
@@ -657,19 +669,48 @@ class BasketballMatchTable extends React.Component {
         }, {
             title: '状态',
             align: 'center',
-            dataIndex: 'status',
+            key: 'status',
             width: '8%',
             render: function (text, record, index) {
-                return <p className="cursor-hand"
-                          onClick={onScoreClick.bind(this, record)}>{record.status == null ? "未开" : (record.status == -1 ? "未开" : status[record.status].text)}</p>
+                let dom = [];
+                if (record.status && record.status.status) {
+                    const status = record.status.status;
+                    dom.push(<div key={`status-status`}
+                                  className="w-full">
+                        {status == null ? "未开" : (status == -1 ? "未开" : statusType[status].text)}
+                    </div>)
+                }
+                if (record.status && record.status.againstIndex) {
+                    const againstIndex = record.status.againstIndex;
+                    dom.push(<div key={`status-against`} className="w-full">{`对阵${againstIndex}`}</div>)
+                }
+                if (record.status && record.status.section) {
+                    const section = record.status.section;
+                    dom.push(<div key={`status-section`} className="w-full">{`第${section}节`}</div>)
+                }
+                if (!record.available) {
+                    dom.push(<span className="w-full center danger">
+                            直播间关闭
+                        </span>)
+                }
+                return <div className="cursor-hand"
+                            onClick={onScoreClick.bind(this, record)}>{dom}</div>
             }
         }, {
             title: '比分',
             align: 'center',
-            width: '8%',
+            key: 'score',
+            width: '15%',
             render: function (text, record, index) {
-                return <p className="cursor-hand"
-                          onClick={onScoreClick.bind(this, record)}>{record.score ? (record.score + (record.penaltyScore ? `(${record.penaltyScore})` : "")) : "-"}</p>;
+                let dom = [];
+                if (record.status && record.status.score) {
+                    const scoreMap = record.status.score;
+                    Object.keys(scoreMap).forEach(key => {
+                        dom.push(<div key={`score-${key}`} className="w-full">{`${scoreMap[key]}`}</div>);
+                    })
+                }
+                return <div className="cursor-hand"
+                            onClick={onScoreClick.bind(this, record)}>{dom}</div>;
             },
         }, {
             title: <Dropdown overlay={onlineDropdown}
@@ -698,7 +739,7 @@ class BasketballMatchTable extends React.Component {
                 title: "小程序码",
                 align: 'center',
                 dataIndex: 'wxacode',
-                width: '6%',
+                width: '7%',
                 render: function (text, record, index) {
                     return <span onClick={genWxaCode.bind(this, record)}>生成</span>
                 },
@@ -749,7 +790,7 @@ class BasketballMatchTable extends React.Component {
             width: '18%',
             render: function (text, record, index) {
                 return <p className="cursor-hand"
-                          onClick={onScoreClick.bind(this, record)}>{record.status == null ? "未开" : (record.status == -1 ? "未开" : status[record.status].text)}</p>
+                          onClick={onScoreClick.bind(this, record)}>{record.status == null ? "未开" : (record.status == -1 ? "未开" : statusType[record.status].text)}</p>
             }
         }, {
             title: '比分',

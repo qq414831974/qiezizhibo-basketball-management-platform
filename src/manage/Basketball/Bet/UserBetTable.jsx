@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import logo from "../../../static/logo.png";
 import defultAvatar from "../../../static/avatar.jpg";
-import {parseTimeString} from "../../../utils";
+import {getMatchAgainstDom, parseTimeString} from "../../../utils";
 import NP from 'number-precision'
 
 class UserBetTable extends React.Component {
@@ -243,21 +243,7 @@ class UserBetTable extends React.Component {
                 width: '25%',
                 render: function (text, record, index) {
                     if (record.match) {
-                        const match = record.match;
-                        const hostTeam = match.hostTeam;
-                        const guestTeam = match.guestTeam;
-                        if (hostTeam == null || guestTeam == null) {
-                            return <Tooltip title={`比赛时间：${match.startTime}`}><span>{match.name}</span></Tooltip>
-                        }
-                        return <Tooltip title={`比赛时间：${match.startTime}`}>
-                            <div className="center">
-                                <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
-                                <p className="ml-s">{hostTeam.name}</p>
-                                <p className="ml-s mr-s">VS</p>
-                                <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
-                                <p className="ml-s">{guestTeam.name}</p>
-                            </div>
-                        </Tooltip>;
+                        return getMatchAgainstDom(record);
                     }
                     return <span>未知</span>;
                 },

@@ -186,13 +186,6 @@ class BasketballLeagueMatchModifyTeamDialog extends React.Component {
                                 <Input placeholder="胜" onChange={this.onInputChange.bind(this, "matchWin")}/>
                             )}
                         </FormItem>
-                        <FormItem {...formItemLayout} className="bs-form-item" label="平">
-                            {getFieldDecorator('matchDraw', {
-                                initialValue: this.props.record.matchDraw,
-                            })(
-                                <Input placeholder="平" onChange={this.onInputChange.bind(this, "matchDraw")}/>
-                            )}
-                        </FormItem>
                         <FormItem {...formItemLayout} className="bs-form-item" label="负">
                             {getFieldDecorator('matchLost', {
                                 initialValue: this.props.record.matchLost,

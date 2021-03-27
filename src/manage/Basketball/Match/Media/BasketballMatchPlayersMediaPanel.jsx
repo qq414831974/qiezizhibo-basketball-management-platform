@@ -28,6 +28,7 @@ class BasketballMatchPlayersMediaPanel extends React.Component {
     state = {
         playerInfo: {},
         pageLoaded: false,
+        againstPlayers: {}
     }
 
     componentDidMount() {
@@ -46,14 +47,7 @@ class BasketballMatchPlayersMediaPanel extends React.Component {
                 this.setState({
                     data: data.data,
                 });
-                this.fetchHostTeam({
-                    pageSize: 100,
-                    pageNum: 1,
-                });
-                this.fetchGuestTeam({
-                    pageSize: 100,
-                    pageNum: 1,
-                });
+                this.fetchTeam(data.data)
                 getMatchMedia({pageNum: 1, pageSize: 100, matchId: this.props.matchId}).then(data => {
                     if (data && data.code == 200) {
                         this.setState({mediaList: data.data ? data.data : []});
@@ -64,63 +58,42 @@ class BasketballMatchPlayersMediaPanel extends React.Component {
             }
         });
     }
-    fetchHostTeam = (params = {}) => {
-        this.setState({
-            hostloading: true,
-        });
-        getMatchPlayersByTeamId(null, this.state.data.hostTeamId).then((data) => {
-            if (data && data.code == 200) {
-                this.setState({
-                    hostdata: data.data ? data.data.records : "",
-                    hostloading: false,
-                });
-                // this.getPlayerInfo(data ? data : "");
-            } else {
-                message.error('获取主队队员失败：' + (data ? data.result + "-" + data.message : data), 3);
-            }
-        });
-    }
-    fetchGuestTeam = (params = {}) => {
-        this.setState({
-            guestloading: true,
-        });
-        getMatchPlayersByTeamId(null, this.state.data.guestTeamId).then((data) => {
-            if (data && data.code == 200) {
-                this.setState({
-                    guestdata:data.data ? data.data.records : "",
-                    guestloading: false,
-                });
-                // this.getPlayerInfo(data ? data : "");
-            } else {
-                message.error('获取客队队员失败：' + (data ? data.result + "-" + data.message : data), 3);
-            }
-        });
-    }
-    // getPlayerInfo = (data) => {
-    //     if (data == null || data == "") {
-    //         return;
-    //     }
-    //     const playerInfo = this.state.playerInfo
-    //     data.forEach((item, index) => {
-    //         playerInfo[item.id] = item
-    //     });
-    //     this.setState({
-    //         playerInfo: playerInfo,
-    //     });
-    // }
-    getTeamPlayerDom = (data) => {
-        let dom = [];
-        data && data.forEach(item => {
-            dom.push(<Link to={
-                `/basketball/basketballPlayer/${item.id}?matchId=${this.props.matchId}`
-            }>
-                <div className="inline-block cell-hover border-radius-10px border-gray pa-xs ml-s cursor-hand">
-                    <Avatar src={item.headImg ? item.headImg : defultAvatar}/>
-                    <span>{`${item.name}(${item.shirtNum})`}</span>
-                </div>
-            </Link>);
-        });
-        return <div className="inline">{dom}</div>;
+    fetchTeam = (match) => {
+        const againstTeams = match.againsts;
+        if (againstTeams != null) {
+            const keys = Object.keys(againstTeams);
+            keys.forEach(key => {
+                const againstTeam = againstTeams[key];
+                if (againstTeam.hostTeamId) {
+                    getMatchPlayersByTeamId(null, againstTeam.hostTeamId).then((data) => {
+                        if (data && data.code == 200) {
+                            const againstPlayers = this.state.againstPlayers
+                            if (againstPlayers[key] == null) {
+                                againstPlayers[key] = {}
+                            }
+                            againstPlayers[key].host = data.data.records;
+                            this.setState({againstPlayers: againstPlayers})
+                        } else {
+                            message.error('获取队员失败：' + (data ? data.result + "-" + data.message : data), 3);
+                        }
+                    });
+                }
+                if (againstTeam.guestTeamId) {
+                    getMatchPlayersByTeamId(null, againstTeam.guestTeamId).then((data) => {
+                        if (data && data.code == 200) {
+                            const againstPlayers = this.state.againstPlayers
+                            if (againstPlayers[key] == null) {
+                                againstPlayers[key] = {}
+                            }
+                            againstPlayers[key].guest = data.data.records;
+                            this.setState({againstPlayers: againstPlayers})
+                        } else {
+                            message.error('获取队员失败：' + (data ? data.result + "-" + data.message : data), 3);
+                        }
+                    });
+                }
+            })
+        }
     }
     refresh = () => {
         this.fetch();
@@ -198,6 +171,85 @@ class BasketballMatchPlayersMediaPanel extends React.Component {
             }
         });
     }
+    getTeamDom = () => {
+        if (this.state.data != null && this.state.data.againstTeams != null) {
+            const againstTeams = this.state.data.againstTeams;
+            console.log(againstTeams)
+            console.log(this.state.againstPlayers)
+            let dom = [];
+            Object.keys(againstTeams).forEach(key => {
+                const againstTeam = againstTeams[key];
+                let teamDom = <div key={`team-${key}`} className="border-gray border-radius-10px mt-s">
+                    <div className="w-full center mt-s">
+                        对阵方{key}
+                    </div>
+                    <Row gutter={8}>
+                        <Col span={12}>
+                            <div>
+                                <div className="center">
+                                    <img className="round-img-xs"
+                                         src={againstTeam.hostTeam ? againstTeam.hostTeam.headImg : defultAvatar}/>
+                                </div>
+                                <div className="center w-full">
+                                    <p style={{fontSize: 12}}
+                                       className="mt-s mb-n">{againstTeam.hostTeam ? againstTeam.hostTeam.name : ""}</p>
+                                </div>
+                                <div>
+                                    {this.getTeamPlayerDom(key, true)}
+                                </div>
+                            </div>
+                        </Col>
+                        <Col span={12}>
+                            <div className="center">
+                                <img className="round-img-xs"
+                                     src={againstTeam.guestTeam ? againstTeam.guestTeam.headImg : defultAvatar}/>
+                            </div>
+                            <div className="center w-full">
+                                <p style={{fontSize: 12}}
+                                   className="mt-s mb-n">{againstTeam.guestTeam ? againstTeam.guestTeam.name : ""}</p>
+                            </div>
+                            <div>
+                                {this.getTeamPlayerDom(key, false)}
+                            </div>
+                        </Col>
+                    </Row>
+                </div>;
+                dom.push(teamDom);
+            })
+            return dom;
+        }
+        return null;
+    }
+    getTeamPlayerDom = (key, isHost) => {
+        let dom = [];
+        if (this.state.againstPlayers && this.state.againstPlayers[key]) {
+            const againstPlayer = this.state.againstPlayers[key];
+            if (againstPlayer) {
+                const hostPlayer = againstPlayer.host;
+                const guestPlayer = againstPlayer.guest;
+                if (hostPlayer && isHost) {
+                    dom.push(this.getPlayerDom(hostPlayer))
+                } else if (guestPlayer && !isHost) {
+                    dom.push(this.getPlayerDom(guestPlayer))
+                }
+            }
+        }
+        return dom;
+    }
+    getPlayerDom = (data) => {
+        let dom = [];
+        data && data.forEach(item => {
+            dom.push(<Link to={
+                `/basketball/basketballPlayer/${item.id}?matchId=${this.props.matchId}`
+            }>
+                <div className="inline-block cell-hover border-radius-10px border-gray pa-xs ml-s cursor-hand">
+                    <Avatar src={item.headImg ? item.headImg : defultAvatar}/>
+                    <span>{`${item.name}(${item.shirtNum})`}</span>
+                </div>
+            </Link>);
+        });
+        return <div className="inline">{dom}</div>;
+    }
 
     render() {
         const isMobile = this.props.responsive.data.isMobile;
@@ -214,41 +266,18 @@ class BasketballMatchPlayersMediaPanel extends React.Component {
             }]
         }
         const ModifyMediaDialog = Form.create()(BasketballPlayerModifyMediaDialog);
-        return <div><Row gutter={8}>
-            <Col span={12}>
-                <div>
-                    <div className="center">
-                        <img className="round-img-xs"
-                             src={this.state.data ? this.state.data.hostTeam.headImg : defultAvatar}/>
-                    </div>
-                    <div className="center w-full">
-                        <p style={{fontSize: 12}}
-                           className="mt-s mb-n">{this.state.data ? this.state.data.hostTeam.name : ""}</p>
-                    </div>
-                    {this.getTeamPlayerDom(this.state.hostdata)}
-                </div>
-            </Col>
-            <Col span={12}>
-                <div className="center">
-                    <img className="round-img-xs"
-                         src={this.state.data ? this.state.data.guestTeam.headImg : defultAvatar}/>
-                </div>
-                <div className="center w-full">
-                    <p style={{fontSize: 12}}
-                       className="mt-s mb-n">{this.state.data ? this.state.data.guestTeam.name : ""}</p>
-                </div>
-                {this.getTeamPlayerDom(this.state.guestdata)}
-            </Col>
-        </Row>
+
+        return <div>
+            {this.getTeamDom()}
             <Card className="mt-m" style={{minHeight: 559}}>
                 <List
                     rowKey={record => record.id}
                     grid={{gutter: 16, lg: 3, md: 2, xs: 1}}
-                    dataSource={this.state.mediaList ? this.state.mediaList.map(media=>{
-                        media.media.player= media.player;
-                        media.media.playerId= media.playerId;
-                        media.media.match= media.match;
-                        media.media.matchId= media.matchId;
+                    dataSource={this.state.mediaList ? this.state.mediaList.map(media => {
+                        media.media.player = media.player;
+                        media.media.playerId = media.playerId;
+                        media.media.match = media.match;
+                        media.media.matchId = media.matchId;
                         return media.media;
                     }) : []}
                     loading={this.state.mediaLoading}

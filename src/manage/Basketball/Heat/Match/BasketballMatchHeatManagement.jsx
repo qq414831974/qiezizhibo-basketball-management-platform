@@ -12,6 +12,7 @@ import {
     deleteMatchHeatRule,
     getMatchById,
     getMatchPlayersByTeamId,
+    getPlayersByMatchId
 } from "../../../../axios";
 import MatchHeatForm from "../Match/MatchHeatForm";
 import MatchHeatTable from "../Match/MatchHeatTable";
@@ -47,18 +48,17 @@ class BasketballMatchHeatManagement extends React.Component {
                 this.setState({
                     match: data.data ? data.data : {},
                 });
-                let players = [];
-                getMatchPlayersByTeamId(null, data.data.hostTeamId).then(res => {
-                    players = players.concat(res.data.records)
-                    getMatchPlayersByTeamId(null, data.data.guestTeamId).then(res => {
-                        players = players.concat(res.data.records)
-                        this.setState({
-                            players: players,
-                        });
-                    })
-                })
             } else {
                 message.error('获取比赛信息失败：' + (data ? data.result + "-" + data.message : data), 3);
+            }
+        })
+        getPlayersByMatchId({matchId: params.matchId}).then(data => {
+            if (data && data.code == 200) {
+                this.setState({
+                    players: data.data ? data.data : [],
+                });
+            } else {
+                message.error('获取比赛球员信息失败：' + (data ? data.result + "-" + data.message : data), 3);
             }
         })
     }

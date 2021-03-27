@@ -305,6 +305,24 @@ class BasketballLeagueMatchSeriesManagement extends React.Component {
                 }
                 return <span>{type}</span>
             }
+        },  {
+            title: '规则类型',
+            align: 'center',
+            dataIndex: 'ruleType',
+            width: '5%',
+            render: function (text, record, index) {
+                let type = "5x5";
+                if (record.type == 1) {
+                    type = "小篮球赛";
+                } else if (record.type == 2) {
+                    type = "1x1";
+                } else if (record.type == 3) {
+                    type = "3x3";
+                }else if (record.type == 4) {
+                    type = "5x5";
+                }
+                return <span>{type}</span>
+            }
         }, {
             title: '城市',
             align: 'center',
@@ -317,7 +335,7 @@ class BasketballLeagueMatchSeriesManagement extends React.Component {
             title: '时间',
             align: 'center',
             dataIndex: 'dateBegin',
-            width: '15%',
+            width: '10%',
             render: function (text, record, index) {
                 return <span>{(record.dateBegin ? parseTimeStringYMD(record.dateBegin) : "-") + "~" + (record.dateEnd ? parseTimeStringYMD(record.dateEnd) : "-")}</span>
             }
@@ -348,11 +366,11 @@ class BasketballLeagueMatchSeriesManagement extends React.Component {
             width: '5%',
             align: 'center',
             render: function (text, record, index) {
-                let type = "茄子tv";
+                let type = "茄子TV篮球";
                 if (record.wechatType) {
                     switch (record.wechatType) {
                         case 0:
-                            type = "茄子tv";
+                            type = "茄子TV篮球";
                             break;
                         case 1:
                             type = "青少年";
