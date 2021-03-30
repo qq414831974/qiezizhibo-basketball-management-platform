@@ -31,10 +31,6 @@ const statusType = {
     21: {text: "比赛结束"},
 }
 const TIME_LINE = 1;
-const STATISTICS = 2;
-const PLAY_LIST = 3;
-const CHATTING_ROOM = 4;
-const RECOMMOMED = 5;
 
 class BasketballMatchTable extends React.Component {
     state = {

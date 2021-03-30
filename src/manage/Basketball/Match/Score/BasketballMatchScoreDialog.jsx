@@ -51,6 +51,9 @@ const eventType = {
     1: {text: "一分球", icon: ball,},
     2: {text: "二分球", icon: ball2,},
     3: {text: "三分球", icon: ball3,},
+    11: {text: "一分球撤销", icon: ball,},
+    12: {text: "二分球撤销", icon: ball2,},
+    13: {text: "三分球撤销", icon: ball3,},
     4: {text: "下一节", icon: calendar, hidden: true},
     5: {text: "切换对阵", icon: vest, hidden: true},
     14: {text: "上一节", icon: calendar, hidden: true},
@@ -155,7 +158,7 @@ class BasketballMatchScoreDialog extends React.Component {
                 const des = eventType[item.eventType].text
                 const hidden = eventType[item.eventType].hidden
                 if (!hidden) {
-                    const isGoal = item.eventType == 1 || item.eventType == 2 || item.eventType == 3
+                    const isGoal = item.eventType == 1 || item.eventType == 2 || item.eventType == 3 || item.eventType == 11 || item.eventType == 12 || item.eventType == 13
                     const dot = <div>
                         <div className="w-full center">
                             <img className="round-img-xxs-hover" onClick={onDotClick.bind(this, item)}

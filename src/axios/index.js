@@ -1366,12 +1366,6 @@ export const getTimelineByMatchId = (params) => get({
     }).catch(function (error) {
         console.log(error)
     });
-export const updateTimeline = (params) => put({url: `${config.basketball_service}/basketball/timeline`, data: params})
-    .then(function (response) {
-        return response.data;
-    }).catch(function (error) {
-        console.log(error)
-    });
 export const addTimeline = (params) => post({url: `${config.basketball_service}/basketball/timeline`, data: params})
     .then(function (response) {
         return response.data;
