@@ -419,13 +419,13 @@ class BasketballLeagueMatchTable extends React.Component {
             width: '5%',
             render: function (text, record, index) {
                 let type = "5x5";
-                if (record.type == 1) {
+                if (record.ruleType == 1) {
                     type = "小篮球赛";
-                } else if (record.type == 2) {
+                } else if (record.ruleType == 2) {
                     type = "1x1";
-                } else if (record.type == 3) {
+                } else if (record.ruleType == 3) {
                     type = "3x3";
-                }else if (record.type == 4) {
+                }else if (record.ruleType == 4) {
                     type = "5x5";
                 }
                 return <span>{type}</span>

@@ -786,7 +786,7 @@ class BasketballMatchTable extends React.Component {
             width: '18%',
             render: function (text, record, index) {
                 return <p className="cursor-hand"
-                          onClick={onScoreClick.bind(this, record)}>{record.status == null ? "未开" : (record.status == -1 ? "未开" : statusType[record.status].text)}</p>
+                          onClick={onScoreClick.bind(this, record)}>{record.status ||  record.status.status == null ? "未开" : (record.status.status == -1 ? "未开" : statusType[record.status.status].text)}</p>
             }
         }, {
             title: '比分',

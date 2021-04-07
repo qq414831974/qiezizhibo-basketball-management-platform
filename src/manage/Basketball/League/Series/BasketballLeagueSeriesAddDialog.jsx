@@ -219,6 +219,16 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                                 </Upload>
                             )}
                         </FormItem>
+                        <FormItem {...formItemLayout} label="微信类型" className="bs-form-item">
+                            {getFieldDecorator('wechatType', {
+                                rules: [{required: true, message: '请选择类型'}],
+                                initialValue: 0
+                            })(
+                                <RadioGroup>
+                                    <Radio value={0}>绝杀时刻</Radio>
+                                </RadioGroup>
+                            )}
+                        </FormItem>
                         <FormItem {...formItemLayout} label="类型" className="bs-form-item">
                             {getFieldDecorator('type', {
                                 rules: [{required: true, message: '请选择类型'}],
