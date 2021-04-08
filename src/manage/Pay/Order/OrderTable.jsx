@@ -241,7 +241,7 @@ class OrderTable extends React.Component {
         history.push(`/basketball/basketballLeagueMatch/${item.id}`);
     }
     getMatchAgainstDom = (record) => {
-        const match = record.match;
+        const match = record;
         let dom = [];
         if (match.againstTeams) {
             const againstMap = match.againstTeams;
