@@ -289,12 +289,12 @@ class BasketballMatchTable extends React.Component {
             statusDialogScore: record.score,
             statusDialogPenaltyScore: record.penaltyScore
         });
-        const matchType = record ? (record.type ? eval(record.type) : []) : [];
-        if (matchType.indexOf(TIME_LINE) >= 0) {
-            this.showScoreDialog();
-        } else {
-            this.showStatusDialog();
-        }
+        // const matchType = record ? (record.type ? eval(record.type) : []) : [];
+        // if (matchType.indexOf(TIME_LINE) >= 0) {
+        this.showScoreDialog();
+        // } else {
+        //     this.showStatusDialog();
+        // }
     };
 
     onStatusDialogRaidoChange = (e) => {
@@ -546,7 +546,7 @@ class BasketballMatchTable extends React.Component {
             this.setState({
                 uploadloading: false,
             });
-            message.success(info.file.response + "10秒后自动刷新(或者待会手动刷新)", 10);
+            message.success(info.file.response.data + "10秒后自动刷新(或者待会手动刷新)", 10);
             setTimeout(() => {
                 this.refresh();
             }, 10000);
@@ -786,7 +786,7 @@ class BasketballMatchTable extends React.Component {
             width: '18%',
             render: function (text, record, index) {
                 return <p className="cursor-hand"
-                          onClick={onScoreClick.bind(this, record)}>{record.status ||  record.status.status == null ? "未开" : (record.status.status == -1 ? "未开" : statusType[record.status.status].text)}</p>
+                          onClick={onScoreClick.bind(this, record)}>{record.status || record.status.status == null ? "未开" : (record.status.status == -1 ? "未开" : statusType[record.status.status].text)}</p>
             }
         }, {
             title: '比分',
@@ -813,23 +813,23 @@ class BasketballMatchTable extends React.Component {
                                        <Button type="primary" shape="circle" icon="plus"
                                                onClick={this.showMatchAddDialog}/>
                                    </Tooltip>
-                                   {/*<Upload*/}
-                                   {/*    className="ml-s mr-s"*/}
-                                   {/*    accept=".docx"*/}
-                                   {/*    action={uploaddocx_match}*/}
-                                   {/*    listType="text"*/}
-                                   {/*    withCredentials={true}*/}
-                                   {/*    showUploadList={false}*/}
-                                   {/*    onChange={this.handleUploadChange}*/}
-                                   {/*    disabled={this.state.uploadloading}*/}
-                                   {/*>*/}
-                                   {/*    {*/}
-                                   {/*        <Tooltip title="导入">*/}
-                                   {/*            <Button type="primary" shape="circle"*/}
-                                   {/*                    icon={this.state.uploadloading ? "loading" : "import"}/>*/}
-                                   {/*        </Tooltip>*/}
-                                   {/*    }*/}
-                                   {/*</Upload>*/}
+                                   <Upload
+                                       className="ml-s mr-s"
+                                       accept=".docx"
+                                       action={uploaddocx_match}
+                                       listType="text"
+                                       withCredentials={true}
+                                       showUploadList={false}
+                                       onChange={this.handleUploadChange}
+                                       disabled={this.state.uploadloading}
+                                   >
+                                       {
+                                           <Tooltip title="导入">
+                                               <Button type="primary" shape="circle"
+                                                       icon={this.state.uploadloading ? "loading" : "import"}/>
+                                           </Tooltip>
+                                       }
+                                   </Upload>
                                    <Tooltip title="导出拉流推流监看地址">
                                        <Button type="primary" shape="circle" icon="video-camera"
                                                hidden={this.state.selectedRowKeys.length > 0 ? false : true}
