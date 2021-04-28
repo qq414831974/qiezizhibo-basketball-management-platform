@@ -48,6 +48,7 @@ import BasketballLeagueEncryptionManagement from "../manage/Basketball/Encryptio
 import BasketballMatchEncrypitonManagement from "../manage/Basketball/Encryption/Match/BasketballMatchEncryptionManagement";
 import BasketballLeagueMatchBillAnalysis from "../manage/Basketball/League/Bill/BasketballLeagueMatchBillAnalysis";
 import BasketballLeagueDetailSetting from "../manage/Basketball/League/Detail/BasketballLeagueDetailSetting";
+import PaymentConfigManagement from "../manage/Setting/Payment/PaymentConfigManagement";
 import Unauthorized from '../manage/Pages/Unauthorized';
 import LogManagement from '../manage/Log/LogManagement';
 
@@ -97,6 +98,7 @@ export default class CRouter extends Component {
                 <Route exact path="/setting/wechat" component={this.requireAuth("/setting/wechat",WechatSetting)}/>
                 <Route exact path="/setting/bulletin" component={this.requireAuth("/setting/bulletin",BulletinSetting)}/>
                 <Route exact path="/setting/sharesentence" component={this.requireAuth("/setting/sharesentence",ShareSentenceManagement)}/>
+                <Route exact path="/setting/payment" component={this.requireAuth("/setting/payment",PaymentConfigManagement)}/>
                 <Route exact path="/pay/product" component={this.requireAuth("/pay/product",ProductManagement)}/>
                 <Route exact path="/pay/order" component={this.requireAuth("/pay/order",OrderManagement)}/>
                 <Route exact path="/pay/freeTicket" component={this.requireAuth("/pay/freeTicket",FreeTicketManagement)}/>
