@@ -482,6 +482,13 @@ class BasketballMatchAddDialog extends React.Component {
         againstTeamsNooice.push({index: againstTeamsNooice.length + 1});
         this.setState({againstTeams: againstTeams, againstTeamsNooice: againstTeamsNooice})
     }
+    removeAgainstTeam = (i)=>{
+        let againstTeams = this.state.againstTeams;
+        let againstTeamsNooice = this.state.againstTeamsNooice;
+        delete againstTeams[i];
+        delete againstTeamsNooice[i];
+        this.setState({againstTeams: againstTeams, againstTeamsNooice: againstTeamsNooice})
+    }
     onTeamSelect = (i, isHost, e, op) => {
         let againstTeamDetails = this.state.againstTeamDetails;
         if (againstTeamDetails == null) {
@@ -523,7 +530,7 @@ class BasketballMatchAddDialog extends React.Component {
                                label={`对阵方${i + 1}`}
                                className="bs-form-item border-min-black pa-s mt-s border-radius-10px">
                 <Row gutter={10}>
-                    <Col span={10}>
+                    <Col span={9}>
                         <FormItem className="bs-form-item">
                             {getFieldDecorator(`againsts[${i}].hostTeamId`, {
                                 rules: [{required: true, message: '请选择主队!'}],
@@ -540,7 +547,7 @@ class BasketballMatchAddDialog extends React.Component {
                             <img style={{height: 45, width: 90}} src={vs}/>
                         </div>
                     </Col>
-                    <Col span={10}>
+                    <Col span={9}>
                         <FormItem className="bs-form-item">
                             {getFieldDecorator(`againsts[${i}].guestTeamId`, {
                                 rules: [{required: true, message: '请选择客队!'}],
@@ -551,6 +558,10 @@ class BasketballMatchAddDialog extends React.Component {
                                 </Select>
                             )}
                         </FormItem>
+                    </Col>
+                    <Col span={2}>
+                        <Button type="danger" size="small" shape="circle" onClick={this.removeAgainstTeam.bind(this, i)}>
+                            <Icon type="minus"/></Button>
                     </Col>
                 </Row>
             </FormItem>)

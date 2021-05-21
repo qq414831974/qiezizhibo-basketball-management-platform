@@ -51,6 +51,7 @@ import BasketballLeagueDetailSetting from "../manage/Basketball/League/Detail/Ba
 import PaymentConfigManagement from "../manage/Setting/Payment/PaymentConfigManagement";
 import Unauthorized from '../manage/Pages/Unauthorized';
 import LogManagement from '../manage/Log/LogManagement';
+import FeedbackManagement from '../manage/Setting/Feedback/FeedbackManagement';
 
 var UrlPattern = require('url-pattern');
 
@@ -130,6 +131,7 @@ export default class CRouter extends Component {
                 <Route path="/basketball/schedule" component={this.requireAuth("/basketball/schedule",BasketballMatchSchedule)}/>
                 <Route path="/analysis/bill" component={this.requireAuth("/analysis/bill",BasketballLeagueMatchBillAnalysis)}/>
                 <Route path="/sys/log" component={this.requireAuth("/sys/log",LogManagement)}/>
+                <Route path="/sys/feedback" component={this.requireAuth("/sys/feedback",FeedbackManagement)}/>
                 <Route render={() => <Redirect to="/index"/>}/>
             </Switch>
         )

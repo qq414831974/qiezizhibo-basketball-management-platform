@@ -194,15 +194,23 @@ class BasketballMatchTable extends React.Component {
             values["startTime"] = values["startTime"] ? values["startTime"].format('YYYY/MM/DD HH:mm:ss') : null;
             if (values["againsts"]) {
                 let againstMap = {};
+                let againstIndex = 0;
                 for (let i = 0; i < values["againsts"].length; i++) {
-                    againstMap[i + 1] = values["againsts"][i];
+                    if(values["againsts"][i]){
+                        againstIndex = againstIndex + 1;
+                        againstMap[againstIndex] = values["againsts"][i];
+                    }
                 }
                 values["againsts"] = againstMap;
             }
             if (values["againstTeamsNooice"]) {
                 let againstTeamNooiceMap = {};
+                let againstIndex = 0;
                 for (let i = 0; i < values["againstTeamsNooice"].length; i++) {
-                    againstTeamNooiceMap[i + 1] = values["againstTeamsNooice"][i];
+                    if(values["againstTeamsNooice"][i]){
+                        againstIndex = againstIndex + 1;
+                        againstTeamNooiceMap[againstIndex] = values["againstTeamsNooice"][i];
+                    }
                 }
                 values["againstTeamsNooice"] = againstTeamNooiceMap;
             }
@@ -232,15 +240,23 @@ class BasketballMatchTable extends React.Component {
             values["available"] = values["available"] != null ? !values["available"] : false;
             if (values["againsts"]) {
                 let againstMap = {};
+                let againstIndex = 0;
                 for (let i = 0; i < values["againsts"].length; i++) {
-                    againstMap[i + 1] = values["againsts"][i];
+                    if(values["againsts"][i]){
+                        againstIndex = againstIndex + 1;
+                        againstMap[againstIndex] = values["againsts"][i];
+                    }
                 }
                 values["againsts"] = againstMap;
             }
             if (values["againstTeamsNooice"]) {
                 let againstTeamNooiceMap = {};
+                let againstIndex = 0;
                 for (let i = 0; i < values["againstTeamsNooice"].length; i++) {
-                    againstTeamNooiceMap[i + 1] = values["againstTeamsNooice"][i];
+                    if(values["againstTeamsNooice"][i]){
+                        againstIndex = againstIndex + 1;
+                        againstTeamNooiceMap[againstIndex] = values["againstTeamsNooice"][i];
+                    }
                 }
                 values["againstTeamsNooice"] = againstTeamNooiceMap;
             }
