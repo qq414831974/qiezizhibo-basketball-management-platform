@@ -1751,6 +1751,149 @@ export const updateLeagueMemberRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
+export const getLeagueRegistrationRule = (param) => get({url: `${config.basketball_service}/basketball/registration/league?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const addLeagueRegistrationRule = (param) => post({
+    url: `${config.basketball_service}/basketball/registration/league`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const updateLeagueRegistrationRule = (param) => put({
+    url: `${config.basketball_service}/basketball/registration/league`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getLeagueTeamRegistrationById = (id) => get({url: `${config.basketball_service}/basketball/registration/league/team/${id}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getLeagueTeamRegistration = (param) => get({url: `${config.basketball_service}/basketball/registration/league/team?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const addLeagueTeamRegistration = (param) => post({
+    url: `${config.basketball_service}/basketball/registration/league/team`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const updateLeagueTeamRegistration = (param) => put({
+    url: `${config.basketball_service}/basketball/registration/league/team`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const deleteLeagueTeamRegistration = (param) => del({url: `${config.basketball_service}/basketball/registration/league/team?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const verifyLeagueTeamRegistration = (param) => post({
+    url: `${config.basketball_service}/basketball/registration/league/team/verify`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getLeaguePlayerRegistration = (param) => get({url: `${config.basketball_service}/basketball/registration/league/player?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const addLeaguePlayerRegistration = (param) => post({
+    url: `${config.basketball_service}/basketball/registration/league/player`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const updateLeaguePlayerRegistration = (param) => put({
+    url: `${config.basketball_service}/basketball/registration/league/player`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const deleteLeaguePlayerRegistration = (param) => del({url: `${config.basketball_service}/basketball/registration/league/player?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const verifyLeaguePlayerRegistration = (param) => post({
+    url: `${config.basketball_service}/basketball/registration/league/player/verify`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const importLeagueTeamRegistration = (param) => post({
+    url: `${config.basketball_service}/basketball/registration/league/import?${unpack(param)}`,
+    data: null
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getLeagueStatisticsRule = (param) => get({url: `${config.basketball_service}/basketball/statistics/league?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const addLeagueStatisticsRule = (param) => post({
+    url: `${config.basketball_service}/basketball/statistics/league`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const updateLeagueStatisticsRule = (param) => put({
+    url: `${config.basketball_service}/basketball/statistics/league`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+
+
 //暂时无用
 export const getProducts = (params) => get({url: `${config.pay_service}/product?${unpack(params)}`})
     .then(function (response) {

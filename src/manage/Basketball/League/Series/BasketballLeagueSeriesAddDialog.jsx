@@ -389,6 +389,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                                     <FormItem>
                                         {getFieldDecorator('dateBegin', {
                                             rules: [{required: true, message: '请选择开始时间!'}],
+                                            initialValue: leagueData.dateBegin ? moment(leagueData.dateBegin) : null,
                                         })(
                                             <DatePicker showTime
                                                         format={'YYYY-MM-DD HH:mm'}/>
@@ -401,6 +402,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                                     <FormItem>
                                         {getFieldDecorator('dateEnd', {
                                             rules: [{required: true, message: '请选择结束时间!'}],
+                                            initialValue: leagueData.dateEnd ? moment(leagueData.dateEnd) : null,
                                         })(
                                             <DatePicker showTime
                                                         format={'YYYY-MM-DD HH:mm'}/>

@@ -186,6 +186,16 @@ class BasketballLeagueDetailSetting extends React.Component {
                                     {/*    `/basketball/league/ad?leagueId=${leagueId}`*/}
                                     {/*}>广告</Link>*/}
                                     {/*</Button>*/}
+                                    <Button key="registration" type="primary">
+                                        <Link to={
+                                            `/basketball/league/registration?leagueId=${leagueId}`
+                                        }>报名</Link>
+                                    </Button>
+                                    <Button key="statistics" type="primary">
+                                        <Link to={
+                                            `/basketball/league/statistics?leagueId=${leagueId}`
+                                        }>统计</Link>
+                                    </Button>
                                 </div>
                                 <div className="w-full center mt-l">
                                     <Button key="all" type="primary" onClick={this.onApplyConfirmClick}>

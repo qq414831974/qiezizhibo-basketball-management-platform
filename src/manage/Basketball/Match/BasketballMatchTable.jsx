@@ -19,6 +19,7 @@ import {Form, message, notification} from "antd/lib/index";
 import BasketballMatchAddDialog from "./BasketballMatchAddDialog"
 import BasketballMatchModifyDialog from "./BasketballMatchModifyDialog"
 import BasketballMatchScoreDialog from "./Score/BasketballMatchScoreDialog"
+import BasketballMatchStatisticsDialog from "./Statistics/BasketballMatchStatisticsDialog"
 import {parseTimeString} from "../../../utils";
 import defultAvatar from '../../../static/avatar.jpg';
 import {Link} from 'react-router-dom';
@@ -45,7 +46,7 @@ class BasketballMatchTable extends React.Component {
         dialogAddVisible: false,
         record: {},
         dialogScoreVisible: false,
-        dialogStatusVisible: false,
+        dialogStatisticsVisible: false,
     };
 
     componentDidMount() {
@@ -301,61 +302,27 @@ class BasketballMatchTable extends React.Component {
     onScoreClick = (record, e) => {
         this.setState({
             record: record,
-            statusDialogRadio: record.status,
-            statusDialogScore: record.score,
-            statusDialogPenaltyScore: record.penaltyScore
         });
-        // const matchType = record ? (record.type ? eval(record.type) : []) : [];
-        // if (matchType.indexOf(TIME_LINE) >= 0) {
         this.showScoreDialog();
-        // } else {
-        //     this.showStatusDialog();
-        // }
     };
-
-    onStatusDialogRaidoChange = (e) => {
-        this.setState({statusDialogRadio: e.target.value});
-
-    }
-    onStatusDialogScoreChange = (e) => {
-        this.setState({statusDialogScore: e.target.value});
-    }
-    onStatusDialogPenaltyScoreChange = (e) => {
-        this.setState({statusDialogPenaltyScore: e.target.value});
-    }
-    handleMatchStatusConfirm = () => {
-        console.log(this.state.record)
-        updateMatchScoreStatusById({
-            id: this.state.record.id,
-            status: this.state.statusDialogRadio,
-            score: this.state.statusDialogScore,
-            penaltyScore: this.state.statusDialogPenaltyScore,
-        }).then((data) => {
-            if (data && data.code == 200) {
-                if (data.data) {
-                    this.refresh();
-                    message.success('修改成功', 1);
-                } else {
-                    message.warn(data.message, 1);
-                }
-            } else {
-                message.error('修改失败：' + (data ? data.result + "-" + data.message : data), 3);
-            }
+    onStatisticsClick = (record, e) => {
+        this.setState({
+            record: record,
         });
-        this.setState({dialogStatusVisible: false});
-    }
+        this.showStatisticsDialog();
+    };
     showScoreDialog = () => {
         this.setState({dialogScoreVisible: true});
     }
-    showStatusDialog = () => {
-        this.setState({dialogStatusVisible: true});
+    showStatisticsDialog = () => {
+        this.setState({dialogStatisticsVisible: true});
     }
     handleMatchScoreCancel = () => {
         this.refresh()
         this.setState({dialogScoreVisible: false});
     };
-    handleMatchStatusCancel = () => {
-        this.setState({dialogStatusVisible: false});
+    handleMatchStatisticsCancel = () => {
+        this.setState({dialogStatisticsVisible: false});
     };
     handleDelete = () => {
         this.setState({
@@ -599,11 +566,13 @@ class BasketballMatchTable extends React.Component {
     render() {
         const genWxaCode = this.genWxaCode;
         const onScoreClick = this.onScoreClick;
+        const onStatisticsClick = this.onStatisticsClick;
         const onNameClick = this.onNameClick;
         const {selectedRowKeys} = this.state;
         const AddDialog = Form.create()(BasketballMatchAddDialog);
         const ModifyDialog = Form.create()(BasketballMatchModifyDialog);
         const ScoreDialog = Form.create()(BasketballMatchScoreDialog);
+        const StatisticsDialog = Form.create()(BasketballMatchStatisticsDialog);
         const state = this.state;
         const isMobile = this.props.responsive.data.isMobile;
 
@@ -722,7 +691,7 @@ class BasketballMatchTable extends React.Component {
                     })
                 }
                 return <div className="cursor-hand"
-                            onClick={onScoreClick.bind(this, record)}>{dom}</div>;
+                            onClick={onStatisticsClick.bind(this, record)}>{dom}</div>;
             },
         }, {
             title: <Dropdown overlay={onlineDropdown}
@@ -753,7 +722,7 @@ class BasketballMatchTable extends React.Component {
                 dataIndex: 'wxacode',
                 width: '7%',
                 render: function (text, record, index) {
-                    return <span onClick={genWxaCode.bind(this, record)}>生成</span>
+                    return <span className="cursor-hand" onClick={genWxaCode.bind(this, record)}>生成</span>
                 },
             },
         ];
@@ -780,37 +749,55 @@ class BasketballMatchTable extends React.Component {
                     filterDropdownVisible: visible,
                 }, () => this.searchInput && this.searchInput.focus());
             },
-            width: '70%',
+            width: '60%',
             render: function (text, record, index) {
-                const hostTeam = record.hostTeam;
-                const guestTeam = record.guestTeam;
-                if (hostTeam == null || guestTeam == null) {
-                    return <span className="cursor-hand" onClick={onNameClick.bind(this, record)}>{record.name}</span>
-                }
-                return <div className="center cursor-hand" onClick={onNameClick.bind(this, record)}>
-                    <Avatar src={hostTeam.headImg ? hostTeam.headImg : defultAvatar}/>
-                    <p className="ml-s">{hostTeam.name}</p>
-                    <p className="ml-s mr-s">VS</p>
-                    <Avatar src={guestTeam.headImg ? guestTeam.headImg : defultAvatar}/>
-                    <p className="ml-s">{guestTeam.name}</p>
-                </div>;
+                return getMatchAgainstDom(record, onNameClick, this);
             },
         }, {
             title: '状态',
             align: 'center',
-            dataIndex: 'status',
-            width: '18%',
+            key: 'status',
+            width: '20%',
             render: function (text, record, index) {
-                return <p className="cursor-hand"
-                          onClick={onScoreClick.bind(this, record)}>{record.status || record.status.status == null ? "未开" : (record.status.status == -1 ? "未开" : statusType[record.status.status].text)}</p>
+                let dom = [];
+                if (record.status && record.status.status) {
+                    const status = record.status.status;
+                    dom.push(<div key={`status-status`}
+                                  className="w-full">
+                        {status == null ? "未开" : (status == -1 ? "未开" : statusType[status].text)}
+                    </div>)
+                }
+                if (record.status && record.status.againstIndex) {
+                    const againstIndex = record.status.againstIndex;
+                    dom.push(<div key={`status-against`} className="w-full">{`对阵${againstIndex}`}</div>)
+                }
+                if (record.status && record.status.section) {
+                    const section = record.status.section;
+                    dom.push(<div key={`status-section`} className="w-full">{`第${section}节`}</div>)
+                }
+                if (!record.available) {
+                    dom.push(<span className="w-full center danger">
+                            直播间关闭
+                        </span>)
+                }
+                return <div className="cursor-hand"
+                            onClick={onScoreClick.bind(this, record)}>{dom}</div>
             }
         }, {
             title: '比分',
             align: 'center',
-            width: '12%',
+            key: 'score',
+            width: '20%',
             render: function (text, record, index) {
-                return <p className="cursor-hand"
-                          onClick={onScoreClick.bind(this, record)}>{record.score ? record.score : "-"}</p>;
+                let dom = [];
+                if (record.status && record.status.score) {
+                    const scoreMap = record.status.score;
+                    Object.keys(scoreMap).forEach(key => {
+                        dom.push(<div key={`score-${key}`} className="w-full">{`${scoreMap[key]}`}</div>);
+                    })
+                }
+                return <div className="cursor-hand"
+                            onClick={onStatisticsClick.bind(this, record)}>{dom}</div>;
             },
         },
         ];
@@ -940,37 +927,18 @@ class BasketballMatchTable extends React.Component {
             <Modal
                 className={isMobile ? "top-n" : ""}
                 width={800}
-                visible={this.state.dialogStatusVisible}
-                title="比分状态设置"
+                visible={this.state.dialogStatisticsVisible}
+                title="技术统计设置"
                 okText="确定"
-                onCancel={this.handleMatchStatusCancel}
+                onCancel={this.handleMatchStatisticsCancel}
                 destroyOnClose="true"
                 footer={[
-                    <Button key="submit" type="primary"
-                            onClick={this.handleMatchStatusConfirm}>确定</Button>,
-                    <Button key="back" onClick={this.handleMatchStatusCancel}>取消</Button>,
+                    <Button key="back" onClick={this.handleMatchStatisticsCancel}>取消</Button>,
                 ]}
             >
-                <div>
-                    <div className="w-full center">
-                        <span className="mb-n mt-m" style={{fontSize: 20}}>比分</span>
-                    </div>
-                    <Input style={{minWidth: 300, textAlign: "center"}} placeholder='比分'
-                           onChange={this.onStatusDialogScoreChange}
-                           value={this.state.statusDialogScore}/>
-                    <Input style={{minWidth: 300, textAlign: "center"}} placeholder='点球比分'
-                           className="mt-m"
-                           onChange={this.onStatusDialogPenaltyScoreChange}
-                           value={this.state.statusDialogPenaltyScore}/>
-                    <Radio.Group className="mt-m" onChange={this.onStatusDialogRaidoChange}
-                                 value={this.state.statusDialogRadio}>
-                        <Radio value={-1}>未开始</Radio>
-                        <Radio value={0}>上半场</Radio>
-                        <Radio value={14}>中场休息</Radio>
-                        <Radio value={15}>下半场</Radio>
-                        <Radio value={21}>比赛结束</Radio>
-                    </Radio.Group>
-                </div>
+                <StatisticsDialog
+                    visible={this.state.dialogStatisticsVisible}
+                    matchId={this.state.record.id}/>
             </Modal>
             <Modal
                 className={isMobile ? "top-n" : ""}
