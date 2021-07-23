@@ -32,7 +32,7 @@ import {
     getActivityInfoList,
     getAllLeagueMatchs,
     uploadposter,
-    getTeamInLeague, getLeagueMatchById, getLeagueTeam,
+    getTeamInLeague, getLeagueMatchById, getLeagueTeam, getLeagueStatisticsRule,
 } from "../../../axios";
 import {message} from "antd/lib/index";
 import {getRound, getJueSaiRankRound} from '../../../utils/index';
@@ -96,6 +96,15 @@ class BasketballMatchAddDialog extends React.Component {
                     this.fetch(data.data);
                 }
             })
+            getLeagueStatisticsRule({leagueId: this.props.leagueId}).then((data) => {
+                if (data && data.code == 200) {
+                    this.setState({
+                        statisticsRule: data.data ? data.data : {},
+                    });
+                } else {
+                    message.error('获取联赛统计规则失败：' + (data ? data.result + "-" + data.message : data), 3);
+                }
+            });
         } else {
             this.fetchLeagues(null, 1);
             this.fetch();
@@ -482,7 +491,7 @@ class BasketballMatchAddDialog extends React.Component {
         againstTeamsNooice.push({index: againstTeamsNooice.length + 1});
         this.setState({againstTeams: againstTeams, againstTeamsNooice: againstTeamsNooice})
     }
-    removeAgainstTeam = (i)=>{
+    removeAgainstTeam = (i) => {
         let againstTeams = this.state.againstTeams;
         let againstTeamsNooice = this.state.againstTeamsNooice;
         delete againstTeams[i];
@@ -560,7 +569,8 @@ class BasketballMatchAddDialog extends React.Component {
                         </FormItem>
                     </Col>
                     <Col span={2}>
-                        <Button type="danger" size="small" shape="circle" onClick={this.removeAgainstTeam.bind(this, i)}>
+                        <Button type="danger" size="small" shape="circle"
+                                onClick={this.removeAgainstTeam.bind(this, i)}>
                             <Icon type="minus"/></Button>
                     </Col>
                 </Row>
@@ -896,7 +906,7 @@ class BasketballMatchAddDialog extends React.Component {
                         <div className="center w-full">
                             <FormItem {...formItemLayout} className="bs-form-item">
                                 {getFieldDecorator('type', {
-                                    initialValue: [2, 3],
+                                    initialValue: this.state.statisticsRule && this.state.statisticsRule.available ? [1, 2, 3] : [2, 3],
                                 })(
                                     <TreeSelect treeData={typeData}
                                                 style={{minWidth: 300, maxWidth: 300, textAlign: "center"}}

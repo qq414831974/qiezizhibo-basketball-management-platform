@@ -60,6 +60,9 @@ class LeagueClipForm extends React.Component {
                             <Switch/>
                         )}
                     </FormItem>
+                    <div className="danger center">
+                        每天晚上11点自动生成当天比赛集锦
+                    </div>
                     {record.id ? <FormItem {...formItemLayout} hidden className="bs-form-item">
                         {getFieldDecorator('id', {
                             initialValue: record.id,
