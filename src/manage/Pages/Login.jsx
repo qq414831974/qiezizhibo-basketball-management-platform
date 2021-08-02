@@ -10,6 +10,7 @@ import moment from 'moment'
 import 'moment/locale/zh-cn';
 import {getUser, setToken, setUser, setRole, getRole, removeToken, removeUser, removeRole} from "../../utils/tools";
 import DocumentTitle from 'react-document-title';
+import {Link} from 'react-router-dom';
 
 moment.locale('zh-cn');
 
@@ -122,6 +123,15 @@ class Login extends React.Component {
                                 </Button>
                             </FormItem>
                         </Form>
+                    </div>
+                    <div className="w-full center" style={{position:"fixed",bottom:0,padding:"10px",textAlign:"center",background:"#fff"}}>
+                        <div>©2021 茄子直播</div>
+                        <a href="https://beian.miit.gov.cn/" target="_blank">
+                            <span className="ml-l" style={{textDecoration:"underline"}}>闽ICP备17018408号-1</span>
+                        </a>
+                        <a href="https://beian.miit.gov.cn/" target="_blank">
+                            <span className="ml-l" style={{textDecoration:"underline"}}>闽ICP备17018408号-2</span>
+                        </a>
                     </div>
                 </div>
             </DocumentTitle>

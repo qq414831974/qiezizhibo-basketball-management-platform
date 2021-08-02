@@ -71,7 +71,7 @@ class BulletinModifyDialog extends React.Component {
 
         this.setState({
             curtain: this.props.record.curtain,
-            senceType: this.props.record.sceneType
+            sceneType: this.props.record.sceneType
         })
     }
 
