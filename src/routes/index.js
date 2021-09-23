@@ -29,6 +29,7 @@ import WechatSetting from "../manage/Setting/WechatSetting";
 import BasketballMatchSchedule from "../manage/Basketball/Match/BasketballMatchSchedule";
 import ProductManagement from "../manage/Pay/Product/ProductManagement";
 import OrderManagement from "../manage/Pay/Order/OrderManagement";
+import CashManagement from "../manage/Pay/Cash/CashManagement";
 import FreeTicketManagement from "../manage/Pay/FreeTicket/FreeTicketManagement";
 import DepositManagement from "../manage/Pay/Deposit/DepositManagement";
 import MatchMonopolyManagement from "../manage/Pay/Monopoly/MatchMonopolyManagement";
@@ -106,6 +107,7 @@ export default class CRouter extends Component {
                 <Route exact path="/setting/payment" component={this.requireAuth("/setting/payment",PaymentConfigManagement)}/>
                 <Route exact path="/pay/product" component={this.requireAuth("/pay/product",ProductManagement)}/>
                 <Route exact path="/pay/order" component={this.requireAuth("/pay/order",OrderManagement)}/>
+                <Route exact path="/pay/cash" component={this.requireAuth("/pay/cash",CashManagement)}/>
                 <Route exact path="/pay/freeTicket" component={this.requireAuth("/pay/freeTicket",FreeTicketManagement)}/>
                 <Route exact path="/pay/monopoly" component={this.requireAuth("/pay/monopoly",MatchMonopolyManagement)}/>
                 <Route exact path="/pay/gift" component={this.requireAuth("/pay/gift",GiftManagement)}/>

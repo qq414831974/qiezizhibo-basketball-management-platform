@@ -1892,7 +1892,75 @@ export const updateLeagueStatisticsRule = (param) => put({
     }).catch(function (error) {
         console.log(error)
     });
-
+export const generateLeaguePlayerCashSettlement = (param) => get({url: `${config.basketball_service}/basketball/cash/settlement/generate?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getLeaguePlayerCashSettlement = (param) => get({url: `${config.basketball_service}/basketball/cash/settlement?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const updateLeaguePlayerCashSettlement = (param) => put({
+    url: `${config.basketball_service}/basketball/cash/settlement`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const deleteLeaguePlayerCashSettlement = (param) => del({url: `${config.basketball_service}/basketball/cash/settlement?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getLeaguePlayerCashOrder = (param) => get({url: `${config.basketball_service}/basketball/cash/out/record?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const passLeaguePlayerCashOrder = (param) => post({
+    url: `${config.basketball_service}/basketball/cash/out/pass?${unpack(param)}`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const failLeaguePlayerCashOrder = (param) => post({
+    url: `${config.basketball_service}/basketball/cash/out/fail?${unpack(param)}`,
+    data: param
+})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getLeaguePlayerCashOutVerifyInfo = (param) => get({url: `${config.basketball_service}/basketball/cash/out/verifyInfo?${unpack(param)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const getCashOrders = (params) => get({url: `${config.pay_service}/payment/order/cash?${unpack(params)}`})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const queryCashOrder = (id) => post({url: `${config.pay_service}/payment/order/cash/${id}/query`, data: {}})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
 
 //暂时无用
 export const getProducts = (params) => get({url: `${config.pay_service}/product?${unpack(params)}`})
