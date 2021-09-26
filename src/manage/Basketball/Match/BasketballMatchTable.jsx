@@ -674,8 +674,15 @@ class BasketballMatchTable extends React.Component {
                             直播间关闭
                         </span>)
                 }
+                if (record.statisticsModeAvailable) {
+                    dom.push(<span className="w-full center warn">
+                            统计模式
+                        </span>)
+                }
                 return <div className="cursor-hand"
-                            onClick={onScoreClick.bind(this, record)}>{dom}</div>
+                            onClick={onScoreClick.bind(this, record)}>
+                    {dom}
+                </div>
             }
         }, {
             title: '比分',

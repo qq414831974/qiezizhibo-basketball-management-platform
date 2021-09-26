@@ -90,13 +90,14 @@ class BasketballMatchModifyDialog extends React.Component {
         }
         const againstTeams = [];
         const againstTeamsNooice = [];
-        Object.keys(this.props.record.againsts).forEach((key) => {
-            againstTeams[key - 1] = this.props.record.againsts[key];
-        })
-        Object.keys(this.props.record.againstTeamsNooice).forEach((key) => {
-            againstTeamsNooice[key - 1] = this.props.record.againstTeamsNooice[key];
-        })
-        console.log(againstTeams)
+        if (this.props.record.againsts != null) {
+            Object.keys(this.props.record.againsts).forEach((key) => {
+                againstTeams[key - 1] = this.props.record.againsts[key];
+            })
+            Object.keys(this.props.record.againstTeamsNooice).forEach((key) => {
+                againstTeamsNooice[key - 1] = this.props.record.againstTeamsNooice[key];
+            })
+        }
         this.setState({
             againstTeams: againstTeams,
             againstTeamsNooice: againstTeamsNooice,
@@ -524,7 +525,7 @@ class BasketballMatchModifyDialog extends React.Component {
         againstTeamsNooice.push({index: againstTeamsNooice.length + 1});
         this.setState({againstTeams: againstTeams, againstTeamsNooice: againstTeamsNooice})
     }
-    removeAgainstTeam = (i)=>{
+    removeAgainstTeam = (i) => {
         let againstTeams = this.state.againstTeams;
         let againstTeamsNooice = this.state.againstTeamsNooice;
         delete againstTeams[i];
@@ -585,7 +586,8 @@ class BasketballMatchModifyDialog extends React.Component {
                         </FormItem>
                     </Col>
                     <Col span={2}>
-                        <Button type="danger" size="small" shape="circle" onClick={this.removeAgainstTeam.bind(this, i)}>
+                        <Button type="danger" size="small" shape="circle"
+                                onClick={this.removeAgainstTeam.bind(this, i)}>
                             <Icon type="minus"/></Button>
                     </Col>
                 </Row>
@@ -880,6 +882,20 @@ class BasketballMatchModifyDialog extends React.Component {
                                 })(
                                     <Input addonBefore={placeSelecter} style={{minWidth: 300, textAlign: "center"}}
                                            placeholder='请输入地点'/>
+                                )}
+                            </FormItem>
+                        </div>
+                        <div className="center w-full">
+                            <p className="mt-m" style={{fontSize: 22}}>仅显示统计模式</p>
+                        </div>
+                        <div className="center w-full">
+                            <span>是否开启仅显示统计模式：</span>
+                            <FormItem className="bs-form-item">
+                                {getFieldDecorator('statisticsModeAvailable', {
+                                    initialValue: record.statisticsModeAvailable != null ? record.statisticsModeAvailable : false,
+                                    valuePropName: "checked"
+                                })(
+                                    <Checkbox/>
                                 )}
                             </FormItem>
                         </div>
