@@ -327,6 +327,7 @@ class BasketballMatchScoreDialog extends React.Component {
                             {player ? <div className="ml-s">
                                 <img src={player.headImg ? player.headImg : defultAvatar} className="round-img-xs"/>
                                 <span>{player.name}</span>
+                                <span>({player.shirtNum}号)</span>
                             </div> : null}
                         </div>
                     </Timeline.Item>
@@ -334,6 +335,7 @@ class BasketballMatchScoreDialog extends React.Component {
                         line = <Timeline.Item dot={dot} className={dis}>
                             <div style={{height: 36}} className="center pr-l inline-flex-important">
                                 {player ? <div>
+                                    <span>({player.shirtNum}号)</span>
                                     <span>{player.name}</span>
                                     <img src={player.headImg ? player.headImg : defultAvatar} className="round-img-xs"/>
                                 </div> : null}
