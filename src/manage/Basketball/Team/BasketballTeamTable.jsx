@@ -256,6 +256,12 @@ class BasketballTeamTable extends React.Component {
             return;
         }
     }
+    handleViewLeague = () => {
+        this.setState({teamLeagueVisible: true})
+    }
+    handleViewLeagueCancel = () => {
+        this.setState({teamLeagueVisible: false})
+    }
 
     render() {
         const onNameClick = this.onNameClick;
@@ -467,6 +473,8 @@ class BasketballTeamTable extends React.Component {
                             "/basketball/basketballTeam/" + this.state.record.id
                         }>详细设置</Link>
                     </Button>,
+                    <Button key="team" type="primary" className="pull-left"
+                            onClick={this.handleViewLeague}>查看所在联赛</Button>,
                     <Button key="delete" type="danger" className="pull-left"
                             onClick={this.handleDelete}>删除</Button>,
                     <Button key="back" onClick={this.handleTeamModifyCancel}>取消</Button>,
@@ -489,6 +497,21 @@ class BasketballTeamTable extends React.Component {
                 zIndex={1001}
             >
                 <p className="mb-n" style={{fontSize: 14}}>是否确认删除{this.state.deleteCols}条数据？</p>
+            </Modal>
+            <Modal
+                className={isMobile ? "top-n" : ""}
+                title="查看所在联赛"
+                visible={this.state.teamLeagueVisible}
+                onCancel={this.handleViewLeagueCancel}
+                zIndex={1001}
+                destroyOnClose
+            >
+                {this.state.record && this.state.record.leagues && this.state.record.leagues.map(data => {
+                    return <div className="w-full center mb-l">
+                        <Avatar src={data.headImg}/>
+                        <span className="ml-s">{data.shortName ? data.shortName : data.name}</span>
+                    </div>
+                })}
             </Modal>
         </div>
     }
