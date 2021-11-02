@@ -1985,6 +1985,18 @@ export const readTodo = (params) => post({url: `${config.system_service}/sys/tod
     }).catch(function (error) {
         console.log(error)
     });
+export const addUserLeagueMember = (param) => post({url: `${config.basketball_service}/basketball/league/member`, data: param})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
+export const deleteUserLeagueMember = (param) => del({url: `${config.basketball_service}/basketball/league/member?${unpack(param)}`, data: null})
+    .then(function (response) {
+        return response.data;
+    }).catch(function (error) {
+        console.log(error)
+    });
 //暂时无用
 export const getProducts = (params) => get({url: `${config.pay_service}/product?${unpack(params)}`})
     .then(function (response) {

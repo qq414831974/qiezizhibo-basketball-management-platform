@@ -171,7 +171,7 @@ class BasketballMatchScoreDialog extends React.Component {
                             {item.againstIndex ? `(对阵${item.againstIndex})` : null}{item.section ? `(第${item.section}节)` : null}
                         </span>
                     </div>
-                    const againstMap = this.state.data ? this.state.data.againstTeams : {};
+                    const againstMap = this.state.data && this.state.data.againstTeams ? this.state.data.againstTeams : {};
                     let isHost = false;
                     Object.keys(againstMap).forEach(key => {
                         if (key = item.againstIndex) {

@@ -94,6 +94,11 @@ class BasketBallLeagueRegistrationManagement extends React.Component {
             }
         });
     }
+    onRegistrationDetailClick = () => {
+        const currentLeague = getQueryString(this.props.location.search, "leagueId");
+        const history = this.props.history;
+        history.push(`/basketball/league/registration/team?leagueId=${currentLeague}`);
+    }
 
     render() {
         const currentLeague = getQueryString(this.props.location.search, "leagueId");
@@ -127,6 +132,9 @@ class BasketBallLeagueRegistrationManagement extends React.Component {
                                             handleSubmit={this.handleRegistrationSettingSubmit}
                                             modifyLoading={this.state.modifyLoading}
                                             ref={this.saveRegistrationSettingRef}/>
+                                    </TabPane>
+                                    <TabPane tab="报名详情" key="2">
+                                        <Button type="primary" onClick={this.onRegistrationDetailClick}>查看</Button>
                                     </TabPane>
                                 </Tabs>
                             </Card>

@@ -150,6 +150,32 @@ class LeagueHeatForm extends React.Component {
         percentMapValue[index] = value;
         this.setState({percentMapValue})
     }
+    getPosterSelector = () => {
+        const {form} = this.props;
+        if (!form.getFieldValue('cashAvailable')) {
+            return null;
+        }
+        return <Select style={{width: 140}} placeholder="选择默认规则图片">
+            <Option key={`opt-all`}
+                    value="https://qiezizhibo-1300664818.cos.ap-shanghai.myqcloud.com/images/cash_rule/all.jpg"
+                    onClick={() => {
+                        form.setFieldsValue({
+                            awardPic: "https://qiezizhibo-1300664818.cos.ap-shanghai.myqcloud.com/images/cash_rule/all.jpg"
+                        })
+                    }}>
+                全提现版本
+            </Option>
+            <Option key={`opt-ten`}
+                    value="https://qiezizhibo-1300664818.cos.ap-shanghai.myqcloud.com/images/cash_rule/ten.jpg"
+                    onClick={() => {
+                        form.setFieldsValue({
+                            awardPic: "https://qiezizhibo-1300664818.cos.ap-shanghai.myqcloud.com/images/cash_rule/ten.jpg"
+                        })
+                    }}>
+                前十名提现版本
+            </Option>
+        </Select>
+    }
 
     render() {
         const {visible, form, record} = this.props;
@@ -159,100 +185,100 @@ class LeagueHeatForm extends React.Component {
         return (
             <div>
                 {visible ?
-                <Form onSubmit={this.props.handleSubmit}>
-                    <FormItem {...formItemLayout} label="类型" className="bs-form-item">
-                        {getFieldDecorator('type', {
-                            initialValue: record.type ? record.type : 2,
-                            rules: [{required: true, message: '请选择类型!'}],
+                    <Form onSubmit={this.props.handleSubmit}>
+                        <FormItem {...formItemLayout} label="类型" className="bs-form-item">
+                            {getFieldDecorator('type', {
+                                initialValue: record.type ? record.type : 2,
+                                rules: [{required: true, message: '请选择类型!'}],
                                 onChange: (e) => {
                                     this.setState({type: e})
                                 }
-                        })(
-                            <Select placeholder="请选择类型!">
+                            })(
+                                <Select placeholder="请选择类型!">
                                     {/*<Option value={0}>球队热度比拼</Option>*/}
                                     {/*<Option value={1}>球员热度比拼</Option>*/}
-                                <Option value={2}>联赛球员热度比拼</Option>
-                                <Option value={3}>联赛球队热度比拼</Option>
-                            </Select>
-                        )}
-                    </FormItem>
-                    <FormItem {...formItemLayout} label="开启" className="bs-form-item">
-                        {getFieldDecorator('available', {
-                            initialValue: record.available != null ? record.available : false,
-                            valuePropName: 'checked',
-                            rules: [{required: true, message: '请选择是否开始!'}],
-                        })(
-                            <Switch/>
-                        )}
-                    </FormItem>
-                    <Tooltip placement="topLeft" trigger="click" title="以比赛开始时间为基准，负数为提前？分钟，正数为延后？分钟">
-                        <FormItem {...formItemLayout} label="开始时间/分钟" className="bs-form-item">
-                            {getFieldDecorator('startInterval', {
-                                initialValue: record.startInterval ? record.startInterval : null,
-                                rules: [{required: true, message: '请输入时间!'}],
-                            })(
-                                    <InputNumber placeholder='请输入时间!'/>
+                                    <Option value={2}>联赛球员热度比拼</Option>
+                                    <Option value={3}>联赛球队热度比拼</Option>
+                                </Select>
                             )}
                         </FormItem>
-                    </Tooltip>
-                    <Tooltip placement="topLeft" trigger="click" title="以比赛结束时间为基准，负数为提前？分钟，正数为延后？分钟">
-                        <FormItem {...formItemLayout} label="结束时间/分钟" className="bs-form-item">
-                            {getFieldDecorator('endInterval', {
-                                initialValue: record.endInterval ? record.endInterval : null,
-                                rules: [{required: true, message: '请输入时间!'}],
+                        <FormItem {...formItemLayout} label="开启" className="bs-form-item">
+                            {getFieldDecorator('available', {
+                                initialValue: record.available != null ? record.available : false,
+                                valuePropName: 'checked',
+                                rules: [{required: true, message: '请选择是否开始!'}],
                             })(
-                                    <InputNumber placeholder='请输入时间!'/>
+                                <Switch/>
                             )}
                         </FormItem>
-                    </Tooltip>
-                    <FormItem {...formItemLayout} label="热度初始值" className="bs-form-item">
-                        <Row gutter={10}>
-                            <Col span={12}>
-                                <FormItem  {...formItemLayout} label="最小值" className="bs-form-item">
-                                    {getFieldDecorator('expand.baseMin', {
-                                        initialValue: record.expand != null ? record.expand.baseMin : null,
-                                        rules: [{required: true, message: '请输入数值!'}],
-                                    })(
+                        <Tooltip placement="topLeft" trigger="click" title="以比赛开始时间为基准，负数为提前？分钟，正数为延后？分钟">
+                            <FormItem {...formItemLayout} label="开始时间/分钟" className="bs-form-item">
+                                {getFieldDecorator('startInterval', {
+                                    initialValue: record.startInterval ? record.startInterval : null,
+                                    rules: [{required: true, message: '请输入时间!'}],
+                                })(
+                                    <InputNumber placeholder='请输入时间!'/>
+                                )}
+                            </FormItem>
+                        </Tooltip>
+                        <Tooltip placement="topLeft" trigger="click" title="以比赛结束时间为基准，负数为提前？分钟，正数为延后？分钟">
+                            <FormItem {...formItemLayout} label="结束时间/分钟" className="bs-form-item">
+                                {getFieldDecorator('endInterval', {
+                                    initialValue: record.endInterval ? record.endInterval : null,
+                                    rules: [{required: true, message: '请输入时间!'}],
+                                })(
+                                    <InputNumber placeholder='请输入时间!'/>
+                                )}
+                            </FormItem>
+                        </Tooltip>
+                        <FormItem {...formItemLayout} label="热度初始值" className="bs-form-item">
+                            <Row gutter={10}>
+                                <Col span={12}>
+                                    <FormItem  {...formItemLayout} label="最小值" className="bs-form-item">
+                                        {getFieldDecorator('expand.baseMin', {
+                                            initialValue: record.expand != null ? record.expand.baseMin : 0,
+                                            rules: [{required: true, message: '请输入数值!'}],
+                                        })(
                                             <InputNumber className="w-full" placeholder='请输入数值!'/>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem  {...formItemLayout} label="最大值" className="bs-form-item">
-                                    {getFieldDecorator('expand.baseMax', {
-                                        initialValue: record.expand != null ? record.expand.baseMax : null,
-                                        rules: [{required: true, message: '请输入数值!'}],
-                                    })(
-                                        <InputNumber className="w-full" placeholder='请输入数值!'/>
-                                    )}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </FormItem>
-                    <FormItem {...formItemLayout} label="热度放大值" className="bs-form-item">
-                        <Row gutter={10}>
-                            <Col span={12}>
-                                <FormItem  {...formItemLayout} label="最小值" className="bs-form-item">
-                                    {getFieldDecorator('expand.expandMin', {
-                                        initialValue: record.expand != null ? record.expand.expandMin : null,
-                                        rules: [{required: true, message: '请输入数值!'}],
-                                    })(
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem  {...formItemLayout} label="最大值" className="bs-form-item">
+                                        {getFieldDecorator('expand.baseMax', {
+                                            initialValue: record.expand != null ? record.expand.baseMax : 0,
+                                            rules: [{required: true, message: '请输入数值!'}],
+                                        })(
                                             <InputNumber className="w-full" placeholder='请输入数值!'/>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem  {...formItemLayout} label="最大值" className="bs-form-item">
-                                    {getFieldDecorator('expand.expandMax', {
-                                        initialValue: record.expand != null ? record.expand.expandMax : null,
-                                        rules: [{required: true, message: '请输入数值!'}],
-                                    })(
-                                        <InputNumber className="w-full" placeholder='请输入数值!'/>
-                                    )}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </FormItem>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="热度放大值" className="bs-form-item">
+                            <Row gutter={10}>
+                                <Col span={12}>
+                                    <FormItem  {...formItemLayout} label="最小值" className="bs-form-item">
+                                        {getFieldDecorator('expand.expandMin', {
+                                            initialValue: record.expand != null ? record.expand.expandMin : 1,
+                                            rules: [{required: true, message: '请输入数值!'}],
+                                        })(
+                                            <InputNumber className="w-full" placeholder='请输入数值!'/>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <FormItem  {...formItemLayout} label="最大值" className="bs-form-item">
+                                        {getFieldDecorator('expand.expandMax', {
+                                            initialValue: record.expand != null ? record.expand.expandMax : 1,
+                                            rules: [{required: true, message: '请输入数值!'}],
+                                        })(
+                                            <InputNumber className="w-full" placeholder='请输入数值!'/>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                        </FormItem>
                         {this.state.type == 2 ?
                             <div>
                                 <FormItem {...formItemLayout} label="开启提现模式" className="bs-form-item">
@@ -312,66 +338,69 @@ class LeagueHeatForm extends React.Component {
                                 </Tooltip>
                             </div> : null}
                         <FormItem {...formItemLayout} label="奖品/规则" className="bs-form-item">
-                        {getFieldDecorator('award', {
-                            initialValue: record.award ? record.award : null,
-                            // rules: [{required: true, message: '请输入奖品!'}],
-                        })(
-                            <Input placeholder='请输入奖品!'/>
-                        )}
-                    </FormItem>
-                    <div className="center w-full">
-                            <span className="mb-n mt-m" style={{fontSize: 20}}>奖品/规则图片</span>
-                    </div>
-                    <div className="center w-full">
-                        <FormItem {...formItemLayout} className="bs-form-item form-match-poster">
-                            {getFieldDecorator('awardPic', {
-                                // initialValue: this.state.currentLeague?this.state.currentLeague.poster:null,
-                                getValueFromEvent(e) {
-                                    return form.getFieldValue('awardPic')
-                                },
-                                onChange(e) {
-                                    const file = e.file;
-                                    if (file.response) {
-                                        form.setFieldsValue({
-                                            awardPic: file.response.data
-                                        })
-                                    }
-                                    handleAvatarChange(e);
-                                }
+                            {getFieldDecorator('award', {
+                                initialValue: record.award ? record.award : null,
+                                // rules: [{required: true, message: '请输入奖品!'}],
                             })(
-                                <Upload
-                                    accept="image/*"
-                                    action={upload}
-                                    listType="picture-card"
-                                    withCredentials={true}
-                                    showUploadList={false}
-                                    disabled={this.state.uploading}
-                                    onChange={this.handleAvatarChange}
-                                >
-                                    {
-                                        <img
-                                            src={form.getFieldValue('awardPic') ? form.getFieldValue('awardPic') :
-                                                (record.awardPic ? record.awardPic : imgcover)}
-                                            alt="poster"
-                                            className="form-match-poster-img"/>
-                                    }
-
-                                </Upload>
+                                <Input placeholder='请输入奖品!'/>
                             )}
                         </FormItem>
-                    </div>
-                    <div className="center mt-m">
-                        <Input style={{minWidth: 300, textAlign: "center"}} placeholder='图片地址'
-                               onChange={this.onPosterChange.bind(this, form)}
-                               value={form.getFieldValue('awardPic') ? form.getFieldValue('awardPic') : record.awardPic}/>
-                    </div>
-                    {record.id ? <FormItem {...formItemLayout} hidden className="bs-form-item">
-                        {getFieldDecorator('id', {
-                            initialValue: record.id,
-                        })(
-                            <Input hidden/>
-                        )}
-                    </FormItem> : null}
+                        <div className="center w-full">
+                            <span className="mb-n mt-m" style={{fontSize: 20}}>奖品/规则图片</span>
+                        </div>
+                        <div className="center w-full">
+                            <FormItem {...formItemLayout} className="bs-form-item form-page">
+                                {getFieldDecorator('awardPic', {
+                                    // initialValue: this.state.currentLeague?this.state.currentLeague.poster:null,
+                                    getValueFromEvent(e) {
+                                        return form.getFieldValue('awardPic')
+                                    },
+                                    onChange(e) {
+                                        const file = e.file;
+                                        if (file.response) {
+                                            form.setFieldsValue({
+                                                awardPic: file.response.data
+                                            })
+                                        }
+                                        handleAvatarChange(e);
+                                    }
+                                })(
+                                    <Upload
+                                        accept="image/*"
+                                        action={upload}
+                                        listType="picture-card"
+                                        withCredentials={true}
+                                        showUploadList={false}
+                                        disabled={this.state.uploading}
+                                        onChange={this.handleAvatarChange}
+                                    >
+                                        {
+                                            <img
+                                                src={form.getFieldValue('awardPic') ? form.getFieldValue('awardPic') :
+                                                    (record.awardPic ? record.awardPic : imgcover)}
+                                                alt="poster"
+                                                className="form-page-img"/>
+                                        }
+
+                                    </Upload>
+                                )}
+                            </FormItem>
+                        </div>
+                        <div className="center mt-m">
+                            <Input
+                                addonBefore={this.getPosterSelector()}
+                                style={{minWidth: 300, textAlign: "center"}}
+                                placeholder='图片地址'
+                                onChange={this.onPosterChange.bind(this, form)}
+                                value={form.getFieldValue('awardPic') ? form.getFieldValue('awardPic') : record.awardPic}/>
+                        </div>
+                        {record.id ? <FormItem {...formItemLayout} hidden className="bs-form-item">
+                            {getFieldDecorator('id', {
+                                initialValue: record.id,
+                            })(
+                                <Input hidden/>
+                            )}
+                        </FormItem> : null}
                         <FormItem {...formItemLayout} hidden className="bs-form-item">
                             {getFieldDecorator('numberSelectValue', {
                                 initialValue: this.state.numberSelectValue,
@@ -379,24 +408,24 @@ class LeagueHeatForm extends React.Component {
                                 <Input hidden/>
                             )}
                         </FormItem>
-                    <div className="w-full center mt-l">
-                        <FormItem wrapperCol={{span: 12, offset: 6}}>
-                            <Button loading={this.props.modifyLoading}
-                                    type="primary"
-                                    htmlType="submit">
-                                确定
-                            </Button>
-                        </FormItem>
-                        <FormItem wrapperCol={{span: 12, offset: 6}}>
-                            <Button type="primary"
-                                    loading={this.props.heatAllLoading}
-                                    onClick={this.props.heatAll}>
-                                应用到该联赛下的所有比赛
-                            </Button>
-                        </FormItem>
-                    </div>
-                </Form>
-                :
+                        <div className="w-full center mt-l">
+                            <FormItem wrapperCol={{span: 12, offset: 6}}>
+                                <Button loading={this.props.modifyLoading}
+                                        type="primary"
+                                        htmlType="submit">
+                                    确定
+                                </Button>
+                            </FormItem>
+                            <FormItem wrapperCol={{span: 12, offset: 6}}>
+                                <Button type="primary"
+                                        loading={this.props.heatAllLoading}
+                                        onClick={this.props.heatAll}>
+                                    应用到该联赛下的所有比赛
+                                </Button>
+                            </FormItem>
+                        </div>
+                    </Form>
+                    :
                     null}
                 <Modal
                     title="请添加"
