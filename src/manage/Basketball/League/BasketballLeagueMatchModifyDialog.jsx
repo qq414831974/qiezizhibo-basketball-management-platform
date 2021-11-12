@@ -11,7 +11,7 @@ import {
     Checkbox,
     Tooltip,
     InputNumber,
-    message,
+    message, TreeSelect,
 } from 'antd';
 import moment from 'moment'
 import 'moment/locale/zh-cn';
@@ -41,6 +41,22 @@ const formItemLayout = {
         sm: {span: 16},
     },
 };
+const typeData = [
+    {
+        title: '技术统计',
+        value: 1,
+    },
+    {
+        title: '球员名单',
+        value: 2,
+    }, {
+        title: '聊天室',
+        value: 3,
+    }, {
+        title: '集锦',
+        value: 4,
+    }
+];
 
 class BasketballLeagueMatchModifyDialog extends React.Component {
     state = {}
@@ -295,7 +311,7 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
                                 <Input placeholder='请输入英文名'/>
                             )}
                         </FormItem>
-                        {isSeries ? null : <FormItem {...formItemLayout} label="组别" className="bs-form-item">
+                        <FormItem {...formItemLayout} label="组别" className="bs-form-item">
                             {getFieldDecorator('subgroup.groups', {
                                 rules: [{required: true, message: '请选择组别'}],
                                 initialValue: record.subgroup ? record.subgroup.groups : [],
@@ -314,9 +330,9 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
                                     <Option key={`default`} value={`default`}>无分组</Option>
                                 </Select>
                             )}
-                        </FormItem>}
-                        {isSeries ? null : this.getRoundDom(record)}
-                        {isSeries ? null : <FormItem {...formItemLayout} label='场地'
+                        </FormItem>
+                        {this.getRoundDom(record)}
+                        <FormItem {...formItemLayout} label='场地'
                                                      className="bs-form-item">
                             {getFieldDecorator('place', {
                                 initialValue: record.place ? record.place : [],
@@ -329,7 +345,7 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
                                 >
                                 </Select>
                             )}
-                        </FormItem>}
+                        </FormItem>
                         <FormItem {...formItemLayout} label="比赛节数" className="bs-form-item">
                             {getFieldDecorator('regulations.section', {
                                 initialValue: record.regulations ? record.regulations.section : null,
@@ -360,6 +376,22 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
                                 },
                             })(
                                 <InputNumber placeholder='请输入'/>
+                            )}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="比赛菜单" className="bs-form-item">
+                            {getFieldDecorator('matchType', {
+                                initialValue: record.matchType ? record.matchType : null,
+                            })(
+                                <TreeSelect treeData={typeData}
+                                            style={{minWidth: 300, maxWidth: 300, textAlign: "center"}}
+                                            placeholder="请选择"
+                                            dropdownStyle={{maxHeight: 300, overflow: 'auto'}}
+                                            onChange={this.onTypeSelectChange}
+                                            allowClear
+                                            multiple
+                                            filterTreeNode={(inputValue, treeNode) => {
+                                                return treeNode.props.title.indexOf(inputValue) != -1 || treeNode.props.value == inputValue;
+                                            }}/>
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="主办方" className="bs-form-item">

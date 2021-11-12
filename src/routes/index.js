@@ -48,7 +48,7 @@ import BasketballLeagueAdManagement from "../manage/Basketball/Ad/League/Basketb
 import BasketballLeagueEncryptionManagement from "../manage/Basketball/Encryption/League/BasketballLeagueEncryptionManagement";
 import BasketballMatchEncrypitonManagement from "../manage/Basketball/Encryption/Match/BasketballMatchEncryptionManagement";
 import BasketBallLeagueStatisticsManagement from "../manage/Basketball/Statistics/BasketBallLeagueStatisticsManagement";
-import BasketballLeagueRegistrationManagement from "../manage/Basketball/Registration/BasketBallLeagueRegistrationManagement";
+import BasketBallLeagueUnitSettingManagement from "../manage/Basketball/UnitSetting/BasketBallLeagueUnitSettingManagement";
 import TeamRegistrationManagement from "../manage/Basketball/Registration/Team/TeamRegistrationManagement";
 import PlayerRegistrationManagement from "../manage/Basketball/Registration/Player/PlayerRegistrationManagement";
 import BasketballLeagueMatchBillAnalysis from "../manage/Basketball/League/Bill/BasketballLeagueMatchBillAnalysis";
@@ -124,7 +124,8 @@ export default class CRouter extends Component {
                 <Route exact path="/basketball/league/encryption" component={this.requireAuth("/basketball/league/encryption",BasketballLeagueEncryptionManagement)}/>
                 <Route exact path="/basketball/match/encryption" component={this.requireAuth("/basketball/match/encryption",BasketballMatchEncrypitonManagement)}/>
                 <Route exact path="/basketball/league/ad" component={this.requireAuth("/basketball/league/ad",BasketballLeagueAdManagement)}/>
-                <Route exact path="/basketball/league/registration" component={this.requireAuth("/basketball/league/registration",BasketballLeagueRegistrationManagement)}/>
+                {/*<Route exact path="/basketball/league/registration" component={this.requireAuth("/basketball/league/registration",BasketballLeagueRegistrationManagement)}/>*/}
+                <Route exact path="/basketball/league/unit" component={this.requireAuth("/basketball/league/unit",BasketBallLeagueUnitSettingManagement)}/>
                 <Route exact path="/basketball/league/registration/team" component={this.requireAuth("/basketball/league/registration/team",TeamRegistrationManagement)}/>
                 <Route exact path="/basketball/league/registration/player" component={this.requireAuth("/basketball/league/registration/player",PlayerRegistrationManagement)}/>
                 <Route exact path="/basketball/league/statistics" component={this.requireAuth("/basketball/league/statistics",BasketBallLeagueStatisticsManagement)}/>

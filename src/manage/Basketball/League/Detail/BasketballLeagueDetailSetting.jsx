@@ -188,8 +188,8 @@ class BasketballLeagueDetailSetting extends React.Component {
                                     {/*</Button>*/}
                                     <Button key="registration" type="primary">
                                         <Link to={
-                                            `/basketball/league/registration?leagueId=${leagueId}`
-                                        }>报名</Link>
+                                            `/basketball/league/unit?leagueId=${leagueId}`
+                                        }>组委会设置</Link>
                                     </Button>
                                     <Button key="statistics" type="primary">
                                         <Link to={

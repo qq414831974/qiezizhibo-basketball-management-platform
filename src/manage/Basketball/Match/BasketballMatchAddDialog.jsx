@@ -643,6 +643,12 @@ class BasketballMatchAddDialog extends React.Component {
         })
         return name;
     }
+    getMatchType = () => {
+        if(this.state.currentLeague && this.state.currentLeague.matchType){
+            return this.state.currentLeague.matchType;
+        }
+        return this.state.statisticsRule && this.state.statisticsRule.available ? [1, 2, 3] : [2, 3];
+    }
 
     render() {
         const {visible, form, record} = this.props;
@@ -906,7 +912,7 @@ class BasketballMatchAddDialog extends React.Component {
                         <div className="center w-full">
                             <FormItem {...formItemLayout} className="bs-form-item">
                                 {getFieldDecorator('type', {
-                                    initialValue: this.state.statisticsRule && this.state.statisticsRule.available ? [1, 2, 3] : [2, 3],
+                                    initialValue: this.getMatchType(),
                                 })(
                                     <TreeSelect treeData={typeData}
                                                 style={{minWidth: 300, maxWidth: 300, textAlign: "center"}}

@@ -98,14 +98,16 @@ class BasketballMatchScoreDialog extends React.Component {
                 this.setState({
                     data: data.data,
                 });
-                this.getPlayerList(data.data);
-                this.getTimeline();
+                this.getPlayerList(data.data, () => {
+                    this.getTimeline();
+                });
+
             } else {
                 message.error('获取比赛失败：' + (data ? data.result + "-" + data.message : data), 3);
             }
         });
     }
-    getPlayerList = (match) => {
+    getPlayerList = (match, callback) => {
         const againstMap = match ? match.againsts : {};
         const teamIdList = [];
         Object.keys(againstMap).forEach(key => {
@@ -136,12 +138,14 @@ class BasketballMatchScoreDialog extends React.Component {
                         playerMap[player.id] = player;
                     })
                 }
-                this.setState({playerLoading: false, playerList: playerMap})
+                this.setState({playerLoading: false, playerList: playerMap}, () => {
+                    callback();
+                })
             });
         }
     }
     getTimeline = () => {
-        getMatchStatus(this.props.matchId).then((res) => {
+        return getMatchStatus(this.props.matchId).then((res) => {
             if (res && res.code == 200) {
                 this.setState({status: res.data, statusLoading: false});
                 let timelines = res.data ? res.data.statistics : [];

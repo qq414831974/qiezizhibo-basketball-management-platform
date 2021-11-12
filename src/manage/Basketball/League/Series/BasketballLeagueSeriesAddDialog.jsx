@@ -9,7 +9,7 @@ import {
     Select,
     Progress,
     Checkbox,
-    Avatar, Tooltip, InputNumber, message,
+    Avatar, Tooltip, InputNumber, message, TreeSelect,
 } from 'antd';
 import moment from 'moment'
 import 'moment/locale/zh-cn';
@@ -40,6 +40,22 @@ const formItemLayout = {
         sm: {span: 16},
     },
 };
+const typeData = [
+    {
+        title: '技术统计',
+        value: 1,
+    },
+    {
+        title: '球员名单',
+        value: 2,
+    }, {
+        title: '聊天室',
+        value: 3,
+    }, {
+        title: '集锦',
+        value: 4,
+    }
+];
 
 class BasketballLeagueSeriesAddDialog extends React.Component {
     state = {}
@@ -98,7 +114,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
         })
     }
     getRoundDom = () => {
-        const {form} = this.props;
+        const {form, leagueData} = this.props;
         const {getFieldDecorator} = form;
         const selectChildren = [];
         const openclose = [];
@@ -133,6 +149,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
         return <FormItem {...formItemLayout} key='round' label='轮次'
                          className="bs-form-item">
             {getFieldDecorator('round.rounds', {
+                initialValue: leagueData.round && leagueData.round.rounds ? leagueData.round.rounds : [],
                 rules: [{required: true, message: '请选择轮次'}],
             })(
                 <Select
@@ -163,7 +180,8 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
     getAreasOption = () => {
         let dom = [];
         this.state.areas.forEach((item) => {
-            dom.push(<Option value={item.province} data={item.province} key={`area-${item.id}`}>{item.province}</Option>);
+            dom.push(<Option value={item.province} data={item.province}
+                             key={`area-${item.id}`}>{item.province}</Option>);
         })
         return dom;
     }
@@ -183,7 +201,8 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                             <div className="center purple-light pt-s pb-s pl-m pr-m border-radius-10px">
                                 <span>系列赛：</span>
                                 <Avatar src={leagueData.headImg ? leagueData.headImg : defultAvatar}/>
-                                <span className="ml-s">{leagueData.name}{leagueData.shortName ? "(" + leagueData.shortName + ")" : ""}</span>
+                                <span
+                                    className="ml-s">{leagueData.name}{leagueData.shortName ? "(" + leagueData.shortName + ")" : ""}</span>
                             </div>
                         </div>
                         <FormItem {...formItemLayout} className="bs-form-item round-div ml-l mb-s">
@@ -232,7 +251,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                         <FormItem {...formItemLayout} label="类型" className="bs-form-item">
                             {getFieldDecorator('type', {
                                 rules: [{required: true, message: '请选择类型'}],
-                                initialValue: 1
+                                initialValue: leagueData.type ? leagueData.type : 1,
                             })(
                                 <RadioGroup>
                                     <Radio value={1}>杯赛</Radio>
@@ -243,7 +262,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                         <FormItem {...formItemLayout} label="规则类型" className="bs-form-item">
                             {getFieldDecorator('ruleType', {
                                 rules: [{required: true, message: '请选择规则类型'}],
-                                initialValue: 4
+                                initialValue: leagueData.ruleType ? leagueData.ruleType : 4,
                             })(
                                 <RadioGroup>
                                     <Radio value={1}>小篮球赛</Radio>
@@ -266,37 +285,36 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="英文名" className="bs-form-item">
-                            {getFieldDecorator('englishName', {
-                            })(
+                            {getFieldDecorator('englishName', {})(
                                 <Input placeholder='请输入英文名'/>
                             )}
                         </FormItem>
-                        {this.state.isSeries ? null :
-                            <FormItem {...formItemLayout} label="组别" className="bs-form-item">
-                                {getFieldDecorator('subgroup.groups', {
-                                    rules: [{required: true, message: '请选择组别'}],
-                                    initialValue: ["default"],
-                                    getValueFromEvent: (e) => {
-                                        if (e.indexOf("default") > -1) {
-                                            return ["default"]
-                                        }
-                                        return e;
+                        <FormItem {...formItemLayout} label="组别" className="bs-form-item">
+                            {getFieldDecorator('subgroup.groups', {
+                                rules: [{required: true, message: '请选择组别'}],
+                                initialValue: leagueData.subgroup && leagueData.subgroup.groups ? leagueData.subgroup.groups : ["default"],
+                                getValueFromEvent: (e) => {
+                                    if (e.indexOf("default") > -1) {
+                                        return ["default"]
                                     }
-                                })(
-                                    <Select
-                                        mode="tags"
-                                        style={{width: '100%'}}
-                                        tokenSeparators={[',', '，']}
-                                    >
-                                        <Option key={`default`} value={`default`}>无分组</Option>
-                                    </Select>
-                                )}
-                            </FormItem>
-                        }
-                        {this.state.isSeries ? null : this.getRoundDom()}
-                        {this.state.isSeries ? null : <FormItem {...formItemLayout} label='场地'
+                                    return e;
+                                }
+                            })(
+                                <Select
+                                    mode="tags"
+                                    style={{width: '100%'}}
+                                    tokenSeparators={[',', '，']}
+                                >
+                                    <Option key={`default`} value={`default`}>无分组</Option>
+                                </Select>
+                            )}
+                        </FormItem>
+                        {this.getRoundDom()}
+                        <FormItem {...formItemLayout} label='场地'
                                                                 className="bs-form-item">
-                            {getFieldDecorator('place', {})(
+                            {getFieldDecorator('place', {
+                                initialValue: leagueData.place ? leagueData.place : [],
+                            })(
                                 <Select
                                     placeholder="请选择比赛场地"
                                     mode="tags"
@@ -305,10 +323,11 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                                 >
                                 </Select>
                             )}
-                        </FormItem>}
+                        </FormItem>
                         <FormItem {...formItemLayout} label="比赛节数" className="bs-form-item">
                             {getFieldDecorator('regulations.section', {
                                 // initialValue: record.englishName,
+                                initialValue: leagueData.regulations && leagueData.regulations.section ? leagueData.regulations.section : null,
                                 getValueFromEvent(e) {
                                     if (e == null) {
                                         return null
@@ -325,6 +344,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                         <FormItem {...formItemLayout} label="每节几分钟" className="bs-form-item">
                             {getFieldDecorator('regulations.minutePerSection', {
                                 // initialValue: record.englishName,
+                                initialValue: leagueData.regulations && leagueData.regulations.minutePerSection ? leagueData.regulations.minutePerSection : null,
                                 getValueFromEvent(e) {
                                     if (e == null) {
                                         return null
@@ -338,13 +358,33 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                                 <InputNumber placeholder='请输入'/>
                             )}
                         </FormItem>
+                        <FormItem {...formItemLayout} label="比赛菜单" className="bs-form-item">
+                            {getFieldDecorator('matchType', {
+                                initialValue: leagueData.matchType ? leagueData.matchType : [],
+                            })(
+                                <TreeSelect treeData={typeData}
+                                            style={{minWidth: 300, maxWidth: 300, textAlign: "center"}}
+                                            placeholder="请选择"
+                                            dropdownStyle={{maxHeight: 300, overflow: 'auto'}}
+                                            onChange={this.onTypeSelectChange}
+                                            allowClear
+                                            multiple
+                                            filterTreeNode={(inputValue, treeNode) => {
+                                                return treeNode.props.title.indexOf(inputValue) != -1 || treeNode.props.value == inputValue;
+                                            }}/>
+                            )}
+                        </FormItem>
                         <FormItem {...formItemLayout} label="主办方" className="bs-form-item">
-                            {getFieldDecorator('majorSponsor', {})(
+                            {getFieldDecorator('majorSponsor', {
+                                initialValue: leagueData.majorSponsor ? leagueData.majorSponsor : null,
+                            })(
                                 <Input placeholder='请输入主办方'/>
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="赞助商" className="bs-form-item">
-                            {getFieldDecorator('sponsor', {})(
+                            {getFieldDecorator('sponsor', {
+                                initialValue: leagueData.sponsor ? leagueData.sponsor : null,
+                            })(
                                 <Input placeholder='请输入赞助商'/>
                             )}
                         </FormItem>
@@ -359,7 +399,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                             <Col span={11}>
                                 <FormItem>
                                     {getFieldDecorator('province', {
-                                        // initialValue: record.province,
+                                        initialValue: leagueData.province ? leagueData.province : null,
                                         rules: [{required: true, message: '请选择省份'}],
                                     })(
                                         <Select disabled={this.state.loading}>
@@ -375,6 +415,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                             <Col span={12}>
                                 <FormItem>
                                     {getFieldDecorator('city', {
+                                        initialValue: leagueData.city ? leagueData.city : null,
                                         rules: [{required: true, message: '请输入城市'}],
                                     })(
                                         <Input placeholder='请输入城市'/>
@@ -382,7 +423,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                                 </FormItem>
                             </Col>
                         </FormItem>
-                        {this.state.isSeries ? null : <FormItem {...formItemLayout} label="时间" className="bs-form-item">
+                        <FormItem {...formItemLayout} label="时间" className="bs-form-item">
                             <div className="inline">
                                 <div className="inline-block">
                                     {isMobile ? <span>开始：</span> : null}
@@ -411,15 +452,16 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                                 </div>
                             </div>
                         </FormItem>
-                        }
                         <FormItem {...formItemLayout} label="联系电话" className="bs-form-item">
-                            {getFieldDecorator('phoneNumber', {})(
+                            {getFieldDecorator('phoneNumber', {
+                                initialValue: leagueData.phoneNumber ? leagueData.phoneNumber : null,
+                            })(
                                 <Input placeholder='请输入联系电话'/>
                             )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="排序" className="bs-form-item">
                             {getFieldDecorator('sortIndex', {
-                                initialValue: this.state.leaguedata ? this.state.leaguedata.sortIndex : null,
+                                initialValue: leagueData.sortIndex ? leagueData.sortIndex : null,
                             })(
                                 <InputNumber placeholder='排序'/>
                             )}
@@ -435,7 +477,7 @@ class BasketballLeagueSeriesAddDialog extends React.Component {
                         <div className="center w-full">
                             <FormItem {...formItemLayout} className="bs-form-item form-match-poster">
                                 {getFieldDecorator('poster', {
-                                    initialValue: this.state.leaguedata ? this.state.leaguedata.poster : null,
+                                    initialValue: leagueData.poster ? leagueData.poster : null,
                                     getValueFromEvent(e) {
                                         return form.getFieldValue('poster')
                                     },
