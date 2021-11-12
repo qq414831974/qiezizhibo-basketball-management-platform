@@ -67,7 +67,10 @@ class LeagueMatchManagementForm extends React.Component {
         return (
             visible ?
                 <Form onSubmit={this.props.handleSubmit}>
-                    <span className="w-full center danger">注意：开启前请在联赛中填写好比赛菜单！</span>
+                    <span className="w-full center" style={{fontSize: 20}}>
+                        {record && record.id != null ? "已设置权限" : <span className="danger">未设置权限</span>}
+                    </span>
+                    <span className="w-full center mt-s danger">注意：开启前请在联赛中填写好比赛菜单！</span>
                     <FormItem {...formItemLayout} label="权限" className="bs-form-item">
                         {getFieldDecorator('permissions', {
                             initialValue: record.permissions ? record.permissions : [1, 2, 3, 4],
