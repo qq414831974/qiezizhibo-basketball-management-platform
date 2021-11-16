@@ -248,6 +248,9 @@ class BasketBallLeagueRegistrationManagement extends React.Component {
                             }
                         }}>
                             <TabPane tab="报名设置" key="1">
+                                 <span className="w-full center" style={{fontSize: 20}}>
+                                    {this.state.data && this.state.data.id != null ? "已设置报名" : <span className="danger">未设置报名</span>}
+                                </span>
                                 <RegistrationSetting
                                     visible={true}
                                     record={this.state.data}
