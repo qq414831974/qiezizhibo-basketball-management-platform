@@ -117,6 +117,7 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
 
     getRoundDom = () => {
         const {form, record} = this.props;
+        const isSeries = this.state.isSeries != null ? this.state.isSeries : (record && record.isParent);
         const {getFieldDecorator} = form;
         const selectChildren = [];
         const openclose = [];
@@ -143,8 +144,14 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
             </Option>);
         }
         selectChildren.push(<OptGroup label="开、闭幕">{openclose}</OptGroup>);
-        selectChildren.push(<OptGroup label="正常轮">{normalRound}</OptGroup>);
-        selectChildren.push(<OptGroup label="小组赛">{groupRound}</OptGroup>);
+        selectChildren.push(<OptGroup
+            label={<div><span>正常轮</span><span className="danger">（适用于联赛）</span></div>}>
+            {normalRound}
+        </OptGroup>);
+        selectChildren.push(<OptGroup
+            label={<div><span>小组赛</span><span className="danger">（适用于杯赛）杯赛积分榜只统计小组赛积分</span></div>}>
+            {groupRound}
+        </OptGroup>);
         selectChildren.push(<OptGroup label="淘汰赛">{knockRound}</OptGroup>);
         selectChildren.push(<OptGroup label="决赛">{finalRound}</OptGroup>);
 
@@ -152,7 +159,7 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
                          className="bs-form-item">
             {getFieldDecorator('round.rounds', {
                 initialValue: record.round ? record.round.rounds : [],
-                rules: [{required: true, message: '请选择轮次'}],
+                rules: [{required: isSeries ? false : true, message: '请选择轮次'}],
             })(
                 <Select
                     placeholder="请选择轮次"
@@ -313,7 +320,7 @@ class BasketballLeagueMatchModifyDialog extends React.Component {
                         </FormItem>
                         <FormItem {...formItemLayout} label="组别" className="bs-form-item">
                             {getFieldDecorator('subgroup.groups', {
-                                rules: [{required: true, message: '请选择组别'}],
+                                rules: [{required: isSeries ? false : true, message: '请选择组别'}],
                                 initialValue: record.subgroup ? record.subgroup.groups : [],
                                 getValueFromEvent: (e) => {
                                     if (e.indexOf("default") > -1) {
