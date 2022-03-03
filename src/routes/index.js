@@ -45,7 +45,7 @@ import UserBetManagement from "../manage/Basketball/Bet/UserBetManagement";
 import BasketballLeagueClipManagement from "../manage/Basketball/Clip/League/BasketballLeagueClipManagement";
 import BasketballMatchClipManagement from "../manage/Basketball/Clip/Match/BasketballMatchClipManagement";
 import BasketballLeagueAdManagement from "../manage/Basketball/Ad/League/BasketballLeagueAdManagement";
-import BasketballLeagueShopManagement from "../manage/Basketball/Shop/League/BasketballLeagueShopManagement";
+import BasketballLeagueShopManagement from "../manage/Basketball/Shop/League/BasketBallLeagueShopManagement";
 import BasketballLeagueEncryptionManagement from "../manage/Basketball/Encryption/League/BasketballLeagueEncryptionManagement";
 import BasketballMatchEncrypitonManagement from "../manage/Basketball/Encryption/Match/BasketballMatchEncryptionManagement";
 import BasketBallLeagueStatisticsManagement from "../manage/Basketball/Statistics/BasketBallLeagueStatisticsManagement";
