@@ -45,6 +45,7 @@ import UserBetManagement from "../manage/Basketball/Bet/UserBetManagement";
 import BasketballLeagueClipManagement from "../manage/Basketball/Clip/League/BasketballLeagueClipManagement";
 import BasketballMatchClipManagement from "../manage/Basketball/Clip/Match/BasketballMatchClipManagement";
 import BasketballLeagueAdManagement from "../manage/Basketball/Ad/League/BasketballLeagueAdManagement";
+import BasketballLeagueShopManagement from "../manage/Basketball/Shop/League/BasketballLeagueShopManagement";
 import BasketballLeagueEncryptionManagement from "../manage/Basketball/Encryption/League/BasketballLeagueEncryptionManagement";
 import BasketballMatchEncrypitonManagement from "../manage/Basketball/Encryption/Match/BasketballMatchEncryptionManagement";
 import BasketBallLeagueStatisticsManagement from "../manage/Basketball/Statistics/BasketBallLeagueStatisticsManagement";
@@ -124,6 +125,7 @@ export default class CRouter extends Component {
                 <Route exact path="/basketball/league/encryption" component={this.requireAuth("/basketball/league/encryption",BasketballLeagueEncryptionManagement)}/>
                 <Route exact path="/basketball/match/encryption" component={this.requireAuth("/basketball/match/encryption",BasketballMatchEncrypitonManagement)}/>
                 <Route exact path="/basketball/league/ad" component={this.requireAuth("/basketball/league/ad",BasketballLeagueAdManagement)}/>
+                <Route exact path="/basketball/league/shop" component={this.requireAuth("/basketball/league/shop",BasketballLeagueShopManagement)}/>
                 {/*<Route exact path="/basketball/league/registration" component={this.requireAuth("/basketball/league/registration",BasketballLeagueRegistrationManagement)}/>*/}
                 <Route exact path="/basketball/league/unit" component={this.requireAuth("/basketball/league/unit",BasketBallLeagueUnitSettingManagement)}/>
                 <Route exact path="/basketball/league/registration/team" component={this.requireAuth("/basketball/league/registration/team",TeamRegistrationManagement)}/>

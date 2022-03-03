@@ -191,6 +191,10 @@ class BasketballLeagueDetailSetting extends React.Component {
                                             `/basketball/league/unit?leagueId=${leagueId}`
                                         }>组委会设置</Link>
                                     </Button>
+                                    <Button key="shop" type="primary"><Link to={
+                                        `/basketball/league/shop?leagueId=${leagueId}`
+                                    }>商城</Link>
+                                    </Button>
                                     <Button key="statistics" type="primary">
                                         <Link to={
                                             `/basketball/league/statistics?leagueId=${leagueId}`
