@@ -106,7 +106,7 @@ class App extends Component {
                                 <Routes auth={auth} permissions={permission.data}/>
                             </Content>
                             <Footer style={{textAlign: 'center'}}>
-                                Qiezizhibo-Basketball-Admin ©2021
+                                Qiezizhibo-Basketball-Admin ©2022
                             </Footer>
                         </Layout>
                     }
