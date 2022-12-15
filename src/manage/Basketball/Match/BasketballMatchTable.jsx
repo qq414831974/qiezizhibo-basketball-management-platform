@@ -669,6 +669,11 @@ class BasketballMatchTable extends React.Component {
                     const section = record.status.section;
                     dom.push(<div key={`status-section`} className="w-full">{`第${section}节`}</div>)
                 }
+                if (record.hidden) {
+                    dom.push(<span className="w-full center purple">
+                            已隐藏
+                        </span>)
+                }
                 if (!record.available) {
                     dom.push(<span className="w-full center danger">
                             直播间关闭
