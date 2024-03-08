@@ -2,9 +2,13 @@
   "name": "qiezizhibo-basketball-management-platform",
   "version": "0.2.0",
   "homepage": "/manage/",
-  "private": true,
+  "private": false,
   "main": "index.js",
   "description": "qiezizhibo-basketball-management-platform",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qq414831974/qiezizhibo-basketball-management-platform"
+  },
   "dependencies": {
     "@babel/core": "7.6.0",
     "@svgr/webpack": "4.3.2",
